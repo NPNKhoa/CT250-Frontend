@@ -1,12 +1,17 @@
-import { lazy, Suspense } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { lazy, Suspense } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import { LoadingPage, NotFoundPage } from '@pages/index';
-import { exampleRoutes } from '@routers';
+import { LoadingPage, NotFoundPage } from "@pages/index";
+import { exampleRoutes, homeRoute } from "@routers";
+
 // import { ExampleLayout } from '@layouts';
 
 const ExampleLayout = lazy(() =>
-  import('@layouts').then((module) => ({ default: module.ExampleLayout }))
+  import("@layouts").then((module) => ({ default: module.ExampleLayout }))
+);
+
+const HomeLayout = lazy(() =>
+  import("@layouts").then((module) => ({ default: module.HomeLayout }))
 );
 
 const Router = () => {
@@ -22,10 +27,15 @@ const Router = () => {
             />
           ))}
 
-          <Route
-            path='*'
-            element={<NotFoundPage />}
-          />
+          {homeRoute.map(({ id, path, element }) => (
+            <Route
+              key={id}
+              path={path}
+              element={<HomeLayout>{element}</HomeLayout>}
+            />
+          ))}
+
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
     </Suspense>
