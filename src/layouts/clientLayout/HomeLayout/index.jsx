@@ -1,9 +1,10 @@
+import Header from "@components/Header";
 import PropTypes from "prop-types";
 
 const HomeLayout = ({ children }) => {
   return (
     <div>
-      <h1>Home Layout</h1>
+      <Header />
       {children}
     </div>
   );
