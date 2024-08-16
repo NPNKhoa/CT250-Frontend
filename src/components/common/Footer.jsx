@@ -6,6 +6,8 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import XIcon from "@mui/icons-material/X";
 import Divider from "@mui/material/Divider";
 
+import FooterImg from "../../assets/Bocongthuong.png";
+
 const Footer = () => {
   return (
     <div className=" ">
@@ -105,23 +107,23 @@ const Footer = () => {
 
           <div className="">
             <ul>
-              <li className="text-white pb-2 text-sm">
+              <li className="text-white pb-2 text-sm hover:text-red-500">
                 <Link to="/">Chính sách đổi trả,hoàn tiền</Link>
               </li>{" "}
-              <li className="text-white pb-2 text-sm">
-                <Link to="/">Chính sách đổi trả,hoàn tiền</Link>
+              <li className="text-white pb-2 text-sm hover:text-red-500">
+                <Link to="/">Chính sách bảo hành</Link>
               </li>{" "}
-              <li className="text-white pb-2 text-sm">
-                <Link to="/">Chính sách đổi trả,hoàn tiền</Link>
+              <li className="text-white pb-2 text-sm hover:text-red-500">
+                <Link to="/">Chính sách xử lý khiếu nại</Link>
               </li>{" "}
-              <li className="text-white pb-2 text-sm">
-                <Link to="/">Chính sách đổi trả,hoàn tiền</Link>
+              <li className="text-white pb-2 text-sm hover:text-red-500">
+                <Link to="/">Chính sách vận chuyển</Link>
               </li>{" "}
-              <li className="text-white pb-2 text-sm">
-                <Link to="/">Chính sách đổi trả,hoàn tiền</Link>
+              <li className="text-white pb-2 text-sm hover:text-red-500">
+                <Link to="/">Điều khoản sử dụng</Link>
               </li>{" "}
-              <li className="text-white pb-2 text-sm">
-                <Link to="/">Chính sách đổi trả,hoàn tiền</Link>
+              <li className="text-white pb-2 text-sm hover:text-red-500">
+                <Link to="/">Chính Sách Bảo Mật Thông Tin</Link>
               </li>
             </ul>
           </div>
@@ -131,21 +133,52 @@ const Footer = () => {
           <h2 className="text-white uppercase text-base font-bold py-2">
             Hướng dẫn
           </h2>
-          <p className="text-white">
-            <span className="text-red-500">VNB Sports</span> là hệ thống cửa
-            hàng cầu lông với hơn 50 chi nhánh trên toàn quốc, cung cấp sỉ và lẻ
-            các mặt hàng dụng cụ cầu lông từ phong trào tới chuyên nghiệp
+          <div className="">
+            <ul>
+              <li className="text-white pb-2 text-sm hover:text-red-500">
+                <Link to="/">
+                  Tìm hiểu công việc tập huấn tennis trước khi tổ chức giải đấu
+                </Link>
+              </li>{" "}
+              <li className="text-white pb-2 text-sm hover:text-red-500">
+                <Link to="/">
+                  Bảng size Lining - Cách chọn size quần áo lining, giày cầu
+                  lông Lining
+                </Link>
+              </li>{" "}
+              <li className="text-white pb-2 text-sm hover:text-red-500">
+                <Link to="/">Hướng dẫn cách tập tennis cho người mới chơi</Link>
+              </li>{" "}
+              <li className="text-white pb-2 text-sm hover:text-red-500">
+                <Link to="/">
+                  Hướng dẫn cách chọn vợt cầu lông cho người mới chơi
+                </Link>
+              </li>{" "}
+              <li className="text-white pb-2 text-sm hover:text-red-500">
+                <Link to="/">Hướng dẫn thanh toán</Link>
+              </li>{" "}
+              <li className="text-white pb-2 text-sm hover:text-red-500">
+                <Link to="/">Kiểm tra bảo hành</Link>
+              </li>
+              <li className="text-white pb-2 text-sm hover:text-red-500">
+                <Link to="/">Kiểm tra đơn hàng</Link>
+              </li>{" "}
+              <li className="text-white pb-2 text-sm hover:text-red-500 uppercase">
+                <Link to="/">HƯỚNG DẪN MUA HÀNG</Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-red-500 ">
+        <div className="py-5 text-white flex flex-col items-center text-center">
+          <p>© CÔNG TY TNHH VNB SPORTS</p>
+          <p>
+            GPKD số 0314496879 do Sở KH và ĐT TP Hồ Chí Minh cấp ngày 05/07/2017
           </p>
-          <p className="text-white">
-            <span className="text-red-500">VNB Sports</span> là hệ thống cửa
-            hàng cầu lông với hơn 50 chi nhánh trên toàn quốc, cung cấp sỉ và lẻ
-            các mặt hàng dụng cụ cầu lông từ phong trào tới chuyên nghiệp
-          </p>
-          <p className="text-white">
-            <span className="text-red-500">VNB Sports</span> là hệ thống cửa
-            hàng cầu lông với hơn 50 chi nhánh trên toàn quốc, cung cấp sỉ và lẻ
-            các mặt hàng dụng cụ cầu lông từ phong trào tới chuyên nghiệp
-          </p>
+          <p>GĐ/Sở hữu website: Phan Lê Chi</p>
+          <img src={FooterImg} alt="" />
         </div>
       </div>
     </div>
