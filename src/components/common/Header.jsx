@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import React from "react";
+import React, { useState } from "react";
 import LogoImg from "../../assets/logo.svg";
 import PhoneCallbackSharpIcon from "@mui/icons-material/PhoneCallbackSharp";
 import PlaceSharpIcon from "@mui/icons-material/PlaceSharp";
@@ -7,15 +7,30 @@ import SearchSharpIcon from "@mui/icons-material/SearchSharp";
 import AccountCircleSharpIcon from "@mui/icons-material/AccountCircleSharp";
 import AddShoppingCartSharpIcon from "@mui/icons-material/AddShoppingCartSharp";
 import PersonSearchRoundedIcon from "@mui/icons-material/PersonSearchRounded";
+import LoginIcon from "@mui/icons-material/Login";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import NavBar from "@components/common/NavBar";
+import { Link } from "react-router-dom";
 
 const Header = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       <div className="bg-white flex justify-center items-center px-10 ">
         <div className=""></div>
         <div className="p-3">
-          <img src={LogoImg} alt="" className="w-[60px]" />
+          <Link to="/">
+            <img src={LogoImg} alt="" className="w-[60px]" />
+          </Link>
         </div>
         <div className="px-10 flex flex-col items-center">
           <ul className=" flex gap-14">
@@ -51,19 +66,45 @@ const Header = () => {
         </div>
 
         <div className=" flex justify-center gap-5 ">
-          <div className="flex flex-col items-center justify-center text-center space-x-2 cursor-pointer">
+          <div className="flex flex-col items-center justify-center text-center space-x-2 cursor-pointer ">
             <span className="border border-gray-300 p-1 flex justify-center items-center rounded-full bg-white w-10 h-10">
               <PersonSearchRoundedIcon className="text-red-500" />
             </span>
             <h3 className="font-thin text-xs uppercase mt-1">Tra cứu</h3>
           </div>
 
-          <div className="flex flex-col items-center justify-center text-center space-x-2 cursor-pointer">
+          <div
+            className="flex flex-col items-center justify-center text-center space-x-2 cursor-pointer"
+            onMouseEnter={handleMouseEnter}
+          >
             <span className="border border-gray-300 p-1 flex justify-center items-center rounded-full bg-white w-10 h-10">
               <AccountCircleSharpIcon className="text-red-500" />
             </span>
             <h3 className="font-thin text-xs uppercase mt-1">Tài khoản</h3>
           </div>
+
+          {isModalOpen && (
+            <div
+              onMouseLeave={handleMouseLeave}
+              className="absolute top-11 right-20 transform -translate-x-1/2 mt-2 w-40 bg-white rounded-lg shadow-lg z-50"
+            >
+              <div className="mt-4 flex flex-col space-y-2 rounded-lg">
+                <Link
+                  to="/signup"
+                  className="hover:bg-red-500 hover:text-white rounded-t-lg p-2 text-center"
+                >
+                  <PersonAddIcon /> Đăng ký
+                </Link>
+                <Link
+                  to="/login"
+                  className="hover:bg-red-500 hover:text-white rounded-b-lg p-2 text-center"
+                >
+                  <LoginIcon /> Đăng nhập
+                </Link>
+              </div>
+            </div>
+          )}
+
           <div className="flex flex-col items-center justify-center text-center space-x-2 relative cursor-pointer">
             <span className="border border-gray-300 p-1 flex justify-center items-center rounded-full bg-white w-10 h-10">
               <AddShoppingCartSharpIcon className="text-red-500 " />
