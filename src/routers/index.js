@@ -1,2 +1,4 @@
 import HomeRoute from "./clientRoutes/HomeRoute";
-export {HomeRoute};
+import authRoutes from "@routers/clientRoutes/authRoutes";
+
+export { HomeRoute, authRoutes };
