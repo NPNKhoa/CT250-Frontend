@@ -1,2 +1,2 @@
-import HomeLayout from "@layouts/clientLayout/Home";
+import HomeLayout from "@layouts/clientLayout/HomeLayout";
 export {HomeLayout };
