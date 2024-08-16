@@ -1,3 +1,2 @@
-import exampleRoutes from "./exampleRoutes";
-import homeRoute from "../routers/clientRoutes/homeRoute";
-export { exampleRoutes, homeRoute };
+import HomeRoute from "./clientRoutes/HomeRoute";
+export {HomeRoute};
