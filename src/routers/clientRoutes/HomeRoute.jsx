@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from "uuid";
 import HomePage from "@pages/clientPages/HomePage";
 
-const homeRoute = [
+const HomeRoute = [
   {
     id: `auth-${uuidv4()}`,
-    path: "/home",
+    path: "/",
     element: <HomePage />,
   },
 ];
 
-export default homeRoute;
+export default HomeRoute;

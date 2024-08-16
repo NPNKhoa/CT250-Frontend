@@ -1,5 +1,5 @@
 import NotFoundPage from './defaultPages/NotFoundPage';
 import LoadingPage from './defaultPages/LoadingPage';
-import ExamplePage from './ExamplePage';
+import HomePage from './clientPages/HomePage';
 
-export { LoadingPage, NotFoundPage, ExamplePage };
+export { LoadingPage, NotFoundPage, HomePage};

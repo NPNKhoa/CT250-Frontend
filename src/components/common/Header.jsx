@@ -7,7 +7,7 @@ import SearchSharpIcon from "@mui/icons-material/SearchSharp";
 import AccountCircleSharpIcon from "@mui/icons-material/AccountCircleSharp";
 import AddShoppingCartSharpIcon from "@mui/icons-material/AddShoppingCartSharp";
 import PersonSearchRoundedIcon from "@mui/icons-material/PersonSearchRounded";
-import NavBar from "@components/Navbar";
+import NavBar from "@components/common/NavBar";
 
 const Header = () => {
   return (
