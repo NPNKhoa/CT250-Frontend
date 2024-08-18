@@ -9,7 +9,6 @@ const authRoutes = [
     element: <LoginPage />,
   },
   {
-    id: `auth-${uuidv4()}`,
     path: "/signup",
     element: <SignUpPage />,
   },

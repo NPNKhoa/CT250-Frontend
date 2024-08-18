@@ -17,13 +17,13 @@ const Footer = () => {
             Thông tin chung
           </h2>
           <p className="text-white text-justify text-sm pb-2">
-            <span className="text-red-500 font-semibold ">VNB Sports</span> là
+            <span className="text-primary font-semibold ">VNB Sports</span> là
             hệ thống cửa hàng cầu lông với hơn 50 chi nhánh trên toàn quốc, cung
             cấp sỉ và lẻ các mặt hàng dụng cụ cầu lông từ phong trào tới chuyên
             nghiệp
           </p>
           <p className="text-white  text-justify text-sm pb-2 italic ">
-            <span className="text-red-500 font-semibold  not-italic">
+            <span className="text-primary font-semibold  not-italic">
               Với sứ mệnh:{" "}
             </span>
             &quot;VNB cam kết mang đến những sản phẩm, dịch vụ chất lượng tốt
@@ -31,7 +31,7 @@ const Footer = () => {
             mình.&quot;
           </p>
           <p className="text-white italic text-justify text-sm pb-2">
-            <span className="text-red-500 not-italic">Tầm nhìn: </span>{" "}
+            <span className="text-primary not-italic">Tầm nhìn: </span>{" "}
             &quot;Trở thành nhà phân phối và sản xuất thể thao lớn nhất Việt
             Nam&quot;
           </p>
@@ -44,13 +44,13 @@ const Footer = () => {
           <div className="pb-5">
             <p className=" text-white text-sm">
               <span className="uppercase">Hệ thống cửa hàng: </span>{" "}
-              <span className="text-red-500">
+              <span className="text-primary">
                 5 shop Premium và 63 cửa hàng
               </span>{" "}
               trên toàn quốc
             </p>
             <Link to="/">
-              <p className="text-red-500 font-bold mt-2">
+              <p className="text-primary font-bold mt-2">
                 Xem tất cả các cửa hàng VNB
               </p>
             </Link>
@@ -60,27 +60,27 @@ const Footer = () => {
             <ul className="">
               <li className="text-white pb-2">
                 Hotline:{" "}
-                <span className="text-red-500"> 0977508430 | 0792677415</span>
+                <span className="text-primary"> 0977508430 | 0792677415</span>
               </li>
               <li className="text-white pb-2">
                 Email:{" "}
-                <span className="text-red-500"> minhtu15112k3gmail.com</span>
+                <span className="text-primary"> minhtu15112k3gmail.com</span>
               </li>
               <li className="text-white pb-2">
                 Hợp tác kinh doanh:{" "}
-                <span className="text-red-500"> 012345789 (Mr. Tu)</span>
+                <span className="text-primary"> 012345789 (Mr. Tu)</span>
               </li>
               <li className="text-white pb-2">
                 Hotline bán sỉ:{" "}
-                <span className="text-red-500"> 0977508430</span>
+                <span className="text-primary"> 0977508430</span>
               </li>
               <li className="text-white pb-2">
                 Nhượng quyền thương hiệu:{" "}
-                <span className="text-red-500">012345789 (Mr. Tu)</span>
+                <span className="text-primary">012345789 (Mr. Tu)</span>
               </li>
               <li className="text-white pb-2">
                 Than phiền dịch vụ:{" "}
-                <span className="text-red-500">012345789 (Mr. Tu)</span>
+                <span className="text-primary">012345789 (Mr. Tu)</span>
               </li>
             </ul>
           </div>
@@ -107,22 +107,22 @@ const Footer = () => {
 
           <div className="">
             <ul>
-              <li className="text-white pb-2 text-sm hover:text-red-500">
+              <li className="text-white pb-2 text-sm hover:text-primary">
                 <Link to="/">Chính sách đổi trả,hoàn tiền</Link>
               </li>{" "}
-              <li className="text-white pb-2 text-sm hover:text-red-500">
+              <li className="text-white pb-2 text-sm hover:text-primary">
                 <Link to="/">Chính sách bảo hành</Link>
               </li>{" "}
-              <li className="text-white pb-2 text-sm hover:text-red-500">
+              <li className="text-white pb-2 text-sm hover:text-primary">
                 <Link to="/">Chính sách xử lý khiếu nại</Link>
               </li>{" "}
-              <li className="text-white pb-2 text-sm hover:text-red-500">
+              <li className="text-white pb-2 text-sm hover:text-primary">
                 <Link to="/">Chính sách vận chuyển</Link>
               </li>{" "}
-              <li className="text-white pb-2 text-sm hover:text-red-500">
+              <li className="text-white pb-2 text-sm hover:text-primary">
                 <Link to="/">Điều khoản sử dụng</Link>
               </li>{" "}
-              <li className="text-white pb-2 text-sm hover:text-red-500">
+              <li className="text-white pb-2 text-sm hover:text-primary">
                 <Link to="/">Chính Sách Bảo Mật Thông Tin</Link>
               </li>
             </ul>
@@ -135,35 +135,35 @@ const Footer = () => {
           </h2>
           <div className="">
             <ul>
-              <li className="text-white pb-2 text-sm hover:text-red-500">
+              <li className="text-white pb-2 text-sm hover:text-primary">
                 <Link to="/">
                   Tìm hiểu công việc tập huấn tennis trước khi tổ chức giải đấu
                 </Link>
               </li>{" "}
-              <li className="text-white pb-2 text-sm hover:text-red-500">
+              <li className="text-white pb-2 text-sm hover:text-primary">
                 <Link to="/">
                   Bảng size Lining - Cách chọn size quần áo lining, giày cầu
                   lông Lining
                 </Link>
               </li>{" "}
-              <li className="text-white pb-2 text-sm hover:text-red-500">
+              <li className="text-white pb-2 text-sm hover:text-primary">
                 <Link to="/">Hướng dẫn cách tập tennis cho người mới chơi</Link>
               </li>{" "}
-              <li className="text-white pb-2 text-sm hover:text-red-500">
+              <li className="text-white pb-2 text-sm hover:text-primary">
                 <Link to="/">
                   Hướng dẫn cách chọn vợt cầu lông cho người mới chơi
                 </Link>
               </li>{" "}
-              <li className="text-white pb-2 text-sm hover:text-red-500">
+              <li className="text-white pb-2 text-sm hover:text-primary">
                 <Link to="/">Hướng dẫn thanh toán</Link>
               </li>{" "}
-              <li className="text-white pb-2 text-sm hover:text-red-500">
+              <li className="text-white pb-2 text-sm hover:text-primary">
                 <Link to="/">Kiểm tra bảo hành</Link>
               </li>
-              <li className="text-white pb-2 text-sm hover:text-red-500">
+              <li className="text-white pb-2 text-sm hover:text-primary">
                 <Link to="/">Kiểm tra đơn hàng</Link>
               </li>{" "}
-              <li className="text-white pb-2 text-sm hover:text-red-500 uppercase">
+              <li className="text-white pb-2 text-sm hover:text-primary uppercase">
                 <Link to="/">HƯỚNG DẪN MUA HÀNG</Link>
               </li>
             </ul>
@@ -171,7 +171,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="bg-red-500 ">
+      <div className="bg-primary ">
         <div className="py-5 text-white flex flex-col items-center text-center">
           <p>© CÔNG TY TNHH VNB SPORTS</p>
           <p>

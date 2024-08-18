@@ -31,7 +31,7 @@ const Header = () => {
   };
   return (
     <>
-      <div className="bg-white flex justify-center items-center px-5">
+      <div className="bg-white flex justify-center items-center">
         <div className=""></div>
         <div className="p-3">
           <Link to="/">
@@ -39,18 +39,18 @@ const Header = () => {
           </Link>
         </div>
         <div className="px-5 flex flex-col items-center">
-          <ul className=" flex gap-10">
+          <ul className=" flex gap-5">
             <li className="flex gap-2 items-center">
-              <PhoneCallbackSharpIcon className="text-red-500 " />
+              <PhoneCallbackSharpIcon className="text-primary " />
               <p className="font-bold text-sm">
                 HOTLINE:
-                <span className="text-red-500 text-center px-2 hover:text-black ">
+                <span className="text-primary text-center px-2 hover:text-black ">
                   0977508430 | 0792677415
                 </span>
               </p>
             </li>
             <li className="flex gap-2 items-center">
-              <PlaceSharpIcon className="text-red-500" />
+              <PlaceSharpIcon className="text-primary" />
               <p className="font-semibold uppercase text-sm">
                 Hệ thống cửa hàng
               </p>
@@ -63,7 +63,7 @@ const Header = () => {
                   placeholder="Tìm sản phẩm..."
                 />
                 <button className="absolute top-1 right-2 m-0">
-                  <SearchSharpIcon className="text-red-500" />
+                  <SearchSharpIcon className="text-primary" />
                 </button>
               </form>
             </li>
@@ -79,7 +79,7 @@ const Header = () => {
               onMouseEnter={handleContact}
             >
               <span className="border border-gray-300 p-1 flex justify-center items-center rounded-full bg-white w-10 h-10">
-                <PersonSearchRoundedIcon className="text-red-500" />
+                <PersonSearchRoundedIcon className="text-primary" />
               </span>
               <h3 className="font-thin text-xs uppercase mt-1">Tra cứu</h3>
             </div>
@@ -92,13 +92,13 @@ const Header = () => {
                 <div className="flex flex-col space-y-2 rounded-lg">
                   <Link
                     to="/"
-                    className="hover:bg-red-500 hover:text-white rounded-t-lg p-2 text-center"
+                    className="hover:bg-primary hover:text-white rounded-t-lg p-2 text-center"
                   >
                     Kiểm tra đơn hàng
                   </Link>
                   <Link
                     to="/"
-                    className="hover:bg-red-500 hover:text-white rounded-b-lg p-2 text-center"
+                    className="hover:bg-primary hover:text-white rounded-b-lg p-2 text-center"
                   >
                     Kiểm tra bảo hành
                   </Link>
@@ -112,7 +112,7 @@ const Header = () => {
               onMouseEnter={handleMouseEnter}
             >
               <span className="border border-gray-300 p-1 flex justify-center items-center rounded-full bg-white w-10 h-10">
-                <AccountCircleSharpIcon className="text-red-500" />
+                <AccountCircleSharpIcon className="text-primary" />
               </span>
               <h3 className="font-thin text-xs uppercase mt-1">Tài khoản</h3>
             </div>
@@ -125,13 +125,13 @@ const Header = () => {
                 <div className="flex flex-col space-y-2 rounded-lg">
                   <Link
                     to="/signup"
-                    className="hover:bg-red-500 hover:text-white rounded-t-lg p-2 text-center"
+                    className="hover:bg-primary hover:text-white rounded-t-lg p-2 text-center"
                   >
                     <PersonAddIcon /> Đăng ký
                   </Link>
                   <Link
                     to="/login"
-                    className="hover:bg-red-500 hover:text-white rounded-b-lg p-2 text-center"
+                    className="hover:bg-primary hover:text-white rounded-b-lg p-2 text-center"
                   >
                     <LoginIcon /> Đăng nhập
                   </Link>
@@ -145,10 +145,10 @@ const Header = () => {
             className="flex flex-col items-center justify-center text-center space-x-2 relative cursor-pointer"
           >
             <span className="border border-gray-300 p-1 flex justify-center items-center rounded-full bg-white w-10 h-10">
-              <AddShoppingCartSharpIcon className="text-red-500" />
+              <AddShoppingCartSharpIcon className="text-primary" />
             </span>
             <h3 className="font-thin text-xs uppercase mt-1">Giỏ hàng</h3>
-            <span className="absolute -top-1 right-2 bg-red-500 rounded-full text-white p-1 w-4 h-4 flex items-center justify-center text-xs">
+            <span className="absolute -top-1 right-2 bg-primary rounded-full text-white p-1 w-4 h-4 flex items-center justify-center text-xs">
               0
             </span>
 

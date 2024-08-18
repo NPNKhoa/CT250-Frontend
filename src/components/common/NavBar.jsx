@@ -25,7 +25,7 @@ const NavBar = () => {
   ];
 
   return (
-    <div className="w-full flex justify-center items-center gap-24 py-1 px-20 bg-red-500">
+    <div className="w-full flex justify-center items-center gap-24 py-1 px-20 bg-primary">
       {arr.map((item, index) => (
         <Link
           key={index}
