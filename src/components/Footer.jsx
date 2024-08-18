@@ -1,12 +1,9 @@
-import { Link } from "react-router-dom";
-import { Fab } from "@mui/material";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import XIcon from "@mui/icons-material/X";
-import Divider from "@mui/material/Divider";
+import { Link } from "react-router-dom";
 
-import FooterImg from "../../assets/BoCongThuong.png";
+import FooterImg from "@assets/BoCongThuong.png";
 
 const Footer = () => {
   return (

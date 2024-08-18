@@ -1,17 +1,17 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
-import LogoImg from "../../assets/logo.svg";
-import CartIcon from "../../assets/cart-icon.png";
+import NavBar from "@components/NavBar";
+import AccountCircleSharpIcon from "@mui/icons-material/AccountCircleSharp";
+import AddShoppingCartSharpIcon from "@mui/icons-material/AddShoppingCartSharp";
+import LoginIcon from "@mui/icons-material/Login";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import PersonSearchRoundedIcon from "@mui/icons-material/PersonSearchRounded";
 import PhoneCallbackSharpIcon from "@mui/icons-material/PhoneCallbackSharp";
 import PlaceSharpIcon from "@mui/icons-material/PlaceSharp";
 import SearchSharpIcon from "@mui/icons-material/SearchSharp";
-import AccountCircleSharpIcon from "@mui/icons-material/AccountCircleSharp";
-import AddShoppingCartSharpIcon from "@mui/icons-material/AddShoppingCartSharp";
-import PersonSearchRoundedIcon from "@mui/icons-material/PersonSearchRounded";
-import LoginIcon from "@mui/icons-material/Login";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import NavBar from "@components/common/NavBar";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import CartIcon from "@assets/cart-icon.png";
+import LogoImg from "@assets/logo.svg";
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
