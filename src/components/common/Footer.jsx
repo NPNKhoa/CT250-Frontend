@@ -6,7 +6,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import XIcon from "@mui/icons-material/X";
 import Divider from "@mui/material/Divider";
 
-import FooterImg from "../../assets/Bocongthuong.png";
+import FooterImg from "../../assets/BoCongThuong.png";
 
 const Footer = () => {
   return (
