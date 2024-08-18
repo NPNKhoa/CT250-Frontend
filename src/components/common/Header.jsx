@@ -16,25 +16,21 @@ const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleMouseEnter = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsModalOpen(false);
+    setIsModalOpen(!isModalOpen);
   };
 
   return (
     <>
-      <div className="bg-white flex justify-center items-center px-10 ">
+      <div className="bg-white flex justify-center items-center px-5">
         <div className=""></div>
         <div className="p-3">
           <Link to="/">
             <img src={LogoImg} alt="" className="w-[60px]" />
           </Link>
         </div>
-        <div className="px-10 flex flex-col items-center">
-          <ul className=" flex gap-14">
-            <li className="flex gap-4 items-center">
+        <div className="px-5 flex flex-col items-center">
+          <ul className=" flex gap-10">
+            <li className="flex gap-2 items-center">
               <PhoneCallbackSharpIcon className="text-red-500 " />
               <p className="font-bold text-sm">
                 HOTLINE:
@@ -53,7 +49,7 @@ const Header = () => {
               <form action="#">
                 <input
                   type="text"
-                  className="bg-gray-200 w-[300px] rounded-lg p-1 out"
+                  className="bg-gray-200 w-[300px] rounded-lg p-1"
                   placeholder="Tìm sản phẩm..."
                 />
                 <button className="absolute top-1 right-2 m-0">
@@ -85,7 +81,7 @@ const Header = () => {
 
           {isModalOpen && (
             <div
-              onMouseLeave={handleMouseLeave}
+              onMouseLeave={handleMouseEnter}
               className="absolute top-11 right-20 transform -translate-x-1/2 mt-2 w-40 bg-white rounded-lg shadow-lg z-50"
             >
               <div className="mt-4 flex flex-col space-y-2 rounded-lg">

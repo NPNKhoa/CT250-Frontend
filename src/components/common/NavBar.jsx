@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 const NavBar = () => {
   const arr = [
     {
-      value: "trangchu",
+      value: "",
       label: "Trang chủ",
     },
     {
-      value: "sanpham",
+      value: "products",
       label: "Sản phẩm",
     },
     {
@@ -15,23 +15,11 @@ const NavBar = () => {
       label: "Sale off",
     },
     {
-      value: "tintuc",
-      label: "Tin tức",
-    },
-    {
-      value: "chinhsach",
-      label: "Chính sách",
-    },
-    {
-      value: "huongdan",
-      label: "Hướng dẫn",
-    },
-    {
-      value: "gioithieu",
+      value: "about",
       label: "Giới thiệu",
     },
     {
-      value: "lienhe",
+      value: "contact",
       label: "Liên hệ",
     },
   ];
@@ -41,7 +29,7 @@ const NavBar = () => {
       {arr.map((item, index) => (
         <Link
           key={index}
-          to={`/products/${item.value}`}
+          to={`/${item.value}`}
           className={`py-2 text-white uppercase font-bold  text-sm {
             productType === item.label.toLowerCase() && selectedTab
           }`}
