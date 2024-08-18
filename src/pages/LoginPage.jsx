@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import loginImg from "../../src/assets/login.png";
-import userIcon from "../../src/assets/user.png";
+import loginImg from "@assets/login.png";
+import userIcon from "@assets/user.png";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

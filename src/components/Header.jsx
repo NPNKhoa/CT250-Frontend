@@ -10,8 +10,8 @@ import PlaceSharpIcon from "@mui/icons-material/PlaceSharp";
 import SearchSharpIcon from "@mui/icons-material/SearchSharp";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import CartIcon from "../../src/assets/cart-icon.png";
-import LogoImg from "../../src/assets/logo.svg";
+import CartIcon from "@assets/cart-icon.png";
+import LogoImg from "@assets/logo.svg";
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

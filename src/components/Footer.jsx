@@ -3,7 +3,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import XIcon from "@mui/icons-material/X";
 import { Link } from "react-router-dom";
 
-import FooterImg from "../../src/assets/BoCongThuong.png";
+import FooterImg from "@assets/BoCongThuong.png";
 
 const Footer = () => {
   return (

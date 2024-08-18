@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import SignUpImg from "../../src/assets/register.png";
-import userIcon from "../../src/assets/user.png";
+import SignUpImg from "@assets/register.png";
+import userIcon from "@assets/user.png";
 
 const SignUpPage = () => {
   const [name, setName] = useState("");
