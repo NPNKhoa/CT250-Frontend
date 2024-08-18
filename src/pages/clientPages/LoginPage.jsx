@@ -35,7 +35,7 @@ const LoginPage = () => {
                 required
                 id="email"
                 onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
               />
             </div>
             <div className="mb-4">
@@ -45,22 +45,22 @@ const LoginPage = () => {
                 required
                 id="password"
                 onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
               />
             </div>
             <button
               type="submit"
-              className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-700 transition duration-300"
+              className="w-full bg-primary text-white py-3 rounded-lg hover:bg-hover-primary transition duration-300"
             >
               Đăng nhập
             </button>
           </form>
 
           <p className="text-center mt-4">
-            <span className="cursor-pointer hover:text-red-500">
+            <span className="cursor-pointer hover:text-primary">
               Quên mật khẩu?{" "}
             </span>
-            <Link to="/signup" className="text-red-500 hover:underline">
+            <Link to="/signup" className="text-primary hover:underline">
               Đăng ký
             </Link>
           </p>
