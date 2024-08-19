@@ -157,7 +157,7 @@ const Header = () => {
                 onMouseLeave={handleCart}
                 className="absolute top-12 right-0 p-5 w-64 bg-white rounded-lg shadow-lg z-50"
               >
-                <div className="mt-4 flex flex-col space-y-2 text-center items-center">
+                <div className="mt-2 flex flex-col space-y-2 text-center items-center">
                   <img src={CartIcon} alt="" className="w-24" />
                   <h3>Không có sản phẩm nào trong giỏ hàng của bạn</h3>
                 </div>
