@@ -91,13 +91,13 @@ const Header = () => {
               >
                 <div className="flex flex-col space-y-2 rounded-lg">
                   <Link
-                    to="/"
+                    to="/checkorder"
                     className="hover:bg-primary hover:text-white rounded-t-lg p-2 text-center"
                   >
                     Kiểm tra đơn hàng
                   </Link>
                   <Link
-                    to="/"
+                    to="/checkwarranty"
                     className="hover:bg-primary hover:text-white rounded-b-lg p-2 text-center"
                   >
                     Kiểm tra bảo hành

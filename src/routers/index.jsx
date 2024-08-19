@@ -1,3 +1,5 @@
+import CheckOrder from "@pages/CheckOrder";
+import CheckWarranty from "@pages/CheckWarranty";
 import HomePage from "@pages/HomePage";
 import LoginPage from "@pages/LoginPage";
 import SignUpPage from "@pages/SignUpPage";
@@ -14,9 +16,19 @@ const routes = [
     element: <LoginPage />,
   },
   {
-    id: "signup", 
+    id: "signup",
     path: "/signup",
     element: <SignUpPage />,
+  },
+  {
+    id: "checkorder",
+    path: "/checkorder",
+    element: <CheckOrder />,
+  },
+  {
+    id: "checkwarranty",
+    path: "/checkwarranty",
+    element: <CheckWarranty />,
   },
 ];
 
