@@ -20,6 +20,7 @@ export default defineConfig({
       '@redux': path.resolve(__dirname, 'src/redux'),
       '@routers': path.resolve(__dirname, 'src/routers'),
       '@utils': path.resolve(__dirname, 'src/utils'),
+      '@services': path.resolve(__dirname, 'src/services'),
     },
   },
 });
