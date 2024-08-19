@@ -7,7 +7,7 @@ const commonConfig = {
     },
 };
 
-const URL = "https://ct250-backend-nydf.onrender.com";
+const URL = "https://ct250-backend-nydf.onrender.com/api/v1";
 
 export default (path) => {
     const baseURL = `${URL}${path}`;
