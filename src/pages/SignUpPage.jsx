@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-import SignUpImg from "../../assets/register.png";
-import userIcon from "../../assets/user.png";
+import SignUpImg from "@assets/register.png";
+import userIcon from "@assets/user.png";
 
 const SignUpPage = () => {
   const [name, setName] = useState("");
@@ -32,7 +32,7 @@ const SignUpPage = () => {
                 placeholder="Username"
                 required
                 id="username"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
               />
             </div>
             <div className="mb-4">
@@ -41,7 +41,7 @@ const SignUpPage = () => {
                 placeholder="Email"
                 required
                 id="email"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
               />
             </div>
             <div className="mb-4">
@@ -50,7 +50,7 @@ const SignUpPage = () => {
                 placeholder="Phone"
                 required
                 id="phone"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
               />
             </div>
             <div className="mb-4">
@@ -59,12 +59,12 @@ const SignUpPage = () => {
                 placeholder="Password"
                 required
                 id="password"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
               />
             </div>
             <button
               type="submit"
-              className="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition duration-300"
+              className="w-full bg-primary text-white py-3 rounded-lg hover:bg-hover-primary transition duration-300"
             >
               Đăng ký tài khoản
             </button>
@@ -72,7 +72,7 @@ const SignUpPage = () => {
 
           <p className="text-center mt-4">
             <span>Đã có tài khoản? </span>
-            <Link to="/login" className="text-red-600 hover:underline">
+            <Link to="/login" className="text-primary hover:underline">
               Đăng nhập
             </Link>
           </p>
