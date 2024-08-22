@@ -7,8 +7,23 @@ const commonConfig = {
     },
 };
 
-// const rootURL = "https://ct250-backend-nydf.onrender.com/api/v1";
-const rootURL = "http://localhost:5000/api/v1";
+async function checkLocalhost() {
+    try {
+        await axios.get('http://localhost:5000/check');
+        return true;
+    // eslint-disable-next-line no-unused-vars
+    } catch (error) {
+        return false;
+    }
+}
+
+const isLocalhostRunning = await checkLocalhost();
+
+const rootURL = isLocalhostRunning 
+        ? "http://localhost:5000/api/v1" 
+        : "https://ct250-backend-nydf.onrender.com/api/v1";
+
+console.log(rootURL);
 
 export default (path) => {
     const baseURL = `${rootURL}${path}`;
