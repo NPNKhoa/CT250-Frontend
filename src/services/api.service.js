@@ -7,7 +7,8 @@ const commonConfig = {
     },
 };
 
-const rootURL = "https://ct250-backend-nydf.onrender.com/api/v1";
+// const rootURL = "https://ct250-backend-nydf.onrender.com/api/v1";
+const rootURL = "http://localhost:5000/api/v1";
 
 export default (path) => {
     const baseURL = `${rootURL}${path}`;

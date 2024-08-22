@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import SignUpImg from "@assets/register.png";
 import userIcon from "@assets/user.png";
-
 import authService from "@services/auth.service";
+import Alert from "@components/Alert";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -16,40 +16,42 @@ const SignUpPage = () => {
     confirmPassword: "",
     gender: "",
   });
+  const [notification, setNotification] = useState({ message: "", type: "" });
   const [imageFile, setImageFile] = useState(null);
 
   const handleChange = (e) => {
-    setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    const { id, value } = e.target;
+    setCredentials((prev) => ({ ...prev, [id]: value }));
   };
 
   const handleFileChange = (e) => {
     setImageFile(e.target.files[0]);
   };
 
+  useEffect(() => {
+    if (notification.message) {
+      const timer = setTimeout(() => setNotification({ message: "", type: "" }), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [notification]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (credentials.password !== credentials.confirmPassword) {
-      alert("Passwords do not match");
+      setNotification({ message: "Passwords do not match!", type: "error" });
       return;
     }
+
     const formData = new FormData();
-    formData.append("fullname", credentials.fullname);
-    formData.append("phone", credentials.phone);
-    formData.append("email", credentials.email);
-    formData.append("password", credentials.password);
-    formData.append("confirmPassword", credentials.confirmPassword);
-    formData.append("gender", credentials.gender);
+    Object.keys(credentials).forEach((key) => formData.append(key, credentials[key]));
     formData.append("imageFile", imageFile);
 
     try {
-      const response = await authService.signup(formData);
-      alert("Signup successful:", response);
-      navigate("/login");
-      // Handle successful signup 
+      await authService.signup(formData);
+      setNotification({ message: "Signup successful!", type: "success" });
+      setTimeout(() => navigate("/login"), 2000);
     } catch (error) {
-      alert("Signup failed:", error);
-      console.error("Signup failed:", error);
-      // Handle signup failure 
+      setNotification({ message: `${error.response.data.error}`, type: "error" });
     }
   };
 
@@ -68,56 +70,24 @@ const SignUpPage = () => {
           </h2>
 
           <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <input
-                type="text"
-                placeholder="Full Name"
-                required
-                id="fullname"
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-              />
-            </div>
-            <div className="mb-4">
-              <input
-                type="email"
-                placeholder="Email"
-                required
-                id="email"
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-              />
-            </div>
-            <div className="mb-4">
-              <input
-                type="text"
-                placeholder="Phone"
-                required
-                id="phone"
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-              />
-            </div>
-            <div className="mb-4">
-              <input
-                type="password"
-                placeholder="Password"
-                required
-                id="password"
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-              />
-            </div>
-            <div className="mb-4">
-              <input
-                type="password"
-                placeholder="Confirm Password"
-                required
-                id="confirmPassword"
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-              />
-            </div>
+            {[
+              { id: "fullname", type: "text", placeholder: "Full Name" },
+              { id: "email", type: "email", placeholder: "Email" },
+              { id: "phone", type: "text", placeholder: "Phone" },
+              { id: "password", type: "password", placeholder: "Password" },
+              { id: "confirmPassword", type: "password", placeholder: "Confirm Password" },
+            ].map(({ id, type, placeholder }) => (
+              <div key={id} className="mb-4">
+                <input
+                  type={type}
+                  placeholder={placeholder}
+                  required
+                  id={id}
+                  onChange={handleChange}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+                />
+              </div>
+            ))}
             <div className="mb-4">
               <select
                 id="gender"
@@ -155,6 +125,10 @@ const SignUpPage = () => {
           </p>
         </div>
       </div>
+
+      {notification.message && (
+        <Alert message={notification.message} type={notification.type} />
+      )}
     </section>
   );
 };
