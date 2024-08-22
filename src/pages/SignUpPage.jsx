@@ -91,7 +91,6 @@ const SignUpPage = () => {
             <div className="mb-4">
               <select
                 id="gender"
-                required
                 onChange={handleChange}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
               >
@@ -103,8 +102,7 @@ const SignUpPage = () => {
             </div>
             <div className="mb-4">
               <input
-                type="file"
-                
+                type="file"                
                 onChange={handleFileChange}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
               />
