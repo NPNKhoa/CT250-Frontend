@@ -1,7 +1,7 @@
 import createApiClient from "./api.service";
 
 class authService {
-    constructor(path = "/api/v1/auth") {
+    constructor(path = "/auth") {
         this.api = createApiClient(path);
     }
 
