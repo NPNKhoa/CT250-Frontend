@@ -104,7 +104,7 @@ const SignUpPage = () => {
             <div className="mb-4">
               <input
                 type="file"
-                required
+                
                 onChange={handleFileChange}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
               />
@@ -133,4 +133,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
+export default SignUpPage
