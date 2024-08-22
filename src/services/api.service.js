@@ -7,10 +7,11 @@ const commonConfig = {
     },
 };
 
-const URL = "https://ct250-backend-nydf.onrender.com";
+// const rootURL = "https://ct250-backend-nydf.onrender.com/api/v1";
+const rootURL = "http://localhost:5000/api/v1";
 
 export default (path) => {
-    const baseURL = `${URL}${path}`;
+    const baseURL = `${rootURL}${path}`;
     return axios.create({
         baseURL: baseURL,
         ...commonConfig,
