@@ -21,7 +21,7 @@ const CheckOrder = () => {
   return (
     <>
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
-      <div className='pb-10 container px-10'>
+      <div className='pb-10 container mx-auto px-10'>
         <h1 className='text-4xl font-semibold mt-4 mb-6 text-left'>
           Kiểm tra đơn hàng
         </h1>
@@ -41,7 +41,7 @@ const CheckOrder = () => {
           />
           <button
             type='submit'
-            className='bg-primary text-white py-3 px-4 rounded-lg hover:bg-primary-hover transition-colors w-[250px]'
+            className='bg-primary text-white py-3 px-4 rounded-lg hover:bg-primary-hover transition-colors w-3/12'
           >
             Tra cứu
           </button>

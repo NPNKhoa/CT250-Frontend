@@ -3,6 +3,7 @@ import LoginPage from '@pages/LoginPage';
 import SignUpPage from '@pages/SignUpPage';
 import AboutUsPage from '@pages/AboutUsPage';
 import CheckOrder from '@pages/CheckOrder';
+import CheckWarranty from '@pages/CheckWarranty';
 
 const routes = [
   {
@@ -31,9 +32,9 @@ const routes = [
     element: <CheckOrder />,
   },
   {
-    id: 'about',
-    path: '/about',
-    element: <AboutUsPage />,
+    id: 'checkwarranty',
+    path: '/checkwarranty',
+    element: <CheckWarranty />,
   },
 ];
 
