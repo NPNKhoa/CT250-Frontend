@@ -1,34 +1,28 @@
-import CheckOrder from "@pages/CheckOrder";
-import CheckWarranty from "@pages/CheckWarranty";
-import HomePage from "@pages/HomePage";
-import LoginPage from "@pages/LoginPage";
-import SignUpPage from "@pages/SignUpPage";
+import HomePage from '@pages/HomePage';
+import LoginPage from '@pages/LoginPage';
+import SignUpPage from '@pages/SignUpPage';
+import AboutUsPage from '@pages/AboutUsPage';
 
 const routes = [
   {
-    id: "home",
-    path: "/",
+    id: 'home',
+    path: '/',
     element: <HomePage />,
   },
   {
-    id: "login",
-    path: "/login",
+    id: 'login',
+    path: '/login',
     element: <LoginPage />,
   },
   {
-    id: "signup",
-    path: "/signup",
+    id: 'signup',
+    path: '/signup',
     element: <SignUpPage />,
   },
   {
-    id: "checkorder",
-    path: "/checkorder",
-    element: <CheckOrder />,
-  },
-  {
-    id: "checkwarranty",
-    path: "/checkwarranty",
-    element: <CheckWarranty />,
+    id: 'about',
+    path: '/about',
+    element: <AboutUsPage />,
   },
 ];
 

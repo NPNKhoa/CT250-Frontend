@@ -14,7 +14,8 @@
       "@pages/*": ["pages/*"],
       "@redux/*": ["redux/*"],
       "@routers/*": ["routers/*"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@services/*": ["services/*"]
     }
   },
   "include": ["src/**/*", "tailwind.config.js"], // Bao gồm tất cả các tệp trong thư mục src
