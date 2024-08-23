@@ -2,6 +2,7 @@ import HomePage from '@pages/HomePage';
 import LoginPage from '@pages/LoginPage';
 import SignUpPage from '@pages/SignUpPage';
 import AboutUsPage from '@pages/AboutUsPage';
+import CheckOrder from '@pages/CheckOrder';
 
 const routes = [
   {
@@ -18,6 +19,16 @@ const routes = [
     id: 'signup',
     path: '/signup',
     element: <SignUpPage />,
+  },
+  {
+    id: 'about',
+    path: '/about',
+    element: <AboutUsPage />,
+  },
+  {
+    id: 'checkorder',
+    path: '/checkorder',
+    element: <CheckOrder />,
   },
   {
     id: 'about',
