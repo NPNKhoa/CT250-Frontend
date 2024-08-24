@@ -4,6 +4,7 @@ import SignUpPage from '@pages/SignUpPage';
 import AboutUsPage from '@pages/AboutUsPage';
 import CheckOrder from '@pages/CheckOrder';
 import CheckWarranty from '@pages/CheckWarranty';
+import ContactPage from '@pages/ContactPage';
 
 const routes = [
   {
@@ -35,6 +36,11 @@ const routes = [
     id: 'checkwarranty',
     path: '/checkwarranty',
     element: <CheckWarranty />,
+  },
+  {
+    id: 'contact',
+    path: '/contact',
+    element: <ContactPage />,
   },
 ];
 
