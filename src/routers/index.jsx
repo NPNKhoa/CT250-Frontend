@@ -5,6 +5,7 @@ import AboutUsPage from '@pages/AboutUsPage';
 import CheckOrder from '@pages/CheckOrder';
 import CheckWarranty from '@pages/CheckWarranty';
 import ContactPage from '@pages/ContactPage';
+import ProductDetail from '@pages/ProductDetail';
 
 const routes = [
   {
@@ -41,6 +42,11 @@ const routes = [
     id: 'contact',
     path: '/contact',
     element: <ContactPage />,
+  },
+  {
+    id: 'product_detail',
+    path: '/product/vot-yonex/vot-yonex-arcsaber1',
+    element: <ProductDetail />,
   },
 ];
 
