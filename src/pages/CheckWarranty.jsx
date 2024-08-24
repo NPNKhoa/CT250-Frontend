@@ -26,7 +26,7 @@ const CheckWarranty = () => {
   return (
     <>
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
-      <div className='pb-10 container mx-auto px-10'>
+      <div className='pb-10 container mx-auto px-4'>
         <h1 className='text-4xl font-semibold mt-4 mb-6 text-left'>
           Kiểm tra bảo hành
         </h1>
