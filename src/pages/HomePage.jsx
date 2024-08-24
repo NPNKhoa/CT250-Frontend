@@ -30,7 +30,7 @@ const HomePage = () => {
               imageUrl='https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-yonex-arcsaber-1-feel-lavender-chinh-hang_1715113370.webp'
               name='Vợt cầu lông Yonex Arcsaber 1 Feel (Lavender) chính hãng'
               price={1000000}
-              productLink='https://example.com/product1'
+              productLink='/product/vot-yonex/vot-yonex-arcsaber1'
             />
           </div>
         </div>
