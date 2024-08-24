@@ -4,7 +4,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 const NavBar = () => {
-  const [showDropdown, setShowDropdown] = useState(true);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const arr = [
     { value: '', label: 'Trang chủ' },
