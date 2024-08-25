@@ -47,7 +47,7 @@ const routes = [
   },
   {
     id: 'product_detail',
-    path: '/products/:id',
+    path: '/products/detail/:id',
     element: <ProductDetail />,
   },
   {

@@ -29,8 +29,6 @@ const ProductDetail = () => {
     fetchProducts();
   }, [id]);
 
-  console.log(products.description);
-
   const breadcrumbs = [
     { label: 'Trang chủ', href: '/' },
     { label: 'Vợt cầu lông', href: '/product/vot' },
