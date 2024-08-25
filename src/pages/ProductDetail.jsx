@@ -7,7 +7,6 @@ import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 import Vnpay from '@assets/Vnpay.png';
-import { Link } from 'react-router-dom';
 import RatingSection from '@components/RatingSection';
 
 import productService from '@services/product.service';
@@ -16,19 +15,21 @@ const ProductDetail = () => {
   const { id } = useParams();
   const [products, setProducts] = useState({});
 
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await productService.getProductById(id);
-        setProducts(response.data);
+        const productResponse = await productService.getProductById(id);
+        setProducts(productResponse.data);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching data:', error);
       }
     };
 
     fetchProducts();
   }, [id]);
-  console.log(products);
+
+  console.log(products.description);
 
   const breadcrumbs = [
     { label: 'Trang chủ', href: '/' },
@@ -36,11 +37,11 @@ const ProductDetail = () => {
     { label: 'Vợt cầu lông Yonex', href: '/product/vot-yonex' },
     {
       label: `${products.productName}`,
-      href: '/product/vot-yonex/vot-yonex-arcsaber1',
+      href: `/products/${id}`,
     },
   ];
 
-  const images = products.productImagePath || [];
+  const images =  products.productImagePath || [];
   const [currentImage, setCurrentImage] = useState(images[0]); // Khởi tạo với giá trị an toàn
 
   useEffect(() => {
@@ -100,36 +101,10 @@ const ProductDetail = () => {
     },
   ];
 
-  const productData = [
-    {
-      specificationName: 'Trình Độ Chơi:',
-      specificationDesc: 'Trung Bình',
-    },
-    {
-      specificationName: 'Chiều dài vợt:',
-      specificationDesc: '675 mm',
-    },
-    {
-      specificationName: 'Phong Cách Chơi:',
-      specificationDesc: 'Tấn Công',
-    },
-    {
-      specificationName: 'Độ Cứng Đũa:',
-      specificationDesc: 'Trung Bình',
-    },
-    {
-      specificationName: 'Điểm Cân Bằng:',
-      specificationDesc: 'Nặng Đầu',
-    },
-    {
-      specificationName: 'Nội Dung Chơi:',
-      specificationDesc: 'Cả Đơn và Đôi',
-    },
-    {
-      specificationName: 'Trọng Lượng:',
-      specificationDesc: '3U: 85 - 89g',
-    },
-  ];
+  const productData = products.technicalSpecification || [];
+
+  // console.log(productData);
+
   const [activeTab, setActiveTab] = useState(true);
   const handleTabChange = tab => {
     setActiveTab(tab);
@@ -166,7 +141,7 @@ const ProductDetail = () => {
             <div className='flex flex-col items-center  p-2'>
               <img
                 src={currentImage}
-                alt='Vợt cầu lông Yonex'
+                alt={products.productName}
                 className='w-96 h-96 object-contain'
               />
               <div className='flex space-x-4 mt-4'>
@@ -191,8 +166,10 @@ const ProductDetail = () => {
             <h1 className='text-3xl font-bold mb-2'>{products.productName}</h1>
             <p className='text-gray-600  mb-2'>Mã: VNB019090</p>
             <p className=' mb-2'>
-              Thương hiệu: <span className='text-primary'>Yonex</span> | Tình
-              trạng: <span className='text-primary'>Còn hàng</span>
+              Thương hiệu: <span className='text-primary'>{products.productBrand?.brandName}</span> | Tình
+              trạng: <span className='text-primary'>
+                {products.countInStock > 0 ? 'Còn hàng' : 'Hết hàng'}
+              </span>
             </p>
             <div className='flex items-center gap-3  mb-8'>
               <p className='text-2xl font-bold text-primary'>
@@ -305,7 +282,7 @@ const ProductDetail = () => {
           {/* Hiển thị nội dung dựa trên activeTab */}
           {activeTab === 'description' ? (
             <div className='p-4 space-y-4 text-gray-800'>
-              <p>{products.description}</p>
+              <div dangerouslySetInnerHTML={{ __html: products.description }} />
             </div>
           ) : (
             <table className='table-auto w-full mt-3'>
@@ -313,7 +290,7 @@ const ProductDetail = () => {
                 {productData.map((item, index) => (
                   <tr key={index} className='border border-gray-300 '>
                     <td className='w-2/5 p-3 border border-gray-300 font-bold'>
-                      {item.specificationName}
+                      {item.specificationName.specificationName}
                     </td>
                     <td className='px-4 py-2 border border-gray-300'>
                       {item.specificationDesc}
