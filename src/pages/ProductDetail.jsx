@@ -14,8 +14,8 @@ import productService from '@services/product.service';
 
 const ProductDetail = () => {
   const { id } = useParams();
-
   const [products, setProducts] = useState({});
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -41,6 +41,17 @@ const ProductDetail = () => {
   ];
 
   const images = products.productImagePath || [];
+  const [currentImage, setCurrentImage] = useState(images[0]); // Khởi tạo với giá trị an toàn
+
+  useEffect(() => {
+    if (images.length > 0) {
+      setCurrentImage(images[0]);
+    }
+  }, [images]); // Cập nhật currentImage khi images thay đổi
+
+  const handleImageClick = image => {
+    setCurrentImage(image);
+  };
 
   const giftsData = [
     {
@@ -124,11 +135,6 @@ const ProductDetail = () => {
     setActiveTab(tab);
   };
 
-  const [currentImage, setCurrentImage] = useState(images[0]);
-  const handleImageClick = image => {
-    setCurrentImage(image);
-  };
-
   const [quantity, setQuantity] = useState(1);
 
   const increment = () => {
@@ -191,13 +197,18 @@ const ProductDetail = () => {
             <div className='flex items-center gap-3  mb-8'>
               <p className='text-2xl font-bold text-primary'>
                 {products.price &&
-                  products.price.toLocaleString('vi-VN', {
+                  (products.price * 0.8).toLocaleString('vi-VN', {
                     style: 'currency',
                     currency: 'VND',
                   })}
               </p>
               <p className='line-through text-gray-400'>
-                Giá niêm yết: 670.000 ₫
+                Giá niêm yết:{' '}
+                {products.price &&
+                  products.price.toLocaleString('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND',
+                  })}
               </p>
             </div>
 
@@ -294,105 +305,7 @@ const ProductDetail = () => {
           {/* Hiển thị nội dung dựa trên activeTab */}
           {activeTab === 'description' ? (
             <div className='p-4 space-y-4 text-gray-800'>
-              <p>
-                <strong>Vợt cầu lông Apacs EDGE SABER 10 (Black)</strong> chính
-                hãng thuộc phân khúc vợt giá rẻ dành cho đối tượng người chơi
-                phong trào yêu thích lối chơi công thủ toàn diện, linh hoạt
-                trong tấn công cũng như phòng thủ. Mặc dù là cây vợt cầu lông
-                giá rẻ nhưng <strong>Edge Saber 10 đỏ</strong>
-                lại được trang bị những công nghệ hiện đại nhất của hãng có thể
-                kể đến như:
-              </p>
-
-              <ul className='list-disc list-inside pl-4 space-y-2'>
-                <li>GRAPHITE T-THROAT</li>
-                <li>NEW CONTROL SUPPORT CAP</li>
-                <li>ARMOR POWER FRAME</li>
-              </ul>
-
-              <p>
-                Chất liệu khung vợt luôn là điểm nhấn của hãng{' '}
-                <strong>Apacs</strong>, bộ khung carbon Nhật Bản cho mức căng
-                tối đa siêu khủng lên đến 38Lbs. Thiết kế màu sắc trắng phối đỏ
-                của <strong>vợt cầu lông Apacs EDGE SABER 10 (Black)</strong>
-                chính hãng tựa dòng Arcsaber 11 của hãng Yonex.
-              </p>
-
-              <p>
-                Thân vợt có độ dẻo trung bình, trợ lực tốt cho người chơi. Phần
-                cán cầm vợt khá vừa tay, phù hợp với đại đa số người chơi phong
-                trào tại Việt Nam. Nhìn chung, nếu bạn đang tìm kiếm một cây vợt
-                giá rẻ, bộ khung chịu được mức căng cao thì{' '}
-                <strong>Apacs EDGE SABER 10</strong> không thể thiếu trong danh
-                sách tham khảo của bạn. Ngoài ra, các bạn cũng có thể tham khảo
-                thêm các sản phẩm vợt cầu lông Apacs khác để chọn cho mình một
-                cây vợt phù hợp với lối đánh của mình nhé.
-              </p>
-
-              <p className='font-semibold'>Thông số kỹ thuật:</p>
-
-              <ul className='list-disc list-inside pl-4 space-y-2'>
-                <li>Thương hiệu: Apacs</li>
-                <li>Chất liệu khung vợt: 30 Tonne Japan HM Graphite</li>
-                <li>Chất liệu đũa vợt: 24 Tonne Japan HM Graphite</li>
-                <li>Trọng lượng: 4U (84g)</li>
-                <li>Điểm cân bằng: 285 ± 3mm (Cân bằng)</li>
-                <li>Chu vi cán vợt: G2</li>
-                <li>Sức căng tối đa: 38 LBS ~ 17.2 kg</li>
-                <li>Màu sắc: Đỏ - Trắng</li>
-                <li>Hệ thống lỗ gen: 76 lỗ</li>
-                <li>Nơi sản xuất: Malaysia</li>
-              </ul>
-
-              <p>
-                <strong>GRAPHITE T-THROAT:</strong> Công nghệ khớp nối tại vị
-                trí giữa khung và đũa vợt được Apacs nghiên cứu và chế tạo đem
-                lại hiệu quả trong việc giảm thiểu độ xoắn, từ đó tăng độ chính
-                xác sau mỗi pha đánh.
-              </p>
-
-              <p>
-                <strong>SLIM SHAFT:</strong> Công nghệ đũa vợt siêu mỏng giúp
-                cắt giảm lực cản không khí, tăng tốc độ đánh cây vợt cầu lông{' '}
-                <strong>Apacs EDGE SABER 10 (Black)</strong> chính hãng.
-              </p>
-
-              <p>
-                <strong>JAPAN HM GRAPHITE:</strong> Chất liệu siêu cứng và bền
-                của Nhật Bản được sử dụng nhiều trên các dòng vợt hiện nay, đem
-                lại độ bền cho khung và chịu được mức căng lớn, giảm thiểu trọng
-                lượng đáng kể so với các vật liệu Carbon truyền thống.
-              </p>
-
-              <p>
-                <strong>76 Grommets System:</strong> Hệ thống gen cho phép khung
-                vợt có nhiều lỗ gen hơn thông thường với 76 lỗ (so với 72 lỗ),
-                tăng sức bền dây vợt lên đến 7%.
-              </p>
-
-              <p>
-                <strong>Vợt cầu lông Apacs EDGE SABER 10 (Black)</strong> chính
-                hãng thích hợp cho lối chơi công thủ toàn diện nhưng hơi thiên
-                về lối đánh phản tạt điều cầu để ép đối thủ mắc lỗi để ra đòn
-                tấn công ghi điểm.
-              </p>
-
-              <p>
-                Apacs EDGE SABER 10 sử dụng trong cả đánh đơn và đánh đôi ở vị
-                trí trên lưới. Giá cả phù hợp cho các đối tượng người chơi như
-                học sinh, sinh viên, người mới tập chơi hay người chơi giải trí
-                ngoài trời.
-              </p>
-
-              <p>
-                <span className='font-bold '>Xem thêm: </span>
-                Những mẫu
-                <span className='font-bold text-primary'>
-                  {' '}
-                  <Link to='#'> vợt cầu lông </Link>
-                </span>{' '}
-                chất lượng chính hãng tại ShopVNB.
-              </p>
+              <p>{products.description}</p>
             </div>
           ) : (
             <table className='table-auto w-full mt-3'>
