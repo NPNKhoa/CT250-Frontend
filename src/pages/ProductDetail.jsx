@@ -31,8 +31,8 @@ const ProductDetail = () => {
 
   const breadcrumbs = [
     { label: 'Trang chủ', href: '/' },
-    { label: 'Vợt cầu lông', href: '/product/vot' },
-    { label: 'Vợt cầu lông Yonex', href: '/product/vot-yonex' },
+    { label: 'Vợt cầu lông', href: '/product/vot-cau-long' },
+    { label: 'Vợt cầu lông Yonex', href: '/product/vot-cau-long-yonex' },
     {
       label: `${products.productName}`,
       href: `/products/${id}`,
