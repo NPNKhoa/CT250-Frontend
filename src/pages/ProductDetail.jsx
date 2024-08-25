@@ -13,14 +13,12 @@ import RatingSection from '@components/RatingSection';
 import productService from '@services/product.service';
 
 const ProductDetail = () => {
-
-
   const { id } = useParams();
-  
+
   const [products, setProducts] = useState({});
   useEffect(() => {
     const fetchProducts = async () => {
-      try {      
+      try {
         const response = await productService.getProductById(id);
         setProducts(response.data);
         console.log(response.data);
@@ -28,7 +26,7 @@ const ProductDetail = () => {
         console.error('Error fetching products:', error);
       }
     };
-  
+
     fetchProducts();
   }, [id]);
 
@@ -43,7 +41,6 @@ const ProductDetail = () => {
   ];
 
   const images = products.productImagePath || [];
-  
 
   const giftsData = [
     {
@@ -185,16 +182,20 @@ const ProductDetail = () => {
             </div>
           </div>
           <div>
-            <h1 className='text-3xl font-bold mb-2'>
-              {products.productName}
-            </h1>
+            <h1 className='text-3xl font-bold mb-2'>{products.productName}</h1>
             <p className='text-gray-600  mb-2'>Mã: VNB019090</p>
             <p className=' mb-2'>
               Thương hiệu: <span className='text-primary'>Yonex</span> | Tình
               trạng: <span className='text-primary'>Còn hàng</span>
             </p>
             <div className='flex items-center gap-3  mb-8'>
-              <p className='text-2xl font-bold text-primary'>559.000 ₫</p>
+              <p className='text-2xl font-bold text-primary'>
+                {products.price &&
+                  products.price.toLocaleString('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND',
+                  })}
+              </p>
               <p className='line-through text-gray-400'>
                 Giá niêm yết: 670.000 ₫
               </p>

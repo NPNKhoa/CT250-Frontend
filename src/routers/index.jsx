@@ -6,8 +6,8 @@ import CheckOrder from '@pages/CheckOrder';
 import CheckWarranty from '@pages/CheckWarranty';
 import ContactPage from '@pages/ContactPage';
 import ProductDetail from '@pages/ProductDetail';
-
 import Products from '@pages/Products';
+import CartPage from '@pages/CartPage';
 
 
 const routes = [
