@@ -16,7 +16,7 @@ function RatingSection() {
       : 5
   ).toFixed(1);
 
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(5);
   const [review, setReview] = useState('');
 
   const handleRatingChange = (event, newRating) => {
@@ -89,7 +89,7 @@ function RatingSection() {
 
         <div className='flex flex-col items-start p-6 bg-white rounded-lg shadow-md w-full mx-auto'>
           <p className='text-lg font-semibold mb-4'>
-            Bạn đánh giá sản phẩm này?
+            Bạn đánh giá sao về sản phẩm này?
           </p>
           <Rating
             name='product-rating'
