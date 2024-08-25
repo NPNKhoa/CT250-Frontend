@@ -1,5 +1,6 @@
 import ViewedProducts from '@components/ViewedProducts';
-import React from 'react';
+import { Rating } from '@mui/material';
+import React, { useState } from 'react';
 
 function RatingSection() {
   const ratingsData = [1, 0, 0, 0, 0]; // Example data for ratings
@@ -15,13 +16,28 @@ function RatingSection() {
       : 5
   ).toFixed(1);
 
+  const [rating, setRating] = useState(0);
+  const [review, setReview] = useState('');
+
+  const handleRatingChange = (event, newRating) => {
+    setRating(newRating);
+  };
+
+  const handleReviewChange = event => {
+    setReview(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    alert(`Đánh giá: ${rating} sao\nNhận xét: ${review}`);
+  };
+
   return (
     <div className='grid grid-cols-[2fr_1fr] mt-5 gap-3'>
       <div className='container mx-auto p-6 bg-white rounded-lg shadow-md'>
         <h2 className='text-xl font-bold mb-4'>
           Đánh giá & nhận xét Vợt Cầu Lông Apacs Power Concept 500 chính hãng
         </h2>
-        <div className='flex items-center mb-6  gap-10'>
+        <div className='flex items-center mb-6 gap-10'>
           {/* rating */}
           <div className=' text-center'>
             <span className='text-4xl font-bold'>{averageRating}/5</span>
@@ -70,9 +86,30 @@ function RatingSection() {
             })}
           </div>
         </div>
-        <div className='flex flex-col items-center'>
-          <p>Bạn đánh giá sản phẩm này?</p>
-          <button className='bg-primary hover:bg-hover-primary text-white font-bold mt-2 py-2 px-4 rounded-lg'>
+
+        <div className='flex flex-col items-start p-6 bg-white rounded-lg shadow-md w-full mx-auto'>
+          <p className='text-lg font-semibold mb-4'>
+            Bạn đánh giá sản phẩm này?
+          </p>
+          <Rating
+            name='product-rating'
+            value={rating}
+            onChange={handleRatingChange}
+            precision={0.5}
+            size='large'
+            className='mb-4'
+          />
+          <textarea
+            value={review}
+            onChange={handleReviewChange}
+            placeholder='Nhập nhận xét của bạn ở đây...'
+            rows='4'
+            className='w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none  focus:ring-primary focus:border-primary resize-none mb-4'
+          />
+          <button
+            onClick={handleSubmit}
+            className='bg-primary hover:bg-hover-primary text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-150 ease-in-out'
+          >
             Đánh giá ngay
           </button>
         </div>
