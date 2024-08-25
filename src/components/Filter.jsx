@@ -27,7 +27,7 @@ const Filter = () => {
 
   return (
     <div className='w-full p-6 bg-gray-50 shadow-lg rounded-lg'>
-  <h3 className='text-lg font-bold mb-6'>Chọn Mức Giá</h3>
+  <h3 className='text-lg font-semibold mb-6'>Chọn Mức Giá</h3>
   <div className='space-y-4 mb-6'>
     {[
       { label: 'Giá dưới 500.000đ', value: 'under-500k' },
@@ -48,7 +48,7 @@ const Filter = () => {
     ))}
   </div>
 
-  <h3 className='text-lg font-bold mb-6'>Thương Hiệu</h3>
+  <h3 className='text-lg font-semibold mb-6'>Thương Hiệu</h3>
   <div className='space-y-4'>
     {[
       { label: 'Yonex', value: 'yonex' },

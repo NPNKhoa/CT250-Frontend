@@ -34,10 +34,6 @@ const NavBar = () => {
     { value: 'contact', label: 'Liên hệ' },
   ];
 
-  // AJGJGJHGJG
-  console.log('productTypes:', productTypes);
-  console.log('brands:', brands);
-
   const productCategories = productTypes.map(type => ({
     title: type.productTypeName,
     items: [
@@ -62,7 +58,7 @@ const NavBar = () => {
             }
           >
             <Link
-              to={`/${item.value}`}
+              to={item.value !== 'products' ? `/${item.value}` : null}
               className='py-1 text-white uppercase font-bold text-sm flex items-center'
             >
               {item.label}
