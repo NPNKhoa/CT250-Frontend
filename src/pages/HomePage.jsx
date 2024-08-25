@@ -51,7 +51,7 @@ const HomePage = () => {
                 imageUrl={product.productImagePath[0]}
                 name={product.productName}
                 price={product.price}
-                productLink={`products/${product._id}`}
+                productLink={`products/detail/${product._id}`}
               />
             ))}
           </div>
