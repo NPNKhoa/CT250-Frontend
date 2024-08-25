@@ -140,7 +140,8 @@ const Header = () => {
             )}
           </div>
 
-          <div
+          <Link
+            to='/cart'
             onMouseEnter={handleCart}
             className='flex flex-col items-center justify-center text-center space-x-2 relative cursor-pointer'
           >
@@ -163,7 +164,7 @@ const Header = () => {
                 </div>
               </div>
             )}
-          </div>
+          </Link>
         </div>
       </div>
       <NavBar />

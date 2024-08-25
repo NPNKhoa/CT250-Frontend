@@ -6,7 +6,9 @@ import CheckOrder from '@pages/CheckOrder';
 import CheckWarranty from '@pages/CheckWarranty';
 import ContactPage from '@pages/ContactPage';
 import ProductDetail from '@pages/ProductDetail';
+
 import Products from '@pages/Products';
+
 
 const routes = [
   {
@@ -52,6 +54,11 @@ const routes = [
     id: 'products',
     path: '/products',
     element: <Products />,
+  },
+  {
+    id: 'cart',
+    path: '/cart',
+    element: <CartPage />,
   },
 ];
 
