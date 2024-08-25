@@ -6,7 +6,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
-import Vnpay from '@assets/Vnpay.png';
+import Vnpay from '@assets/vnpay.png';
 import RatingSection from '@components/RatingSection';
 
 import productService from '@services/product.service';
@@ -19,7 +19,7 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const productResponse = await productService.getProductById(id);
+        const productResponse = await productService.getById(id);
         setProducts(productResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error);
