@@ -16,14 +16,14 @@ const ProductItem = ({ imageUrl, name, price, productLink }) => {
   return (
     <Link
       to={productLink}
-      className='block bg-white rounded-lg shadow-md overflow-hidden w-64 h-96'
+      className='block bg-white rounded-lg shadow-md overflow-hidden w-60 h-80'
     >
-      <div className='w-full h-2/3'>
-        <img src={imageUrl} alt={name} className='w-full h-full object-cover' />
+      <div className='flex justify-center w-full h-2/3'>
+        <img src={imageUrl} alt={name} className='w-auto h-full object-cover' />
       </div>
       <div className='p-4 h-1/3'>
-        <h3 className='text-base text-gray-800'>{name}</h3>
-        <p className='text-red-600 font-bold'>{formattedPrice}</p>
+        <h3 className='h-2/3 text-sm text-gray-800'>{name}</h3>
+        <p className='h-1/3 text-red-600 font-bold'>{formattedPrice}</p>
       </div>
     </Link>
   );
