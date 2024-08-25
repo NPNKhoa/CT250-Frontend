@@ -15,8 +15,8 @@ const ProductItem = ({ imageUrl, name, price, productLink }) => {
 
   return (
     <Link
-      to={productLink}
-      className='block bg-white rounded-lg shadow-md overflow-hidden w-60 h-80'
+      to={`/${productLink}`}
+      className='block bg-white rounded-lg shadow-md overflow-hidden w-auto'
     >
       <div className='flex justify-center w-full h-2/3'>
         <img src={imageUrl} alt={name} className='w-auto h-full object-cover' />

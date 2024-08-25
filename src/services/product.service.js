@@ -9,6 +9,17 @@ class productService {
     return (await this.api.get('/')).data;
   }
 
+  async getByName(productName, page, limit) {
+    const params = new URLSearchParams({
+      productName, 
+      page, 
+      limit
+    });
+  
+    return (await this.api.get(`/?${params.toString()}`)).data;
+  }
+  
+
   async getById(id) {
     return (await this.api.get(`/${id}`)).data;
   }

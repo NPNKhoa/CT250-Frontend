@@ -15,46 +15,55 @@ const routes = [
     path: '/',
     element: <HomePage />,
   },
+  
   {
     id: 'login',
     path: '/login',
     element: <LoginPage />,
   },
+
   {
     id: 'signup',
     path: '/signup',
     element: <SignUpPage />,
   },
+
   {
     id: 'about',
     path: '/about',
     element: <AboutUsPage />,
   },
+
   {
     id: 'checkorder',
     path: '/checkorder',
     element: <CheckOrder />,
   },
+
   {
     id: 'checkwarranty',
     path: '/checkwarranty',
     element: <CheckWarranty />,
   },
+
   {
     id: 'contact',
     path: '/contact',
     element: <ContactPage />,
   },
+
   {
     id: 'product_detail',
     path: '/products/detail/:id',
     element: <ProductDetail />,
   },
+
   {
     id: 'products',
     path: '/products/:id',
     element: <Products />,
   },
+
   {
     id: 'cart',
     path: '/cart',
