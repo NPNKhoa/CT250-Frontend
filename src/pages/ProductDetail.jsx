@@ -21,7 +21,6 @@ const ProductDetail = () => {
       try {
         const response = await productService.getProductById(id);
         setProducts(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
@@ -29,6 +28,7 @@ const ProductDetail = () => {
 
     fetchProducts();
   }, [id]);
+  console.log(products);
 
   const breadcrumbs = [
     { label: 'Trang chủ', href: '/' },

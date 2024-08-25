@@ -28,7 +28,7 @@ class productService {
   }
 
   async deleteProduct(id) {
-    return (await this.api.delete(`${id}`)).data;
+    return (await this.api.delete(`/${id}`)).data;
   }
 }
 
