@@ -9,7 +9,6 @@ import ProductDetail from '@pages/ProductDetail';
 import Products from '@pages/Products';
 import CartPage from '@pages/CartPage';
 
-
 const routes = [
   {
     id: 'home',
@@ -50,7 +49,8 @@ const routes = [
     id: 'product_detail',
     path: '/products/:id',
     element: <ProductDetail />,
-  },{
+  },
+  {
     id: 'products',
     path: '/products',
     element: <Products />,
