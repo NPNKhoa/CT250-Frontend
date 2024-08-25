@@ -52,7 +52,7 @@ const routes = [
   },
   {
     id: 'products',
-    path: '/products',
+    path: '/products/:id',
     element: <Products />,
   },
   {
