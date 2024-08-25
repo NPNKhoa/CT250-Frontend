@@ -6,6 +6,8 @@ import CheckOrder from '@pages/CheckOrder';
 import CheckWarranty from '@pages/CheckWarranty';
 import ContactPage from '@pages/ContactPage';
 import ProductDetail from '@pages/ProductDetail';
+import Products from '@pages/Products';
+import CartPage from '@pages/CartPage';
 
 const routes = [
   {
@@ -45,8 +47,18 @@ const routes = [
   },
   {
     id: 'product_detail',
-    path: '/product/vot-yonex/vot-yonex-arcsaber1',
+    path: '/products/:id',
     element: <ProductDetail />,
+  },
+  {
+    id: 'products',
+    path: '/products',
+    element: <Products />,
+  },
+  {
+    id: 'cart',
+    path: '/cart',
+    element: <CartPage />,
   },
 ];
 

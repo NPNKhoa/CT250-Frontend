@@ -21,13 +21,14 @@ const LoginPage = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const { data } = await authService.login(credentials);
+      const data = await authService.login(credentials);
+      console.log(data);
       localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data));
+      localStorage.setItem('user', JSON.stringify(data.data));
       setNotification({ message: 'Login successful!', type: 'success' });
       setTimeout(() => navigate('/'), 2000);
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error('Login failed:', error.response.data.error);
       setNotification({
         message: 'Login failed! Please try again.',
         type: 'error',

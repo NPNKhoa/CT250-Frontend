@@ -1,29 +1,57 @@
+import { useEffect, useState } from 'react';
 import BreadcrumbsComponent from '@components/Breadcrumb';
-import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import CheckIcon from '@mui/icons-material/Check';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 import Vnpay from '@assets/Vnpay.png';
+import { Link } from 'react-router-dom';
+import RatingSection from '@components/RatingSection';
+
+import productService from '@services/product.service';
 
 const ProductDetail = () => {
+  const { id } = useParams();
+  const [products, setProducts] = useState({});
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await productService.getProductById(id);
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    fetchProducts();
+  }, [id]);
+  console.log(products);
+
   const breadcrumbs = [
     { label: 'Trang chủ', href: '/' },
     { label: 'Vợt cầu lông', href: '/product/vot' },
     { label: 'Vợt cầu lông Yonex', href: '/product/vot-yonex' },
     {
-      label: 'Vợt cầu lông Yonex Arcsaber 1 Feel (Lavender) chính hãng',
+      label: `${products.productName}`,
       href: '/product/vot-yonex/vot-yonex-arcsaber1',
     },
   ];
 
-  const images = [
-    'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-honor-pro-new-chinh-hang_1709061799.webp',
-    'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-honor-pro-new-chinh-hang-4_1709061807.webp',
-    'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-honor-pro-new-chinh-hang-3_1709061821.webp',
-    'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-honor-pro-new-chinh-hang-1_1709061829.webp',
-  ];
+  const images = products.productImagePath || [];
+  const [currentImage, setCurrentImage] = useState(images[0]); // Khởi tạo với giá trị an toàn
+
+  useEffect(() => {
+    if (images.length > 0) {
+      setCurrentImage(images[0]);
+    }
+  }, [images]); // Cập nhật currentImage khi images thay đổi
+
+  const handleImageClick = image => {
+    setCurrentImage(image);
+  };
 
   const giftsData = [
     {
@@ -72,9 +100,39 @@ const ProductDetail = () => {
     },
   ];
 
-  const [currentImage, setCurrentImage] = useState(images[0]);
-  const handleImageClick = image => {
-    setCurrentImage(image);
+  const productData = [
+    {
+      specificationName: 'Trình Độ Chơi:',
+      specificationDesc: 'Trung Bình',
+    },
+    {
+      specificationName: 'Chiều dài vợt:',
+      specificationDesc: '675 mm',
+    },
+    {
+      specificationName: 'Phong Cách Chơi:',
+      specificationDesc: 'Tấn Công',
+    },
+    {
+      specificationName: 'Độ Cứng Đũa:',
+      specificationDesc: 'Trung Bình',
+    },
+    {
+      specificationName: 'Điểm Cân Bằng:',
+      specificationDesc: 'Nặng Đầu',
+    },
+    {
+      specificationName: 'Nội Dung Chơi:',
+      specificationDesc: 'Cả Đơn và Đôi',
+    },
+    {
+      specificationName: 'Trọng Lượng:',
+      specificationDesc: '3U: 85 - 89g',
+    },
+  ];
+  const [activeTab, setActiveTab] = useState(true);
+  const handleTabChange = tab => {
+    setActiveTab(tab);
   };
 
   const [quantity, setQuantity] = useState(1);
@@ -99,7 +157,10 @@ const ProductDetail = () => {
   return (
     <>
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
-      <div className='container mx-auto py-16'>
+
+      {/* product detail */}
+      <div className='container mx-auto py-8'>
+        {/* product top */}
         <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
           <div>
             <div className='flex flex-col items-center  p-2'>
@@ -127,18 +188,27 @@ const ProductDetail = () => {
             </div>
           </div>
           <div>
-            <h1 className='text-3xl font-bold mb-2'>
-              Vợt Cầu Lông Yonex Arcsaber 1 Feel (Lavender) Chính Hãng
-            </h1>
+            <h1 className='text-3xl font-bold mb-2'>{products.productName}</h1>
             <p className='text-gray-600  mb-2'>Mã: VNB019090</p>
             <p className=' mb-2'>
               Thương hiệu: <span className='text-primary'>Yonex</span> | Tình
               trạng: <span className='text-primary'>Còn hàng</span>
             </p>
             <div className='flex items-center gap-3  mb-8'>
-              <p className='text-2xl font-bold text-primary'>559.000 ₫</p>
+              <p className='text-2xl font-bold text-primary'>
+                {products.price &&
+                  (products.price * 0.8).toLocaleString('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND',
+                  })}
+              </p>
               <p className='line-through text-gray-400'>
-                Giá niêm yết: 670.000 ₫
+                Giá niêm yết:{' '}
+                {products.price &&
+                  products.price.toLocaleString('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND',
+                  })}
               </p>
             </div>
 
@@ -210,13 +280,52 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        <div className='mt-8'>
-          <h2 className='text-xl font-bold'>Thông tin thêm</h2>
-          <p>
-            Bảo hành chính hãng theo nhà sản xuất (Trừ hàng nội địa, xách tay)
-          </p>
-          <p>Mua hàng tại VNB Premium để nhận thêm nhiều ưu đãi</p>
+        {/* product bottom */}
+        <div className='container mx-auto mt-5'>
+          <div className='grid grid-cols-2 font-semibold text-2xl py-2 border-b-2'>
+            <button
+              className={`button ${
+                activeTab === 'description' ? ' text-primary' : ' text-gray-700'
+              }`}
+              onClick={() => handleTabChange('description')}
+            >
+              Mô tả sản phẩm
+            </button>
+            <button
+              className={`button ${
+                activeTab === 'specifications'
+                  ? ' text-primary'
+                  : ' text-gray-700'
+              }`}
+              onClick={() => handleTabChange('specifications')}
+            >
+              Thông số kỹ thuật
+            </button>
+          </div>
+          {/* Hiển thị nội dung dựa trên activeTab */}
+          {activeTab === 'description' ? (
+            <div className='p-4 space-y-4 text-gray-800'>
+              <p>{products.description}</p>
+            </div>
+          ) : (
+            <table className='table-auto w-full mt-3'>
+              <tbody>
+                {productData.map((item, index) => (
+                  <tr key={index} className='border border-gray-300 '>
+                    <td className='w-2/5 p-3 border border-gray-300 font-bold'>
+                      {item.specificationName}
+                    </td>
+                    <td className='px-4 py-2 border border-gray-300'>
+                      {item.specificationDesc}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
+
+        <RatingSection />
       </div>
     </>
   );
