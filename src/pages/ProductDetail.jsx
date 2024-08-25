@@ -7,6 +7,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 import Vnpay from '@assets/Vnpay.png';
 import { Link } from 'react-router-dom';
+import RatingSection from '@components/RatingSection';
 
 const ProductDetail = () => {
   const breadcrumbs = [
@@ -137,7 +138,7 @@ const ProductDetail = () => {
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
 
       {/* product detail */}
-      <div className='container mx-auto py-16'>
+      <div className='container mx-auto py-8'>
         {/* product top */}
         <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
           <div>
@@ -391,6 +392,8 @@ const ProductDetail = () => {
             </table>
           )}
         </div>
+
+        <RatingSection />
       </div>
     </>
   );
