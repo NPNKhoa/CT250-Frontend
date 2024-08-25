@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
+import productTypeService from '@services/productType.service';
+
 const NavBar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
-
+  
   const arr = [
     { value: '', label: 'Trang chủ' },
     { value: 'products', label: 'Sản phẩm' },

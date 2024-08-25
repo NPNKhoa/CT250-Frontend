@@ -5,15 +5,15 @@ class productService {
     this.api = createApiClient(path);
   }
 
-  async getAllProducts() {
+  async getAll() {
     return (await this.api.get('/')).data;
   }
 
-  async getProductById(id) {
+  async getById(id) {
     return (await this.api.get(`/${id}`)).data;
   }
 
-  async addProduct(data) {
+  async add(data) {
     return (
       await this.api.post('/', data, {
         headers: {
@@ -23,11 +23,11 @@ class productService {
     ).data;
   }
 
-  async updateProduct(id, data) {
+  async update(id, data) {
     return (await this.api.put(`/${id}`, data)).data;
   }
 
-  async deleteProduct(id) {
+  async delete(id) {
     return (await this.api.delete(`/${id}`)).data;
   }
 }
