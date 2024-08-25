@@ -6,13 +6,6 @@ class authService {
   }
 
   async login(data) {
-    try {
-      const res = await this.api.post('/login', data);
-
-      console.log(res);
-    } catch (error) {
-      console.log(error.response.data.error);
-    }
     return (await this.api.post('/login', data)).data;
   }
 

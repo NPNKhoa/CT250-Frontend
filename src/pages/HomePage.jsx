@@ -1,7 +1,26 @@
+import { useEffect, useState } from 'react';
+
 import Carousel from '@components/Carousel';
 import ProductItem from '@components/ProductItem';
 
+import productService from '@services/product.service';
+
 const HomePage = () => {
+
+  const [products, setProducts] = useState({});
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await productService.getAllProducts();
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+  
+    fetchProducts();
+  }, []);
+
   return (
     <div className='min-h-screen bg-gray-100'>
       <section className='relative'>
@@ -25,13 +44,16 @@ const HomePage = () => {
           <h2 className='text-3xl font-bold text-center text-primary mb-8'>
             Sản phẩm nổi bật
           </h2>
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
-            <ProductItem
-              imageUrl='https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-yonex-arcsaber-1-feel-lavender-chinh-hang_1715113370.webp'
-              name='Vợt cầu lông Yonex Arcsaber 1 Feel (Lavender) chính hãng'
-              price={1000000}
-              productLink='/product/vot-yonex/vot-yonex-arcsaber1'
-            />
+          <div className='grid grid-cols-5 gap-3'>
+            {Array.isArray(products) && products.map((product, index) => (
+              <ProductItem
+                key={index}
+                imageUrl={product.productImagePath[0]}
+                name={product.productName}
+                price={product.price}
+                productLink={`products/${product._id}`}
+              />
+            ))}
           </div>
         </div>
       </section>

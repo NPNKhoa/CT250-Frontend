@@ -1,5 +1,6 @@
+import { useEffect, useState } from 'react';
 import BreadcrumbsComponent from '@components/Breadcrumb';
-import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import CheckIcon from '@mui/icons-material/Check';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
@@ -9,23 +10,40 @@ import Vnpay from '@assets/Vnpay.png';
 import { Link } from 'react-router-dom';
 import RatingSection from '@components/RatingSection';
 
+import productService from '@services/product.service';
+
 const ProductDetail = () => {
+
+
+  const { id } = useParams();
+  
+  const [products, setProducts] = useState({});
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {      
+        const response = await productService.getProductById(id);
+        setProducts(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+  
+    fetchProducts();
+  }, [id]);
+
   const breadcrumbs = [
     { label: 'Trang chủ', href: '/' },
     { label: 'Vợt cầu lông', href: '/product/vot' },
     { label: 'Vợt cầu lông Yonex', href: '/product/vot-yonex' },
     {
-      label: 'Vợt cầu lông Yonex Arcsaber 1 Feel (Lavender) chính hãng',
+      label: `${products.productName}`,
       href: '/product/vot-yonex/vot-yonex-arcsaber1',
     },
   ];
 
-  const images = [
-    'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-honor-pro-new-chinh-hang_1709061799.webp',
-    'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-honor-pro-new-chinh-hang-4_1709061807.webp',
-    'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-honor-pro-new-chinh-hang-3_1709061821.webp',
-    'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-honor-pro-new-chinh-hang-1_1709061829.webp',
-  ];
+  const images = products.productImagePath || [];
+  
 
   const giftsData = [
     {
@@ -168,7 +186,7 @@ const ProductDetail = () => {
           </div>
           <div>
             <h1 className='text-3xl font-bold mb-2'>
-              Vợt Cầu Lông Yonex Arcsaber 1 Feel (Lavender) Chính Hãng
+              {products.productName}
             </h1>
             <p className='text-gray-600  mb-2'>Mã: VNB019090</p>
             <p className=' mb-2'>
