@@ -15,7 +15,6 @@ const ProductDetail = () => {
   const { id } = useParams();
   const [products, setProducts] = useState({});
 
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -41,7 +40,7 @@ const ProductDetail = () => {
     },
   ];
 
-  const images =  products.productImagePath || [];
+  const images = products.productImagePath || [];
   const [currentImage, setCurrentImage] = useState(images[0]); // Khởi tạo với giá trị an toàn
 
   useEffect(() => {
@@ -166,8 +165,12 @@ const ProductDetail = () => {
             <h1 className='text-3xl font-bold mb-2'>{products.productName}</h1>
             <p className='text-gray-600  mb-2'>Mã: VNB019090</p>
             <p className=' mb-2'>
-              Thương hiệu: <span className='text-primary'>{products.productBrand?.brandName}</span> | Tình
-              trạng: <span className='text-primary'>
+              Thương hiệu:{' '}
+              <span className='text-primary'>
+                {products.productBrand?.brandName}
+              </span>{' '}
+              | Tình trạng:{' '}
+              <span className='text-primary'>
                 {products.countInStock > 0 ? 'Còn hàng' : 'Hết hàng'}
               </span>
             </p>
