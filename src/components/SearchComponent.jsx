@@ -3,18 +3,30 @@ import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import WhatshotSharpIcon from '@mui/icons-material/WhatshotSharp';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export default function SearchPopover() {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const inputRef = React.useRef(null); // Tham chiếu đến input
+  const inputRef = React.useRef(null);
 
-  const handleClick = event => {
-    setAnchorEl(event.currentTarget);
-  };
+  const navigate = useNavigate();
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget);
+    inputRef.current?.focus(); // Tự động focus vào input khi click
+  };
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    const query = inputRef.current.value.trim(); // Lấy giá trị tìm kiếm
+    if (query) {
+      navigate(`/search?query=${encodeURIComponent(query)}`); // Chuyển hướng đến trang search với query
+    }
   };
 
   const open = Boolean(anchorEl);
@@ -78,15 +90,22 @@ export default function SearchPopover() {
     },
   ];
 
+  useEffect(() => {
+    if (open && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [open]);
+
   return (
     <div>
-      <form action='#' className='relative'>
+      <form action='#' className='relative' onSubmit={handleSubmit}>
         <input
           ref={inputRef}
           type='text'
           className='bg-gray-200 w-[300px] rounded-lg p-1'
           placeholder='Tìm sản phẩm...'
           onClick={handleClick}
+          required
         />
         <button type='submit' className='absolute top-1 right-2 m-0'>
           <SearchSharpIcon className='text-primary' />
