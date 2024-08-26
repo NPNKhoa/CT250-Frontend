@@ -1,10 +1,30 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
+import productTypeService from '@services/productType.service';
+import brandService from '@services/brand.service';
+
 const NavBar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
+
+  const [productTypes, setProductTypes] = useState([]);
+  const [brands, setBrands] = useState([]);
+
+  useEffect(() => {
+    const fetchProductTypes = async () => {
+      try {
+        const responseType = await productTypeService.getAll();
+        setProductTypes(responseType.data);
+        const responsebrand = await brandService.getAll();
+        setBrands(responsebrand.data);
+      } catch (error) {
+        console.error('Error fetching product types:', error);
+      }
+    };
+    fetchProductTypes();
+  }, []);
 
   const arr = [
     { value: '', label: 'Trang chủ' },
@@ -14,77 +34,18 @@ const NavBar = () => {
     { value: 'contact', label: 'Liên hệ' },
   ];
 
-  const productCategories = [
-    {
-      title: 'Vợt cầu lông',
-      items: [
-        'Vợt cầu lông Yonex',
-        'Vợt cầu lông Victor',
-        'Vợt cầu lông Lining',
-        'Vợt cầu lông Mizuno',
-        'Vợt cầu lông Apacs',
-        'Vợt cầu lông VNB',
-        'Vợt cầu lông Proace',
-        'Vợt cầu lông Forza',
-        'Vợt cầu lông FlyPower',
-        'Vợt cầu lông Tenway',
-      ],
-    },
-    {
-      title: 'Giày cầu lông',
-      items: [
-        'Giày cầu lông Yonex',
-        'Giày cầu lông Victor',
-        'Giày cầu lông Lining',
-        'Giày cầu lông Kumpoo',
-        'Giày cầu lông Promax',
-        'Giày cầu lông Babolat',
-        'Giày cầu lông Sunbatta',
-        'Giày cầu lông Apacs',
-      ],
-    },
-    {
-      title: 'Áo cầu lông',
-      items: [
-        'Áo cầu lông Yonex',
-        'Áo cầu lông VNB',
-        'Áo cầu lông Kamito',
-        'Áo cầu lông Victor',
-        'Áo cầu lông Lining',
-        'Áo cầu lông DonexPro',
-        'Áo cầu lông Alien Armour',
-        'Áo thể thao SFD',
-        'Áo thể thao Kawasaki',
-        'Áo thể thao Pebble Beach',
-      ],
-    },
-    {
-      title: 'Váy cầu lông',
-      items: [
-        'Váy cầu lông Yonex',
-        'Váy cầu lông Victec',
-        'Váy cầu lông Lining',
-        'Váy cầu lông Donex Pro',
-        'Váy cầu lông Victor',
-        'Váy cầu lông Kamito',
-      ],
-    },
-    {
-      title: 'Quần cầu lông',
-      items: [
-        'Quần cầu lông Yonex',
-        'Quần cầu lông Victor',
-        'Quần cầu lông Lining',
-        'Quần cầu lông VNB',
-        'Quần cầu lông SFD',
-        'Quần cầu lông Donex Pro',
-        'Quần cầu lông Apacs',
-        'Quần cầu lông Alien Armour',
-        'Quần cầu lông Mizuno',
-        'Quần cầu lông Kawasaki',
-      ],
-    },
-  ];
+  const productCategories = productTypes.map(type => ({
+    title: type.productTypeName,
+    items: [
+      ...brands.map(brand =>
+        type.productTypeName.concat(` ${brand.brandName}`)
+      ),
+    ],
+    brand: [
+      ...brands.map(brand =>`${brand.brandName}`
+      ),
+    ],
+  }));
 
   return (
     <div className='w-full'>
@@ -101,7 +62,7 @@ const NavBar = () => {
             }
           >
             <Link
-              to={`/${item.value}`}
+              to={item.value !== 'products' ? `/${item.value}` : null}
               className='py-1 text-white uppercase font-bold text-sm flex items-center'
             >
               {item.label}
@@ -122,15 +83,20 @@ const NavBar = () => {
                   {productCategories.map((category, idx) => (
                     <div key={idx} className='w-full sm:w-1/2 lg:w-1/4 mb-4'>
                       <h3 className='text-primary font-semibold mb-2'>
-                        {category.title}
+                        {category.title.toUpperCase()}
                       </h3>
                       <ul>
                         {category.items.map((product, i) => (
                           <li key={i} className='text-gray-600 mb-1'>
                             <Link
-                              to={`/${item.value}/${product
+                              to={`/products/${category.title
                                 .toLowerCase()
-                                .replace(/ /g, '-')}`}
+                                .replace(/ /g, '-')
+                                .normalize('NFD')
+                                .replace(/[\u0300-\u036f]/g, '')}?brand=${
+                                category.brand[i]
+                              }`}
+                              onClick={() => setShowDropdown(false)}
                             >
                               {product}
                             </Link>
@@ -140,9 +106,7 @@ const NavBar = () => {
                       <Link
                         to={`/${item.value}`}
                         className='text-primary mt-2 inline-block'
-                      >
-                        Xem thêm
-                      </Link>
+                      ></Link>
                     </div>
                   ))}
                 </div>

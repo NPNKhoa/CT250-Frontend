@@ -11,7 +11,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await productService.getAllProducts();
+        const response = await productService.getAll();
         setProducts(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -51,7 +51,7 @@ const HomePage = () => {
                 imageUrl={product.productImagePath[0]}
                 name={product.productName}
                 price={product.price}
-                productLink={`products/${product._id}`}
+                productLink={`products/detail/${product._id}`}
               />
             ))}
           </div>

@@ -6,7 +6,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
-import Vnpay from '@assets/Vnpay.png';
+import Vnpay from '@assets/vnpay.png';
 import RatingSection from '@components/RatingSection';
 
 import productService from '@services/product.service';
@@ -18,7 +18,7 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const productResponse = await productService.getProductById(id);
+        const productResponse = await productService.getById(id);
         setProducts(productResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -28,12 +28,10 @@ const ProductDetail = () => {
     fetchProducts();
   }, [id]);
 
-  console.log(products.description);
-
   const breadcrumbs = [
     { label: 'Trang chủ', href: '/' },
-    { label: 'Vợt cầu lông', href: '/product/vot' },
-    { label: 'Vợt cầu lông Yonex', href: '/product/vot-yonex' },
+    { label: 'Vợt cầu lông', href: '/products/vot-cau-long' },
+    { label: 'Vợt cầu lông Yonex', href: '/products/vot-cau-long-yonex' },
     {
       label: `${products.productName}`,
       href: `/products/${id}`,
@@ -102,9 +100,7 @@ const ProductDetail = () => {
 
   const productData = products.technicalSpecification || [];
 
-  // console.log(productData);
-
-  const [activeTab, setActiveTab] = useState(true);
+  const [activeTab, setActiveTab] = useState('description');
   const handleTabChange = tab => {
     setActiveTab(tab);
   };
@@ -133,7 +129,7 @@ const ProductDetail = () => {
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
 
       {/* product detail */}
-      <div className='container mx-auto py-8'>
+      <div className='container mx-auto py-8 px-4'>
         {/* product top */}
         <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
           <div>
@@ -261,7 +257,7 @@ const ProductDetail = () => {
         </div>
 
         {/* product bottom */}
-        <div className='container mx-auto mt-5'>
+        <div className='container mx-auto mt-5 px-4'>
           <div className='grid grid-cols-2 font-semibold text-2xl py-2 border-b-2'>
             <button
               className={`button ${
@@ -282,9 +278,9 @@ const ProductDetail = () => {
               Thông số kỹ thuật
             </button>
           </div>
-          {/* Hiển thị nội dung dựa trên activeTab */}
+          {/* Hiển thị nội dung dựa trên activeTab */}{' '}
           {activeTab === 'description' ? (
-            <div className='p-4 space-y-4 text-gray-800'>
+            <div className='p-10 space-y-4 text-gray-800  flex justify-center items-center'>
               <div dangerouslySetInnerHTML={{ __html: products.description }} />
             </div>
           ) : (
@@ -304,7 +300,6 @@ const ProductDetail = () => {
             </table>
           )}
         </div>
-
         <RatingSection />
       </div>
     </>

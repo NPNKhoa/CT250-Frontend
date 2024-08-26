@@ -1,28 +1,34 @@
-import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import BreadcrumbsComponent from '@components/Breadcrumb';
 
 import productService from '@services/product.service';
 
 import ProductItem from '@components/ProductItem';
-import Filter from '@components/Filter';
-import BreadcrumbsComponent from '@components/Breadcrumb';
 import PaginationComponent from '@components/PaginationComponent';
 
-const Products = () => {
+const SearchPage = () => {
   const location = useLocation();
-  const query = new URLSearchParams(location.search);
-  const page = parseInt(query.get('page') || '', 10);
-  const brand = query.get('brand') || '';
-  const type = query.get('type') || '';
+  const searchParams = new URLSearchParams(location.search);
+  const query = searchParams.get('query');
+  const page = parseInt(searchParams.get('page') || '', 10);
 
   const [products, setProducts] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
+
+  const breadcrumbs = [
+    { label: 'Trang chủ', href: '/' },
+    {
+      label: `Tìm kiếm sản phẩm: ${query}`,
+      href: `/search?query=${encodeURIComponent(query)}`,
+    },
+  ];
 
   useEffect(() => {
     const fetchProductTypes = async () => {
       try {
         setProducts([]);
-        const responseProduct = await productService.getByName(brand, page, 12);
+        const responseProduct = await productService.getByName(query, page, 10);
         setProducts(responseProduct.data);
         setTotalPage(responseProduct.meta.totalPages);
       } catch (error) {
@@ -31,27 +37,11 @@ const Products = () => {
     };
 
     fetchProductTypes();
-  }, [brand, page]);
-
+  }, [query, page]);
   return (
     <>
-      {products.length > 0 && (
-        <BreadcrumbsComponent
-          breadcrumbs={[
-            { label: 'Trang chủ', href: '/' },
-            {
-              label: `${products[0].productType?.productTypeName}`,
-              href: `/products/${type}`,
-            },
-            { label: `${products[0].productType?.productTypeName} ${brand}` },
-          ]}
-        />
-      )}
-      <div className='flex p-4'>
-        <div className='w-1/5 m-1'>
-          <Filter />
-        </div>
-        <div className='w-4/5 grid grid-cols-4 gap-1 ml-2'>
+      <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
+      <div className='grid grid-cols-5 gap-1 m-6'>
           {Array.isArray(products) &&
             products.map((product, index) => (
               <ProductItem
@@ -62,16 +52,15 @@ const Products = () => {
                 productLink={`products/detail/${product._id}`}
               />
             ))}
-          <div className='col-span-4 mt-4 flex justify-center'>
+          <div className='col-span-5 mt-4 flex justify-center'>
             <PaginationComponent
-              path={`${location.pathname}?brand=${brand}`}
+              path={`${location.pathname}?query=${query}`}
               totalPages={totalPage}
             />
           </div>
         </div>
-      </div>
     </>
   );
 };
 
-export default Products;
+export default SearchPage;

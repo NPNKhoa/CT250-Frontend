@@ -7,18 +7,21 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PersonSearchRoundedIcon from '@mui/icons-material/PersonSearchRounded';
 import PhoneCallbackSharpIcon from '@mui/icons-material/PhoneCallbackSharp';
 import PlaceSharpIcon from '@mui/icons-material/PlaceSharp';
-import SearchSharpIcon from '@mui/icons-material/SearchSharp';
+// import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import CartIcon from '@assets/cart-icon.png';
+// import CartIcon from '@assets/cart-icon.png';
 import LogoImg from '@assets/logo.svg';
+
+import SearchComponent from '@components/SearchComponent';
+import CartComponent from '@components/CartComponent';
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  const handleMouseEnter = () => {
+  const handleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
@@ -26,8 +29,12 @@ const Header = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleCart = () => {
-    setIsCartOpen(!isCartOpen);
+  const handleMouseEnter = () => {
+    setIsCartOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsCartOpen(false);
   };
   return (
     <>
@@ -56,16 +63,7 @@ const Header = () => {
               </p>
             </li>
             <li className='flex gap-3 relative'>
-              <form action='#'>
-                <input
-                  type='text'
-                  className='bg-gray-200 w-[300px] rounded-lg p-1'
-                  placeholder='Tìm sản phẩm...'
-                />
-                <button className='absolute top-1 right-2 m-0'>
-                  <SearchSharpIcon className='text-primary' />
-                </button>
-              </form>
+              <SearchComponent />
             </li>
           </ul>
           <hr className='mt-3 w-full text-gray-300' />
@@ -109,7 +107,7 @@ const Header = () => {
             {/* Tài khoản */}
             <div
               className='flex flex-col items-center justify-center text-center space-x-2 cursor-pointer'
-              onMouseEnter={handleMouseEnter}
+              onMouseEnter={handleModal}
             >
               <span className='border border-gray-300 p-1 flex justify-center items-center rounded-full bg-white w-10 h-10'>
                 <AccountCircleSharpIcon className='text-primary' />
@@ -119,7 +117,7 @@ const Header = () => {
 
             {isModalOpen && (
               <div
-                onMouseLeave={handleMouseEnter}
+                onMouseLeave={handleModal}
                 className='absolute top-full mt-2 right-0 w-40 bg-white rounded-lg shadow-lg z-50'
               >
                 <div className='flex flex-col space-y-2 rounded-lg'>
@@ -142,7 +140,8 @@ const Header = () => {
 
           <Link
             to='/cart'
-            onMouseEnter={handleCart}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
             className='flex flex-col items-center justify-center text-center space-x-2 relative cursor-pointer'
           >
             <span className='border border-gray-300 p-1 flex justify-center items-center rounded-full bg-white w-10 h-10'>
@@ -155,13 +154,15 @@ const Header = () => {
 
             {isCartOpen && (
               <div
-                onMouseLeave={handleCart}
-                className='absolute top-12 right-0 p-5 w-64 bg-white rounded-lg shadow-lg z-50'
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                className='absolute top-12 right-0 w-96  bg-white rounded-lg shadow-lg z-50'
               >
-                <div className='mt-2 flex flex-col space-y-2 text-center items-center'>
+                {/* <div className='mt-2 flex flex-col space-y-2 text-center items-center'>
                   <img src={CartIcon} alt='' className='w-24' />
                   <h3>Không có sản phẩm nào trong giỏ hàng của bạn</h3>
-                </div>
+                </div> */}
+                <CartComponent />
               </div>
             )}
           </Link>

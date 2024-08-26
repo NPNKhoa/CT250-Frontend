@@ -93,7 +93,7 @@ const CartPage = () => {
         <h2 className='text-2xl font-bold mb-4'>Giỏ hàng của bạn</h2>
         {cartItems.length === 0 ? (
           <div className='flex flex-col items-center'>
-            <img src={CartIcon} alt='' className='w-48' />
+            <img src={CartIcon} alt='' className='w-48      ' />
             <p className='text-center text-lg text-gray-500'>
               Không có sản phẩm nào trong giỏ hàng của bạn
             </p>
@@ -102,7 +102,7 @@ const CartPage = () => {
           <>
             <table className='w-full bg-white rounded-lg shadow'>
               <thead className='bg-primary'>
-                <tr className='border-b'>
+                <tr className='border-b text-white'>
                   <th className='text-left py-2 px-4'>Sản phẩm</th>
                   <th className='text-right py-2 px-4'>Đơn giá</th>
                   <th className='text-center py-2 px-4'>Số lượng</th>
@@ -132,19 +132,19 @@ const CartPage = () => {
                     <td className='text-center py-2 px-4'>
                       <button
                         onClick={() => handleQuantityChange(item.id, -1)}
-                        className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-l'
+                        className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-l-full'
                       >
                         -
                       </button>
-                      <span className='mx-2'>{item.quantity}</span>
+                      <span className='mx-3'>{item.quantity}</span>
                       <button
                         onClick={() => handleQuantityChange(item.id, 1)}
-                        className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-r'
+                        className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-r-full'
                       >
                         +
                       </button>
                     </td>
-                    <td className='text-right py-2 px-4'>
+                    <td className='text-right py-2 px-4 text-primary font-semibold'>
                       {(item.price * item.quantity).toLocaleString('vi-VN', {
                         style: 'currency',
                         currency: 'VND',
