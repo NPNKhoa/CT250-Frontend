@@ -25,7 +25,6 @@ const Products = () => {
         const responseProduct = await productService.getByName(brand, page, 12);
         setProducts(responseProduct.data);
         setTotalPage(responseProduct.meta.totalPages);
-        console.log(responseProduct.meta.totalPages);
       } catch (error) {
         console.error('Error fetching product types:', error);
       }
