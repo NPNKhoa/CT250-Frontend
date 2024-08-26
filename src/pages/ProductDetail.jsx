@@ -15,7 +15,6 @@ const ProductDetail = () => {
   const { id } = useParams();
   const [products, setProducts] = useState({});
 
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -39,7 +38,7 @@ const ProductDetail = () => {
     },
   ];
 
-  const images =  products.productImagePath || [];
+  const images = products.productImagePath || [];
   const [currentImage, setCurrentImage] = useState(images[0]); // Khởi tạo với giá trị an toàn
 
   useEffect(() => {
@@ -103,7 +102,7 @@ const ProductDetail = () => {
 
   // console.log(productData);
 
-  const [activeTab, setActiveTab] = useState(true);
+  const [activeTab, setActiveTab] = useState('description');
   const handleTabChange = tab => {
     setActiveTab(tab);
   };
@@ -132,7 +131,7 @@ const ProductDetail = () => {
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
 
       {/* product detail */}
-      <div className='container mx-auto py-8'>
+      <div className='container mx-auto py-8 px-4'>
         {/* product top */}
         <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
           <div>
@@ -164,8 +163,12 @@ const ProductDetail = () => {
             <h1 className='text-3xl font-bold mb-2'>{products.productName}</h1>
             <p className='text-gray-600  mb-2'>Mã: VNB019090</p>
             <p className=' mb-2'>
-              Thương hiệu: <span className='text-primary'>{products.productBrand?.brandName}</span> | Tình
-              trạng: <span className='text-primary'>
+              Thương hiệu:{' '}
+              <span className='text-primary'>
+                {products.productBrand?.brandName}
+              </span>{' '}
+              | Tình trạng:{' '}
+              <span className='text-primary'>
                 {products.countInStock > 0 ? 'Còn hàng' : 'Hết hàng'}
               </span>
             </p>
@@ -256,7 +259,7 @@ const ProductDetail = () => {
         </div>
 
         {/* product bottom */}
-        <div className='container mx-auto mt-5'>
+        <div className='container mx-auto mt-5 px-4'>
           <div className='grid grid-cols-2 font-semibold text-2xl py-2 border-b-2'>
             <button
               className={`button ${
@@ -277,9 +280,9 @@ const ProductDetail = () => {
               Thông số kỹ thuật
             </button>
           </div>
-          {/* Hiển thị nội dung dựa trên activeTab */}
+          {/* Hiển thị nội dung dựa trên activeTab */}{' '}
           {activeTab === 'description' ? (
-            <div className='p-4 space-y-4 text-gray-800'>
+            <div className='p-10 space-y-4 text-gray-800  flex justify-center items-center'>
               <div dangerouslySetInnerHTML={{ __html: products.description }} />
             </div>
           ) : (
@@ -299,7 +302,6 @@ const ProductDetail = () => {
             </table>
           )}
         </div>
-
         <RatingSection />
       </div>
     </>
