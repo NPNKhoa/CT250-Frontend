@@ -14,17 +14,17 @@ const ProductItem = ({ imageUrl, name, price, productLink }) => {
   const formattedPrice = formatPriceToVND(price);
 
   return (
-    <div className='block bg-white rounded-lg shadow-md overflow-hidden w-auto'>
-      <div className='flex justify-center w-full h-2/3'>
+    <div className='block bg-white rounded-lg shadow-md overflow-hidden w-60 h-86'>
+      <div className='flex justify-center items-center w-full h-3/4'>
         <Link to={`/${productLink}`}>
           <img
             src={imageUrl}
             alt={name}
-            className='w-auto h-full object-cover'
+            className='w-full h-full object-cover'
           />
         </Link>
       </div>
-      <div className='p-4 h-1/3'>
+      <div className='p-4 h-1/4'>
         <Link to={`/${productLink}`}>
           <h3 className='h-2/3 text-sm text-gray-800'>{name}</h3>
         </Link>
