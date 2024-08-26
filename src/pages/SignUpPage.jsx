@@ -64,10 +64,16 @@ const SignUpPage = () => {
   };
 
   return (
-    <section className='flex items-center justify-center min-h-screen bg-gray-100 py-5'>
-      <div className='max-w-3xl mx-auto bg-white p-10 rounded-lg shadow-md flex'>
-        <div className='w-full'>
-          <h2 className='text-2xl font-semibold text-center mb-8'>
+    <section className='flex items-center justify-center min-h-screen bg-white py-5'>
+      <div className='max-w-3xl mx-auto bg-gray-100 p-5 rounded-lg shadow-md flex items-center'>
+        <div className='w-1/2 hidden lg:block'>
+          <img src={SignUpImg} alt='Login' className='rounded-lg' />
+        </div>
+        <div className='w-full  lg:w-1/2'>
+          <div className='flex justify-center mb-3'>
+            <img src={userIcon} alt='User Icon' className='w-20 h-20' />
+          </div>
+          <h2 className='text-2xl font-semibold text-center mb-5'>
             Đăng ký tài khoản
           </h2>
 
@@ -94,7 +100,7 @@ const SignUpPage = () => {
                 />
               </div>
             ))}
-            <div className='mb-4'>
+            {/* <div className='mb-4'>
               <select
                 id='gender'
                 onChange={handleChange}
@@ -112,7 +118,7 @@ const SignUpPage = () => {
                 onChange={handleFileChange}
                 className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary'
               />
-            </div>
+            </div> */}
             <button
               type='submit'
               className='w-full bg-primary text-white py-3 rounded-lg hover:bg-hover-primary transition duration-300'
