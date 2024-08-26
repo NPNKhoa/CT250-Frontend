@@ -1,72 +1,53 @@
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-import brandService from '@services/brand.service';
-import productTypeService from '@services/productType.service';
 import productService from '@services/product.service';
 
 import ProductItem from '@components/ProductItem';
 import Filter from '@components/Filter';
 import BreadcrumbsComponent from '@components/Breadcrumb';
+import PaginationComponent from '@components/PaginationComponent';
 
 const Products = () => {
-  const capitalizeFirstLetter = str => {
-    // In hoa chữ cái đầu tiên
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
-  const normalizeString = str => {
-    // Chuyển chuỗi thành chuỗi không dấu
-    return str
-      .toLowerCase()
-      .replace(/ /g, '-')
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '');
-  };
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const page = parseInt(query.get('page') || '', 10);
+  const brand = query.get('brand') || '';
+  const type = query.get('type') || '';
 
-  const { id } = useParams();
-  const [productTypes, setProductTypes] = useState([]);
-  const [brands, setBrands] = useState([]);
   const [products, setProducts] = useState([]);
-
-  const parts = id.split('-');
-  const type = parts.slice(0, -1).join('-');
-  const brand = capitalizeFirstLetter(parts[parts.length - 1]);
+  const [totalPage, setTotalPage] = useState(0);
 
   useEffect(() => {
     const fetchProductTypes = async () => {
       try {
         setProducts([]);
-
-        const responseType = await productTypeService.getAll();
-        setProductTypes(responseType.data);
-        const responsebrand = await brandService.getAll();
-        setBrands(responsebrand.data);
-
-        if (id === '') {
-          const responseProduct = await productService.getAll();
-          setProducts(responseProduct.data);
-        } else {
-          const responseProduct = await productService.getByName(brand, 1, 10);
-          setProducts(responseProduct.data);
-        }
+        const responseProduct = await productService.getByName(brand, page, 12);
+        setProducts(responseProduct.data);
+        setTotalPage(responseProduct.meta.totalPages);
+        console.log(responseProduct.meta.totalPages);
       } catch (error) {
         console.error('Error fetching product types:', error);
       }
     };
+
     fetchProductTypes();
-  }, [id, brand]);
-
-  console.log(products);
-
-  const breadcrumbs = [
-    { label: 'Trang chủ', href: '/' },
-    { label: 'Vợt cầu lông', href: '/products/' },
-    { label: `Vợt cầu lông ${brand}` },
-  ];
+  }, [brand, page]);
 
   return (
     <>
-      <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
+      {products.length > 0 && (
+        <BreadcrumbsComponent
+          breadcrumbs={[
+            { label: 'Trang chủ', href: '/' },
+            {
+              label: `${products[0].productType?.productTypeName}`,
+              href: `/products/${type}`,
+            },
+            { label: `${products[0].productType?.productTypeName} ${brand}` },
+          ]}
+        />
+      )}
       <div className='flex p-4'>
         <div className='w-1/5 m-1'>
           <Filter />
@@ -82,6 +63,12 @@ const Products = () => {
                 productLink={`products/detail/${product._id}`}
               />
             ))}
+          <div className='col-span-4 mt-4 flex justify-center'>
+            <PaginationComponent
+              path={`${location.pathname}?brand=${brand}`}
+              totalPages={totalPage}
+            />
+          </div>
         </div>
       </div>
     </>

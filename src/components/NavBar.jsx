@@ -41,6 +41,10 @@ const NavBar = () => {
         type.productTypeName.concat(` ${brand.brandName}`)
       ),
     ],
+    brand: [
+      ...brands.map(brand =>`${brand.brandName}`
+      ),
+    ],
   }));
 
   return (
@@ -85,11 +89,13 @@ const NavBar = () => {
                         {category.items.map((product, i) => (
                           <li key={i} className='text-gray-600 mb-1'>
                             <Link
-                              to={`/${item.value}/${product
+                              to={`/products/${category.title
                                 .toLowerCase()
                                 .replace(/ /g, '-')
                                 .normalize('NFD')
-                                .replace(/[\u0300-\u036f]/g, '')}`}
+                                .replace(/[\u0300-\u036f]/g, '')}?brand=${
+                                category.brand[i]
+                              }`}
                               onClick={() => setShowDropdown(false)}
                             >
                               {product}

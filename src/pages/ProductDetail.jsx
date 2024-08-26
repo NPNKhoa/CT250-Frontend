@@ -30,8 +30,8 @@ const ProductDetail = () => {
 
   const breadcrumbs = [
     { label: 'Trang chủ', href: '/' },
-    { label: 'Vợt cầu lông', href: '/product/vot-cau-long' },
-    { label: 'Vợt cầu lông Yonex', href: '/product/vot-cau-long-yonex' },
+    { label: 'Vợt cầu lông', href: '/products/vot-cau-long' },
+    { label: 'Vợt cầu lông Yonex', href: '/products/vot-cau-long-yonex' },
     {
       label: `${products.productName}`,
       href: `/products/${id}`,
@@ -99,8 +99,6 @@ const ProductDetail = () => {
   ];
 
   const productData = products.technicalSpecification || [];
-
-  // console.log(productData);
 
   const [activeTab, setActiveTab] = useState('description');
   const handleTabChange = tab => {
