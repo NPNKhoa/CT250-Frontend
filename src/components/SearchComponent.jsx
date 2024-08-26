@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
@@ -92,7 +91,9 @@ export default function SearchPopover() {
 
   useEffect(() => {
     if (open && inputRef.current) {
-      inputRef.current.focus();
+      setTimeout(() => {
+        inputRef.current.focus();
+      }, 100); // Thử tăng delay để đảm bảo focus sau khi Popover hiển thị
     }
   }, [open]);
 
@@ -104,6 +105,7 @@ export default function SearchPopover() {
           type='text'
           className='bg-gray-200 w-[300px] rounded-lg p-1'
           placeholder='Tìm sản phẩm...'
+          onMouseDown={event => event.preventDefault()}
           onClick={handleClick}
           required
         />
@@ -124,6 +126,11 @@ export default function SearchPopover() {
         transformOrigin={{
           vertical: 'top',
           horizontal: 'left',
+        }}
+        onEntered={() => {
+          setTimeout(() => {
+            inputRef.current?.focus(); // Focus khi Popover đã hiển thị
+          }, 0);
         }}
         PaperProps={{
           style: {
