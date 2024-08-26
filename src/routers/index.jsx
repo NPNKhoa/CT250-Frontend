@@ -8,6 +8,7 @@ import ContactPage from '@pages/ContactPage';
 import ProductDetail from '@pages/ProductDetail';
 import Products from '@pages/Products';
 import CartPage from '@pages/CartPage';
+import SearchPage from '@pages/SearchPage';
 
 const routes = [
   {
@@ -68,6 +69,12 @@ const routes = [
     id: 'cart',
     path: '/cart',
     element: <CartPage />,
+  },
+
+  {
+    id: 'search',
+    path: '/search',
+    element: <SearchPage />,
   },
 ];
 

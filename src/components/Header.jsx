@@ -13,6 +13,8 @@ import { Link } from 'react-router-dom';
 import CartIcon from '@assets/cart-icon.png';
 import LogoImg from '@assets/logo.svg';
 
+import SearchComponent from '@components/SearchComponent';
+
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -56,16 +58,7 @@ const Header = () => {
               </p>
             </li>
             <li className='flex gap-3 relative'>
-              <form action='#'>
-                <input
-                  type='text'
-                  className='bg-gray-200 w-[300px] rounded-lg p-1'
-                  placeholder='Tìm sản phẩm...'
-                />
-                <button className='absolute top-1 right-2 m-0'>
-                  <SearchSharpIcon className='text-primary' />
-                </button>
-              </form>
+              <SearchComponent />
             </li>
           </ul>
           <hr className='mt-3 w-full text-gray-300' />
