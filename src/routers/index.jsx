@@ -15,7 +15,7 @@ const routes = [
     path: '/',
     element: <HomePage />,
   },
-  
+
   {
     id: 'login',
     path: '/login',
