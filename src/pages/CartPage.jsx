@@ -93,7 +93,7 @@ const CartPage = () => {
         <h2 className='text-2xl font-bold mb-4'>Giỏ hàng của bạn</h2>
         {cartItems.length === 0 ? (
           <div className='flex flex-col items-center'>
-            <img src={CartIcon} alt='' className='w-48' />
+            <img src={CartIcon} alt='' className='w-48      ' />
             <p className='text-center text-lg text-gray-500'>
               Không có sản phẩm nào trong giỏ hàng của bạn
             </p>

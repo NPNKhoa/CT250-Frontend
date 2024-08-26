@@ -90,6 +90,7 @@ const NavBar = () => {
                                 .replace(/ /g, '-')
                                 .normalize('NFD')
                                 .replace(/[\u0300-\u036f]/g, '')}`}
+                              onClick={() => setShowDropdown(false)}
                             >
                               {product}
                             </Link>
@@ -99,8 +100,7 @@ const NavBar = () => {
                       <Link
                         to={`/${item.value}`}
                         className='text-primary mt-2 inline-block'
-                      >
-                      </Link>
+                      ></Link>
                     </div>
                   ))}
                 </div>
