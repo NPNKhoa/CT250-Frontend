@@ -10,10 +10,12 @@ import Filter from '@components/Filter';
 import BreadcrumbsComponent from '@components/Breadcrumb';
 
 const Products = () => {
-  const capitalizeFirstLetter = (str) => { // In hoa chữ cái đầu tiên
+  const capitalizeFirstLetter = str => {
+    // In hoa chữ cái đầu tiên
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
-  const normalizeString = str => { // Chuyển chuỗi thành chuỗi không dấu
+  const normalizeString = str => {
+    // Chuyển chuỗi thành chuỗi không dấu
     return str
       .toLowerCase()
       .replace(/ /g, '-')
@@ -29,18 +31,17 @@ const Products = () => {
   const parts = id.split('-');
   const type = parts.slice(0, -1).join('-');
   const brand = capitalizeFirstLetter(parts[parts.length - 1]);
-  
 
   useEffect(() => {
     const fetchProductTypes = async () => {
       try {
         setProducts([]);
-  
+
         const responseType = await productTypeService.getAll();
         setProductTypes(responseType.data);
         const responsebrand = await brandService.getAll();
         setBrands(responsebrand.data);
-  
+
         if (id === '') {
           const responseProduct = await productService.getAll();
           setProducts(responseProduct.data);
@@ -65,23 +66,24 @@ const Products = () => {
 
   return (
     <>
-    <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
-    <div className="flex p-4">
-      <div className="w-1/5 m-1">
-        <Filter />
+      <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
+      <div className='flex p-4'>
+        <div className='w-1/5 m-1'>
+          <Filter />
+        </div>
+        <div className='w-4/5 grid grid-cols-4 gap-1 ml-2'>
+          {Array.isArray(products) &&
+            products.map((product, index) => (
+              <ProductItem
+                key={index}
+                imageUrl={product.productImagePath[0]}
+                name={product.productName}
+                price={product.price}
+                productLink={`products/detail/${product._id}`}
+              />
+            ))}
+        </div>
       </div>
-      <div className="w-4/5 grid grid-cols-4 gap-1 ml-2">
-        {Array.isArray(products) && products.map((product, index) => (
-          <ProductItem
-            key={index}
-            imageUrl={product.productImagePath[0]}
-            name={product.productName}
-            price={product.price}
-            productLink={`products/detail/${product._id}`}
-          />
-        ))}
-      </div>
-    </div>
     </>
   );
 };
