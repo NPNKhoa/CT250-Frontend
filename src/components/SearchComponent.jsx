@@ -4,11 +4,11 @@ import Typography from '@mui/material/Typography';
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import WhatshotSharpIcon from '@mui/icons-material/WhatshotSharp';
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 export default function SearchPopover() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const inputRef = React.useRef(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const inputRef = useRef(null);
 
   const navigate = useNavigate();
 
@@ -144,6 +144,7 @@ export default function SearchPopover() {
               <Link
                 key={category.label}
                 to={category.href}
+                onClick={() => setAnchorEl(null)}
                 className='bg-gray-200 hover:bg-gray-300 text-xs mt-2 text-gray-800 font-bold p-1 rounded'
               >
                 {category.label}
