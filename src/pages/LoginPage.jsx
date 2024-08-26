@@ -48,12 +48,12 @@ const LoginPage = () => {
 
   return (
     <section className='flex items-center justify-center py-10'>
-      <div className='max-w-3xl mx-auto bg-gray-100 p-8 rounded-lg shadow-md flex'>
+      <div className='max-w-3xl mx-auto bg-gray-100 p-5 rounded-lg shadow-md flex items-center'>
         <div className='w-1/2 hidden lg:block'>
           <img src={loginImg} alt='Login' className='rounded-lg' />
         </div>
         <div className='w-full lg:w-1/2'>
-          <div className='flex justify-center mb-7'>
+          <div className='flex justify-center mb-3'>
             <img src={userIcon} alt='User Icon' className='w-20 h-20' />
           </div>
           <h2 className='text-2xl font-semibold text-center mb-7'>Đăng nhập</h2>

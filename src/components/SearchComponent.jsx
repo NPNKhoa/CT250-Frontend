@@ -45,7 +45,7 @@ export default function SearchPopover() {
         'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-edge-saber-10-black-chinh-hang_1703023099.webp',
       name: 'Áo Cầu Lông Yonex VM1055 Nam - Xanh',
       price: 130000,
-      href: '/products/detail/66cb4db4916b971633510a55',
+      href: '/products/detail/66cc4b1ad8974d0480cfb05a',
     },
     {
       id: 2,
@@ -53,7 +53,7 @@ export default function SearchPopover() {
         'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-edge-saber-10-black-chinh-hang_1703023099.webp',
       name: 'Áo Cầu Lông Yonex VM1055 Nữ - Xanh',
       price: 130000,
-      href: '/products/detail/66cb4db4916b971633510a55',
+      href: '/products/detail/66cc4b1ad8974d0480cfb05a',
     },
     {
       id: 3,
@@ -61,7 +61,7 @@ export default function SearchPopover() {
         'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-edge-saber-10-black-chinh-hang_1703023099.webp',
       name: 'Áo Cầu Lông Yonex VM1056 Nữ - Xanh',
       price: 130000,
-      href: '/products/detail/66cb4db4916b971633510a55',
+      href: '/products/detail/66cc4b1ad8974d0480cfb05a',
     },
     {
       id: 4,
@@ -69,7 +69,7 @@ export default function SearchPopover() {
         'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-edge-saber-10-black-chinh-hang_1703023099.webp',
       name: 'Áo Cầu Lông Yonex VM1056 Nữ - Xanh',
       price: 130000,
-      href: '/products/detail/66cb4db4916b971633510a55',
+      href: '/products/detail/66cc4b1ad8974d0480cfb05a',
     },
     {
       id: 5,
@@ -77,7 +77,7 @@ export default function SearchPopover() {
         'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-edge-saber-10-black-chinh-hang_1703023099.webp',
       name: 'Áo Cầu Lông Yonex VM1056 Nữ - Xanh',
       price: 130000,
-      href: '/products/detail/66cb4db4916b971633510a55',
+      href: '/products/detail/66cc4b1ad8974d0480cfb05a',
     },
     {
       id: 6,
@@ -85,7 +85,7 @@ export default function SearchPopover() {
         'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-edge-saber-10-black-chinh-hang_1703023099.webp',
       name: 'Áo Cầu Lông Yonex VM1056 Nữ - Xanh',
       price: 130000,
-      href: '/products/detail/66cb4db4916b971633510a55',
+      href: '/products/detail/66cc4b1ad8974d0480cfb05a',
     },
   ];
 
@@ -165,7 +165,7 @@ export default function SearchPopover() {
                 key={product.id}
                 className='bg-white shadow-md rounded-lg overflow-hidden flex items-center'
               >
-                <Link to={'/products/detail/66cb4db4916b971633510a55'}>
+                <Link to={product.href}>
                   <img
                     src={product.image}
                     alt={product.name}
@@ -174,7 +174,7 @@ export default function SearchPopover() {
                 </Link>
 
                 <div className='p-2'>
-                  <Link to={'/products/detail/66cb4db4916b971633510a55'}>
+                  <Link to={product.href}>
                     <h3 className='text-sm font-semibold   hover:text-primary '>
                       {product.name}
                     </h3>
