@@ -9,17 +9,23 @@ import PhoneCallbackSharpIcon from '@mui/icons-material/PhoneCallbackSharp';
 import PlaceSharpIcon from '@mui/icons-material/PlaceSharp';
 // import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 // import CartIcon from '@assets/cart-icon.png';
 import LogoImg from '@assets/logo.svg';
 
 import SearchComponent from '@components/SearchComponent';
 import CartComponent from '@components/CartComponent';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '@redux/slices/authSlice';
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const user = useSelector(state => state.auth.authUser);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -36,6 +42,12 @@ const Header = () => {
   const handleMouseLeave = () => {
     setIsCartOpen(false);
   };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/');
+  };
+
   return (
     <>
       <div className='bg-white flex justify-center items-center'>
@@ -121,36 +133,56 @@ const Header = () => {
                 className='absolute top-full mt-2 right-0 w-40 bg-white rounded-lg shadow-lg z-50'
               >
                 <div className='flex flex-col space-y-2 rounded-lg'>
-                  <Link
-                    to='/signup'
-                    className='hover:bg-primary hover:text-white rounded-t-lg p-2 text-center'
-                  >
-                    <PersonAddIcon /> Đăng ký
-                  </Link>
-                  <Link
-                    to='/login'
-                    className='hover:bg-primary hover:text-white rounded-b-lg p-2 text-center'
-                  >
-                    <LoginIcon /> Đăng nhập
-                  </Link>
+                  {user ? (
+                    <>
+                      <Link
+                        to='/profile'
+                        className='hover:bg-primary hover:text-white rounded-t-lg p-2 text-center'
+                      >
+                        Thông tin tài khoản
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className='hover:bg-primary hover:text-white rounded-b-lg p-2 text-center'
+                      >
+                        Đăng xuất
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        to='/signup'
+                        className='hover:bg-primary hover:text-white rounded-t-lg p-2 text-center'
+                      >
+                        <PersonAddIcon /> Đăng ký
+                      </Link>
+                      <Link
+                        to='/login'
+                        className='hover:bg-primary hover:text-white rounded-b-lg p-2 text-center'
+                      >
+                        <LoginIcon /> Đăng nhập
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             )}
           </div>
 
-          <Link
-            to='/cart'
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            className='flex flex-col items-center justify-center text-center space-x-2 relative cursor-pointer'
-          >
-            <span className='border border-gray-300 p-1 flex justify-center items-center rounded-full bg-white w-10 h-10'>
-              <AddShoppingCartSharpIcon className='text-primary' />
-            </span>
-            <h3 className='font-thin text-xs uppercase mt-1'>Giỏ hàng</h3>
-            <span className='absolute -top-1 right-2 bg-primary rounded-full text-white p-1 w-4 h-4 flex items-center justify-center text-xs'>
-              0
-            </span>
+          <div className='flex flex-col items-center justify-center text-center space-x-2 relative cursor-pointer'>
+            <Link
+              to='/cart'
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              <span className='border border-gray-300 p-1 flex justify-center items-center rounded-full bg-white w-10 h-10'>
+                <AddShoppingCartSharpIcon className='text-primary' />
+              </span>
+              <h3 className='font-thin text-xs uppercase mt-1'>Giỏ hàng</h3>
+              <span className='absolute -top-1 right-2 bg-primary rounded-full text-white p-1 w-4 h-4 flex items-center justify-center text-xs'>
+                0
+              </span>
+            </Link>
 
             {isCartOpen && (
               <div
@@ -165,7 +197,7 @@ const Header = () => {
                 <CartComponent />
               </div>
             )}
-          </Link>
+          </div>
         </div>
       </div>
       <NavBar />

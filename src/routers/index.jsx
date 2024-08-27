@@ -9,6 +9,8 @@ import ProductDetail from '@pages/ProductDetail';
 import Products from '@pages/Products';
 import CartPage from '@pages/CartPage';
 import SearchPage from '@pages/SearchPage';
+import ProfilePage from '@pages/ProfilePage';
+import AccountInfo from '@pages/AccountInfo';
 
 const routes = [
   {
@@ -75,6 +77,18 @@ const routes = [
     id: 'search',
     path: '/search',
     element: <SearchPage />,
+  },
+
+  {
+    id: 'profile',
+    path: '/profile',
+    element: <ProfilePage />,
+  },
+
+  {
+    id: 'accountinfo',
+    path: '/accountinfo',
+    element: <AccountInfo />,
   },
 ];
 
