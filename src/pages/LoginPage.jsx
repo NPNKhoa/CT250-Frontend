@@ -1,17 +1,22 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
 import GoogleButton from 'react-google-button';
-
 import loginImg from '@assets/login.png';
 import userIcon from '@assets/user.png';
-import authService from '@services/auth.service';
+import { useDispatch, useSelector } from 'react-redux';
+
 import Alert from '@components/Alert';
+import { loginThunk } from '@redux/thunk/authThunk';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [notification, setNotification] = useState({ message: '', type: '' });
+  const dispatch = useDispatch();
+
+  const loading = useSelector(state => state.auth.loading);
+  const error = useSelector(state => state.auth.error);
+  const authUser = useSelector(state => state.auth.authUser);
 
   const handleChange = e => {
     const { id, value } = e.target;
@@ -20,31 +25,20 @@ const LoginPage = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    try {
-      const data = await authService.login(credentials);
-      console.log(data);
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.data));
+    dispatch(loginThunk(credentials));
+  };
+
+  useEffect(() => {
+    if (authUser) {
       setNotification({ message: 'Login successful!', type: 'success' });
       setTimeout(() => navigate('/'), 2000);
-    } catch (error) {
-      console.error('Login failed:', error.response.data.error);
+    } else if (error) {
       setNotification({
         message: 'Login failed! Please try again.',
         type: 'error',
       });
     }
-  };
-
-  useEffect(() => {
-    if (notification.message) {
-      const timer = setTimeout(
-        () => setNotification({ message: '', type: '' }),
-        2000
-      );
-      return () => clearTimeout(timer);
-    }
-  }, [notification]);
+  }, [authUser, error, navigate]);
 
   return (
     <section className='flex items-center justify-center py-10'>
@@ -73,8 +67,9 @@ const LoginPage = () => {
             <button
               type='submit'
               className='w-full bg-primary text-white py-3 rounded-lg hover:bg-hover-primary transition duration-300'
+              disabled={loading} // Disabled button when loading
             >
-              Đăng nhập
+              {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
             </button>
           </form>
           <div className='my-4 flex items-center justify-between'>
