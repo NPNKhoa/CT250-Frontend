@@ -138,19 +138,20 @@ const Header = () => {
             )}
           </div>
 
-          <Link
-            to='/cart'
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            className='flex flex-col items-center justify-center text-center space-x-2 relative cursor-pointer'
-          >
-            <span className='border border-gray-300 p-1 flex justify-center items-center rounded-full bg-white w-10 h-10'>
-              <AddShoppingCartSharpIcon className='text-primary' />
-            </span>
-            <h3 className='font-thin text-xs uppercase mt-1'>Giỏ hàng</h3>
-            <span className='absolute -top-1 right-2 bg-primary rounded-full text-white p-1 w-4 h-4 flex items-center justify-center text-xs'>
-              0
-            </span>
+          <div className='flex flex-col items-center justify-center text-center space-x-2 relative cursor-pointer'>
+            <Link
+              to='/cart'
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              <span className='border border-gray-300 p-1 flex justify-center items-center rounded-full bg-white w-10 h-10'>
+                <AddShoppingCartSharpIcon className='text-primary' />
+              </span>
+              <h3 className='font-thin text-xs uppercase mt-1'>Giỏ hàng</h3>
+              <span className='absolute -top-1 right-2 bg-primary rounded-full text-white p-1 w-4 h-4 flex items-center justify-center text-xs'>
+                0
+              </span>
+            </Link>
 
             {isCartOpen && (
               <div
@@ -165,7 +166,7 @@ const Header = () => {
                 <CartComponent />
               </div>
             )}
-          </Link>
+          </div>
         </div>
       </div>
       <NavBar />
