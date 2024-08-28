@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 function AccountInfo() {
   const [userData, setUserData] = useState({
     email: 'test1@gmail.com',
-    fullName: 'Nguyễn Minh Tử',
+    fullName: 'Nguyen Minh Tu',
     phoneNumber: '0845969757',
     gender: '',
     dateOfBirth: '',
