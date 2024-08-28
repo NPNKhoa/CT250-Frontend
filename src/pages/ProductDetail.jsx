@@ -117,11 +117,25 @@ const ProductDetail = () => {
     }
   };
 
-  const handleInputChange = event => {
-    const newValue = parseInt(event.target.value);
-    if (!isNaN(newValue) && newValue >= 0 && newValue <= Infinity) {
-      setQuantity(newValue);
-    }
+  // const handleInputChange = event => {
+  //   const newValue = parseInt(event.target.value);
+  //   if (!isNaN(newValue) && newValue >= 0 && newValue <= Infinity) {
+  //     setQuantity(newValue);
+  //   }
+  // };
+
+  const handleAddToCart = () => {
+    alert(
+      `Đã thêm ${quantity} ${
+        products.productName
+      } vào giỏ hàng.\n\nThông tin sản phẩm:\nGiá: ${
+        products.price &&
+        (products.price * 0.8).toLocaleString('vi-VN', {
+          style: 'currency',
+          currency: 'VND',
+        })
+      }\nMã sản phẩm: VNB019090`
+    );
   };
 
   return (
@@ -226,13 +240,19 @@ const ProductDetail = () => {
               >
                 -
               </button>
-              <input
+              {/* <input
                 type='number'
                 className='w-20 text-center px-4 py-2 border mx-1 border-primary rounded-lg'
                 value={quantity}
                 readOnly
                 onChange={handleInputChange}
-              />
+              /> */}
+              <span
+                className='w-20 text-center px-4 py-2 border mx-1 border-primary rounded-lg'
+                value={quantity}
+              >
+                {quantity}
+              </span>
               <button
                 className='bg-primary hover:bg-hover-primary text-white font-bold py-2 px-4 rounded-full'
                 onClick={increment}
@@ -245,7 +265,10 @@ const ProductDetail = () => {
               <button className='bg-primary hover:bg-hover-primary text-white font-bold p-4 rounded-lg w-full'>
                 MUA NGAY
               </button>
-              <button className='bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg w-full ml-2'>
+              <button
+                onClick={handleAddToCart}
+                className='bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg w-full ml-2'
+              >
                 THÊM VÀO GIỎ HÀNG
               </button>
             </div>
