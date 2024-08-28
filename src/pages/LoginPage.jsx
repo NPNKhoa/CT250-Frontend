@@ -4,7 +4,7 @@ import GoogleButton from 'react-google-button';
 import loginImg from '@assets/login.png';
 import userIcon from '@assets/user.png';
 import { useDispatch, useSelector } from 'react-redux';
-
+import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@components/Alert';
 import { loginThunk } from '@redux/thunk/authThunk';
 
@@ -66,10 +66,14 @@ const LoginPage = () => {
             ))}
             <button
               type='submit'
-              className='w-full bg-primary text-white py-3 rounded-lg hover:bg-hover-primary transition duration-300'
+              className='w-full  bg-primary text-white py-3 rounded-lg hover:bg-hover-primary transition duration-300'
               disabled={loading} // Disabled button when loading
             >
-              {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+              {loading ? (
+                <CircularProgress color='inherit' size={20} />
+              ) : (
+                'Đăng nhập'
+              )}
             </button>
           </form>
           <div className='my-4 flex items-center justify-between'>

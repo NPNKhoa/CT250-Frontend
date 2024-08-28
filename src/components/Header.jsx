@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import NavBar from '@components/NavBar';
 import AccountCircleSharpIcon from '@mui/icons-material/AccountCircleSharp';
 import AddShoppingCartSharpIcon from '@mui/icons-material/AddShoppingCartSharp';
@@ -8,7 +7,7 @@ import PersonSearchRoundedIcon from '@mui/icons-material/PersonSearchRounded';
 import PhoneCallbackSharpIcon from '@mui/icons-material/PhoneCallbackSharp';
 import PlaceSharpIcon from '@mui/icons-material/PlaceSharp';
 // import SearchSharpIcon from '@mui/icons-material/SearchSharp';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 // import CartIcon from '@assets/cart-icon.png';
 import LogoImg from '@assets/logo.svg';
@@ -16,31 +15,45 @@ import LogoImg from '@assets/logo.svg';
 import SearchComponent from '@components/SearchComponent';
 import CartComponent from '@components/CartComponent';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '@redux/slices/authSlice';
+import { logout, setCredentials } from '@redux/slices/authSlice';
 
 const Header = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isModalAccount, setIsModalAccount] = useState(false);
+  const [isModalContact, setIsModalContact] = useState(false);
+  const [isModalCart, setIsModalCart] = useState(false);
 
-  const user = useSelector(state => state.auth.authUser);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.auth.authUser);
 
-  const handleModal = () => {
-    setIsModalOpen(!isModalOpen);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (refreshToken && token) {
+      dispatch(setCredentials({ token, refreshToken }));
+    }
+  }, [dispatch]);
+
+  const handleMouseEnterAccount = () => {
+    setIsModalAccount(true);
+  };
+  const handleMouseLeaveAccount = () => {
+    setIsModalAccount(false);
   };
 
-  const handleContact = () => {
-    setIsOpen(!isOpen);
+  const handleMouseEnterContact = () => {
+    setIsModalContact(true);
+  };
+  const handleMouseLeaveContact = () => {
+    setIsModalContact(false);
   };
 
-  const handleMouseEnter = () => {
-    setIsCartOpen(true);
+  const handleMouseEnterCart = () => {
+    setIsModalCart(true);
   };
 
-  const handleMouseLeave = () => {
-    setIsCartOpen(false);
+  const handleMouseLeaveCart = () => {
+    setIsModalCart(false);
   };
 
   const handleLogout = () => {
@@ -86,7 +99,8 @@ const Header = () => {
             {/* Tra cứu */}
             <div
               className='flex flex-col items-center justify-center text-center space-x-2 cursor-pointer'
-              onMouseEnter={handleContact}
+              onMouseEnter={handleMouseEnterContact}
+              onMouseLeave={handleMouseLeaveContact}
             >
               <span className='border border-gray-300 p-1 flex justify-center items-center rounded-full bg-white w-10 h-10'>
                 <PersonSearchRoundedIcon className='text-primary' />
@@ -94,10 +108,11 @@ const Header = () => {
               <h3 className='font-thin text-xs uppercase mt-1'>Tra cứu</h3>
             </div>
 
-            {isOpen && (
+            {isModalContact && (
               <div
-                onMouseLeave={handleContact}
-                className='absolute top-full mt-2 right-0 w-40 bg-white rounded-lg shadow-lg z-50'
+                onMouseEnter={handleMouseEnterContact}
+                onMouseLeave={handleMouseLeaveContact}
+                className='absolute top-12 mt-2 right-0 w-40 bg-white rounded-lg shadow-lg z-50'
               >
                 <div className='flex flex-col space-y-2 rounded-lg'>
                   <Link
@@ -119,7 +134,8 @@ const Header = () => {
             {/* Tài khoản */}
             <div
               className='flex flex-col items-center justify-center text-center space-x-2 cursor-pointer'
-              onMouseEnter={handleModal}
+              onMouseEnter={handleMouseEnterAccount}
+              onMouseLeave={handleMouseLeaveAccount}
             >
               <span className='border border-gray-300 p-1 flex justify-center items-center rounded-full bg-white w-10 h-10'>
                 <AccountCircleSharpIcon className='text-primary' />
@@ -127,10 +143,11 @@ const Header = () => {
               <h3 className='font-thin text-xs uppercase mt-1'>Tài khoản</h3>
             </div>
 
-            {isModalOpen && (
+            {isModalAccount && (
               <div
-                onMouseLeave={handleModal}
-                className='absolute top-full mt-2 right-0 w-40 bg-white rounded-lg shadow-lg z-50'
+                onMouseEnter={handleMouseEnterAccount}
+                onMouseLeave={handleMouseLeaveAccount}
+                className='absolute top-12 mt-2 left-0 w-40 bg-white rounded-lg shadow-lg z-50'
               >
                 <div className='flex flex-col space-y-2 rounded-lg'>
                   {user ? (
@@ -172,8 +189,8 @@ const Header = () => {
           <div className='flex flex-col items-center justify-center text-center space-x-2 relative cursor-pointer'>
             <Link
               to='/cart'
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
+              onMouseEnter={handleMouseEnterCart}
+              onMouseLeave={handleMouseLeaveCart}
             >
               <span className='border border-gray-300 p-1 flex justify-center items-center rounded-full bg-white w-10 h-10'>
                 <AddShoppingCartSharpIcon className='text-primary' />
@@ -184,10 +201,10 @@ const Header = () => {
               </span>
             </Link>
 
-            {isCartOpen && (
+            {isModalCart && (
               <div
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
+                onMouseEnter={handleMouseEnterCart}
+                onMouseLeave={handleMouseLeaveCart}
                 className='absolute top-12 right-0 w-96  bg-white rounded-lg shadow-lg z-50'
               >
                 {/* <div className='mt-2 flex flex-col space-y-2 text-center items-center'>
