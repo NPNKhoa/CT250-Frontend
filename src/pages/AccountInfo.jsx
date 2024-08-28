@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Avatar from '@assets/user.png';
+import PasswordInput from '@components/PasswordInput';
 
 function AccountInfo() {
   const [userData, setUserData] = useState({
@@ -88,34 +89,36 @@ function AccountInfo() {
         className='bg-white p-6 rounded-lg shadow-md'
       >
         <div className='mb-4 flex items-center'>
-          <label
-            htmlFor='avatar'
-            className='block text-gray-700 text-sm font-bold mb-2 mr-4'
-          >
-            Avatar:
-          </label>
-          <input
-            type='file'
-            id='avatar'
-            accept='image/*'
-            onChange={handleAvatarChange}
-            className='mb-4'
-          />
-          {avatarPreview ? (
-            <img
-              src={avatarPreview}
-              alt='Avatar Preview'
-              className='w-24 h-24 object-cover rounded-full'
+          <div className='flex items-center border py-3 px-5 rounded-xl bg-gray-200'>
+            <label
+              htmlFor='avatar'
+              className='block text-gray-700 text-sm font-bold mb-2 mr-4'
+            >
+              Avatar:
+            </label>
+            <input
+              type='file'
+              id='avatar'
+              accept='image/*'
+              onChange={handleAvatarChange}
+              className='mb-4'
             />
-          ) : (
-            <div className='border rounded-lg'>
+            {avatarPreview ? (
               <img
-                src={Avatar}
+                src={avatarPreview}
                 alt='Avatar Preview'
                 className='w-24 h-24 object-cover rounded-full'
               />
-            </div>
-          )}
+            ) : (
+              <div className='border rounded-lg'>
+                <img
+                  src={Avatar}
+                  alt='Avatar Preview'
+                  className='w-24 h-24 object-cover rounded-full'
+                />
+              </div>
+            )}
+          </div>
         </div>
 
         {['email', 'fullName', 'phoneNumber', 'gender', 'dateOfBirth'].map(
@@ -181,8 +184,7 @@ function AccountInfo() {
                 field.slice(1).replace(/([A-Z])/g, ' $1')}
               :
             </label>
-            <input
-              type='password'
+            <PasswordInput
               id={field}
               value={
                 field === 'currentPassword'
@@ -198,8 +200,6 @@ function AccountInfo() {
                 if (field === 'confirmPassword')
                   setConfirmPassword(e.target.value);
               }}
-              className='shadow appearance-none border rounded w-full p-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-              required
             />
           </div>
         ))}
