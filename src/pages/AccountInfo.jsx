@@ -1,16 +1,47 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Avatar from '@assets/user.png';
 import PasswordInput from '@components/PasswordInput';
+import { useDispatch, useSelector } from 'react-redux';
+import { getLoggedInUser } from '@redux/thunk/userThunk';
 
 function AccountInfo() {
+  const dispatch = useDispatch();
+
+  // Lấy thông tin người dùng từ Redux store
+  const user = useSelector(state => state.users.user);
+  const accessToken = localStorage.getItem('accessToken');
+
+  // Gọi API lấy thông tin người dùng khi component được mount
+  useEffect(() => {
+    if (accessToken) {
+      dispatch(getLoggedInUser(accessToken));
+    }
+  }, [dispatch, accessToken]);
+
+  console.log(user);
+
+  // Cập nhật userData khi dữ liệu người dùng thay đổi
+  useEffect(() => {
+    if (user) {
+      setUserData({
+        email: user.email || '',
+        fullName: user.fullname || '',
+        phoneNumber: user.phone || '',
+        gender: user.gender || '',
+        dateOfBirth: user.dateOfBirth || '',
+        avatarImagePath: user.avatarImagePath || Avatar,
+      });
+    }
+  }, [user]);
+
   const [userData, setUserData] = useState({
-    email: 'test1@gmail.com',
-    fullName: 'Nguyen Minh Tu',
-    phoneNumber: '0845969757',
+    email: '',
+    fullName: '',
+    phoneNumber: '',
     gender: '',
     dateOfBirth: '',
-    avatarImagePath: '',
+    avatarImagePath: Avatar,
   });
 
   const [currentPassword, setCurrentPassword] = useState('');
