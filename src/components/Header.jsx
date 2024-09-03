@@ -37,10 +37,10 @@ const Header = () => {
   const user = useSelector(state => state.auth.authUser);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
-    if (refreshToken && token) {
-      dispatch(setCredentials({ token, refreshToken }));
+    if (refreshToken && accessToken) {
+      dispatch(setCredentials({ accessToken, refreshToken }));
     }
   }, [dispatch]);
 

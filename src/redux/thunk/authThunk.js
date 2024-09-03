@@ -7,12 +7,10 @@ export const loginThunk = createAsyncThunk(
     try {
       const data = await authService.login(credentials);
 
-      console.log(data.data);
-
       // Lưu access token và refresh token vào localStorage
-      // localStorage.setItem('accessToken', data.accessToken);
-      // localStorage.setItem('refreshToken', data.refreshToken);
-      localStorage.setItem('loggedInUser', JSON.stringify(data.data));
+      localStorage.setItem('accessToken', data.data.accessToken);
+      localStorage.setItem('refreshToken', data.data.refreshToken);
+
       return data.data;
     } catch (error) {
       return rejectWithValue(error.response.data.error);

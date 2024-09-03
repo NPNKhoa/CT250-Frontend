@@ -1,5 +1,6 @@
+// userSlice.js
 import { createSlice } from '@reduxjs/toolkit';
-import { getUserById, getLoggedInUser } from '@redux/thunk/userThunk'; // Đảm bảo đường dẫn đúng
+import { getUserById, getLoggedInUser } from '@redux/thunk/userThunk';
 
 const userSlice = createSlice({
   name: 'users',
@@ -11,7 +12,6 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder
-      // Xử lý trạng thái khi getUserById được gọi
       .addCase(getUserById.pending, state => {
         state.loading = true;
         state.error = null;
@@ -24,8 +24,6 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-
-      // Xử lý trạng thái khi getLoggedInUser được gọi
       .addCase(getLoggedInUser.pending, state => {
         state.loading = true;
         state.error = null;
