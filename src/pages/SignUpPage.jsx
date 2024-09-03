@@ -107,7 +107,7 @@ const SignUpPage = () => {
             )}
           </div>
         ))}
-        <div className='mb-4'>
+        {/* <div className='mb-4'>
           <select
             id='gender'
             value={credentials.gender}
@@ -120,7 +120,7 @@ const SignUpPage = () => {
             <option value='female'>Female</option>
             <option value='other'>Other</option>
           </select>
-        </div>
+        </div> */}
         {/* Uncomment the file input if you want to allow image uploads */}
         {/* <div className='mb-4'>
         <input
