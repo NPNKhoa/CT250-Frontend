@@ -2,28 +2,34 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import userService from '@services/user.service';
 
-// Thunk to get user by ID
 export const getUserById = createAsyncThunk(
   'users/getUserById',
   async (userId, thunkAPI) => {
     try {
+      // Gọi API để lấy thông tin người dùng theo userId
       const data = await userService.getUserById(userId);
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      // Trả về lỗi nếu có, sử dụng rejectWithValue để giữ thông tin lỗi
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.error || error.message
+      );
     }
   }
 );
 
-// Thunk to get the logged-in user's data
 export const getLoggedInUser = createAsyncThunk(
   'users/getLoggedInUser',
-  async (_, thunkAPI) => {
+  async (accessToken, thunkAPI) => {
     try {
-      const data = await userService.getLoggedInUser();
+      // Gọi API để lấy thông tin người dùng đăng nhập hiện tại dựa trên accessToken
+      const data = await userService.getLoggedInUser(accessToken);
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      // Trả về lỗi nếu có, sử dụng rejectWithValue để giữ thông tin lỗi
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.error || error.message
+      );
     }
   }
 );

@@ -16,11 +16,15 @@ class UserService {
     }
   }
 
-  // Lấy thông tin của người dùng đã đăng nhập
-  async getLoggedInUser() {
+  async getLoggedInUser(accessToken) {
     try {
-      const response = await this.api.get('/me');
-      console.log('Logged-in user data:', response.data);
+      // console.log(accessToken);
+      const response = await this.api.get('/me', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      // console.log('Logged-in user data:', response.data.data);
       return response.data;
     } catch (error) {
       throw new Error(
