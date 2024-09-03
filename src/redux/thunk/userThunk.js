@@ -23,8 +23,8 @@ export const getLoggedInUser = createAsyncThunk(
   async (accessToken, thunkAPI) => {
     try {
       // Gọi API để lấy thông tin người dùng đăng nhập hiện tại dựa trên accessToken
-      const data = await userService.getLoggedInUser(accessToken);
-      return data;
+      const response = await userService.getLoggedInUser(accessToken);
+      return response.data;
     } catch (error) {
       // Trả về lỗi nếu có, sử dụng rejectWithValue để giữ thông tin lỗi
       return thunkAPI.rejectWithValue(

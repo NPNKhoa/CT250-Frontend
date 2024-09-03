@@ -5,15 +5,21 @@ import { getLoggedInUser } from '@redux/thunk/userThunk';
 
 function ProfilePage() {
   const dispatch = useDispatch();
+
+  // Lấy thông tin người dùng từ Redux store
   const user = useSelector(state => state.users.user);
   const accessToken = localStorage.getItem('accessToken');
 
+  // Gọi API lấy thông tin người dùng khi component được mount
   useEffect(() => {
     if (accessToken) {
       dispatch(getLoggedInUser(accessToken));
     }
   }, [dispatch, accessToken]);
 
+  console.log(user);
+
+  // Hiển thị thông tin người dùng
   return (
     <div className='container mx-auto px-4 py-10'>
       <h1 className='text-2xl font-bold mb-6'>Thông tin tài khoản</h1>
