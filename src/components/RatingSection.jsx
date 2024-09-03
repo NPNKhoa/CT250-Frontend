@@ -1,6 +1,6 @@
 import ViewedProducts from '@components/ViewedProducts';
 import { Rating } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 function RatingSection() {
   const ratingsData = [1, 0, 0, 0, 0]; // Example data for ratings

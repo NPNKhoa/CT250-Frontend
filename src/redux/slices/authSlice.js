@@ -13,27 +13,30 @@ const authSlice = createSlice({
   reducers: {
     logout: state => {
       state.authUser = null; // Đăng xuất
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+    },
+    setCredentials: (state, action) => {
+      state.authUser = action.payload;
     },
   },
   extraReducers: builder => {
     builder
       .addCase(loginThunk.pending, state => {
         state.loading = true;
-        state.error = ''; // Xóa lỗi khi bắt đầu đăng nhập mới
+        state.error = '';
       })
       .addCase(loginThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.authUser = action.payload; // Lưu trữ thông tin người dùng vào state
+        state.authUser = action.payload;
       })
       .addCase(loginThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload; // Lưu trữ lỗi khi đăng nhập thất bại
+        state.error = action.payload;
       });
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, setCredentials } = authSlice.actions;
 
 export default authSlice.reducer;

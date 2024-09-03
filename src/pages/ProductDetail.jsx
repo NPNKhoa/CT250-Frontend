@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import BreadcrumbsComponent from '@components/Breadcrumb';
 import { useParams } from 'react-router-dom';
 
@@ -10,16 +10,24 @@ import Vnpay from '@assets/vnpay.png';
 import RatingSection from '@components/RatingSection';
 
 import productService from '@services/product.service';
+import productTypeService from '@services/productType.service';
+import brandService from '@services/brand.service';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [products, setProducts] = useState({});
+  const [productTypes, setProductTypes] = useState([]);
+  const [brands, setBrands] = useState([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const productResponse = await productService.getById(id);
         setProducts(productResponse.data);
+        const productTypeResponse = await productTypeService.getAll();
+        setProductTypes(productTypeResponse.data);
+        const brandResponse = await brandService.getAll();
+        setBrands(brandResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -38,7 +46,10 @@ const ProductDetail = () => {
     },
   ];
 
-  const images = products.productImagePath || [];
+  const images = useMemo(
+    () => products.productImagePath || [],
+    [products.productImagePath]
+  );
   const [currentImage, setCurrentImage] = useState(images[0]); // Khởi tạo với giá trị an toàn
 
   useEffect(() => {
@@ -117,11 +128,31 @@ const ProductDetail = () => {
     }
   };
 
-  const handleInputChange = event => {
-    const newValue = parseInt(event.target.value);
-    if (!isNaN(newValue) && newValue >= 0 && newValue <= Infinity) {
-      setQuantity(newValue);
-    }
+  // const handleInputChange = event => {
+  //   const newValue = parseInt(event.target.value);
+  //   if (!isNaN(newValue) && newValue >= 0 && newValue <= Infinity) {
+  //     setQuantity(newValue);
+  //   }
+  // };
+
+  const handleAddToCart = () => {
+    alert(
+      `Đã thêm ${quantity} ${
+        products.productName
+      } vào giỏ hàng.\n\nThông tin sản phẩm:\nGiá: ${
+        products.price &&
+        (products.price * 0.8).toLocaleString('vi-VN', {
+          style: 'currency',
+          currency: 'VND',
+        })
+      }\nMã sản phẩm: VNB019090`
+    );
+  };
+
+  const [openTypeIndex, setOpenTypeIndex] = useState(null);
+
+  const toggleMenu = index => {
+    setOpenTypeIndex(openTypeIndex === index ? null : index);
   };
 
   return (
@@ -226,13 +257,19 @@ const ProductDetail = () => {
               >
                 -
               </button>
-              <input
+              {/* <input
                 type='number'
                 className='w-20 text-center px-4 py-2 border mx-1 border-primary rounded-lg'
                 value={quantity}
                 readOnly
                 onChange={handleInputChange}
-              />
+              /> */}
+              <span
+                className='w-20 text-center px-4 py-2 border mx-1 border-primary rounded-lg'
+                value={quantity}
+              >
+                {quantity}
+              </span>
               <button
                 className='bg-primary hover:bg-hover-primary text-white font-bold py-2 px-4 rounded-full'
                 onClick={increment}
@@ -245,7 +282,10 @@ const ProductDetail = () => {
               <button className='bg-primary hover:bg-hover-primary text-white font-bold p-4 rounded-lg w-full'>
                 MUA NGAY
               </button>
-              <button className='bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg w-full ml-2'>
+              <button
+                onClick={handleAddToCart}
+                className='bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg w-full ml-2'
+              >
                 THÊM VÀO GIỎ HÀNG
               </button>
             </div>
@@ -257,48 +297,83 @@ const ProductDetail = () => {
         </div>
 
         {/* product bottom */}
-        <div className='container mx-auto mt-5 px-4'>
-          <div className='grid grid-cols-2 font-semibold text-2xl py-2 border-b-2'>
-            <button
-              className={`button ${
-                activeTab === 'description' ? ' text-primary' : ' text-gray-700'
-              }`}
-              onClick={() => handleTabChange('description')}
-            >
-              Mô tả sản phẩm
-            </button>
-            <button
-              className={`button ${
-                activeTab === 'specifications'
-                  ? ' text-primary'
-                  : ' text-gray-700'
-              }`}
-              onClick={() => handleTabChange('specifications')}
-            >
-              Thông số kỹ thuật
-            </button>
-          </div>
-          {/* Hiển thị nội dung dựa trên activeTab */}{' '}
-          {activeTab === 'description' ? (
-            <div className='p-10 space-y-4 text-gray-800  flex justify-center items-center'>
-              <div dangerouslySetInnerHTML={{ __html: products.description }} />
+        <div className='flex'>
+          <div className='container w-3/4 mt-5 px-4'>
+            <div className='grid grid-cols-2 font-semibold text-2xl py-2 border-b-2'>
+              <button
+                className={`button ${
+                  activeTab === 'description'
+                    ? ' text-primary'
+                    : ' text-gray-700'
+                }`}
+                onClick={() => handleTabChange('description')}
+              >
+                Mô tả sản phẩm
+              </button>
+              <button
+                className={`button ${
+                  activeTab === 'specifications'
+                    ? ' text-primary'
+                    : ' text-gray-700'
+                }`}
+                onClick={() => handleTabChange('specifications')}
+              >
+                Thông số kỹ thuật
+              </button>
             </div>
-          ) : (
-            <table className='table-auto w-full mt-3'>
-              <tbody>
-                {productData.map((item, index) => (
-                  <tr key={index} className='border border-gray-300 '>
-                    <td className='w-2/5 p-3 border border-gray-300 font-bold'>
-                      {item.specificationName.specificationName}
-                    </td>
-                    <td className='px-4 py-2 border border-gray-300'>
-                      {item.specificationDesc}
-                    </td>
-                  </tr>
+            {/* Hiển thị nội dung dựa trên activeTab */}{' '}
+            {activeTab === 'description' ? (
+              <div className='p-10 space-y-4 text-gray-800  flex justify-center items-center'>
+                <div
+                  className='product-description'
+                  dangerouslySetInnerHTML={{ __html: products.description }}
+                />
+              </div>
+            ) : (
+              <table className='table-auto w-full mt-3'>
+                <tbody>
+                  {productData.map((item, index) => (
+                    <tr key={index} className='border border-gray-300 '>
+                      <td className='w-2/5 p-3 border border-gray-300 font-bold'>
+                        {item.specificationName.specificationName}
+                      </td>
+                      <td className='px-4 py-2 border border-gray-300'>
+                        {item.specificationDesc}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+          <div className='w-1/4 pt-3'>
+            <div className='w-full max-w-xs p-4 bg-white rounded-lg shadow'>
+              <h2 className='text-lg font-bold flex justify-between items-center'>
+                DANH MỤC SẢN PHẨM
+              </h2>
+              <h3 className='m-2'>
+                {productTypes.map((type, index) => (
+                  <div className='' key={index}>
+                    {type.productTypeName}
+                    <button
+                      onClick={() => toggleMenu(index)}
+                      className='text-lg font-bold'
+                    >
+                      {openTypeIndex === index ? '-' : '+'} 
+                    </button>
+                    <ul>
+                      {openTypeIndex === index &&
+                        brands.map((brand, idx) => (
+                          <li key={idx} className='m-3'>
+                            {type.productTypeName.concat(` ${brand.brandName}`)}
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
                 ))}
-              </tbody>
-            </table>
-          )}
+              </h3>
+            </div>
+          </div>
         </div>
         <RatingSection />
       </div>
