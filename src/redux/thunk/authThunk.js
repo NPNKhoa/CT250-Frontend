@@ -7,11 +7,12 @@ export const loginThunk = createAsyncThunk(
     try {
       const data = await authService.login(credentials);
 
-      // console.log(data.data);
+      console.log(data.data);
 
       // Lưu access token và refresh token vào localStorage
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('refreshToken', data.refreshToken);
+      // localStorage.setItem('accessToken', data.accessToken);
+      // localStorage.setItem('refreshToken', data.refreshToken);
+      localStorage.setItem('loggedInUser', JSON.stringify(data.data));
       return data.data;
     } catch (error) {
       return rejectWithValue(error.response.data.error);
@@ -25,13 +26,15 @@ export const loginThunk = createAsyncThunk(
 //     try {
 //       const response = await authService.logout();
 
-//       // Xóa dữ liệu từ localStorage
-//       localStorage.removeItem('token');
-//       localStorage.removeItem('refreshToken');
-
-//       return response;
+//       if (response.status === 204) {
+//         localStorage.removeItem('token');
+//         localStorage.removeItem('refreshToken');
+//         return response;
+//       } else {
+//         throw new Error('Logout failed!');
+//       }
 //     } catch (error) {
-//       return rejectWithValue(error.response.data.error);
+//       return rejectWithValue(error.response?.data?.error || 'Logout failed!');
 //     }
 //   }
 // );

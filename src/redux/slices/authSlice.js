@@ -13,8 +13,9 @@ const authSlice = createSlice({
   reducers: {
     logout: state => {
       state.authUser = null; // Đăng xuất
-      localStorage.removeItem('token');
-      localStorage.removeItem('refreshToken');
+      // localStorage.removeItem('accessToken');
+      // localStorage.removeItem('refreshToken');
+      localStorage.removeItem('loggedInUser');
     },
     setCredentials: (state, action) => {
       state.authUser = action.payload;
