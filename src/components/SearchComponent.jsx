@@ -16,6 +16,11 @@ export default function SearchPopover() {
   const [query, setQuery] = useState('');
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef(null);
+  const queryRef = useRef(query);
+
+  useEffect(() => {
+    queryRef.current = query;
+  }, [query]);
 
   useEffect(() => {
     const SpeechRecognition =
@@ -40,13 +45,12 @@ export default function SearchPopover() {
         .map(result => result.transcript)
         .join('');
       setQuery(currentTranscript);
-      
     };
-
+    
     recognition.onend = () => {
       setIsListening(false);
-      if (query) {
-        navigate(`/search?productName=${encodeURIComponent(query)}`);
+      if (queryRef.current) {
+        navigate(`/search?productName=${encodeURIComponent(queryRef.current)}`);
       }
     };
 
