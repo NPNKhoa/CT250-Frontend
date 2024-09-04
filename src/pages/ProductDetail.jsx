@@ -146,11 +146,13 @@ const ProductDetail = () => {
   // };
   const accessToken = localStorage.getItem('accessToken');
   const handleAddToCart = () => {
+
     cartService.addToCart(accessToken, {
       productId: products._id,
       quantity: quantity,
     });
     setNotification({ message: 'Đã thêm vào giỏ hàng!', type: 'success' });
+
   };
 
   const [openTypeIndices, setOpenTypeIndices] = useState([]);
@@ -379,9 +381,11 @@ const ProductDetail = () => {
                       {openTypeIndices.includes(index) &&
                         brands.map((brand, idx) => (
                           <li key={idx} className='m-4'>
-                            <Link to={`/products?productType=${encodeURIComponent(type.productTypeName)}&brand=${
-                                encodeURIComponent(brand.brandName)
-                              }`}>
+                            <Link
+                              to={`/products?productType=${encodeURIComponent(
+                                type.productTypeName
+                              )}&brand=${encodeURIComponent(brand.brandName)}`}
+                            >
                               {`${type.productTypeName} ${brand.brandName}`}
                             </Link>
                           </li>
