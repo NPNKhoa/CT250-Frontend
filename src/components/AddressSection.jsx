@@ -41,13 +41,13 @@ function AddressSection() {
   };
 
   return (
-    <div>
-      <Button
+    <div className='mt-5'>
+      <button
         className='bg-primary hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4'
         onClick={handleClickOpen}
       >
         + Thêm địa chỉ mới
-      </Button>
+      </button>
 
       <AddressFormDialog
         open={open}
@@ -65,8 +65,8 @@ function AddressSection() {
             <div key={index} className='border-t border-gray-300 py-4'>
               <div className='flex justify-between'>
                 <div>
-                  <h3 className='text-lg font-semibold'>{address.fullName}</h3>
-                  <p className='text-gray-600'>{address.phoneNumber}</p>
+                  <h3 className='text-lg font-semibold'>{address.fullname}</h3>
+                  <p className='text-gray-600'>{address.phone}</p>
                   <p>{address.detail}</p>
                   <p>
                     {address.commune}, {address.district}, {address.province}

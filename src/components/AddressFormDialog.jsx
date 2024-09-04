@@ -127,10 +127,10 @@ const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} className='text-primary'>
+        <Button onClick={onClose} color='primary'>
           Trở Lại
         </Button>
-        <Button type='button' onClick={handleSubmit} className='text-primary'>
+        <Button type='button' onClick={handleSubmit} color='primary'>
           Hoàn thành
         </Button>
       </DialogActions>
