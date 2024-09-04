@@ -40,6 +40,7 @@ export default function SearchPopover() {
         .map(result => result.transcript)
         .join('');
       setQuery(currentTranscript);
+      
     };
 
     recognition.onend = () => {
@@ -159,6 +160,7 @@ export default function SearchPopover() {
           type='text'
           className='bg-gray-200 w-full max-w-xs rounded-lg p-2'
           placeholder='Tìm sản phẩm...'
+          value={query}
           onMouseDown={event => event.preventDefault()}
           onClick={handleClick}
           required
