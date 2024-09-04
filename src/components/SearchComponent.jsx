@@ -4,12 +4,66 @@ import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import WhatshotSharpIcon from '@mui/icons-material/WhatshotSharp';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
+import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
+import MicNoneIcon from '@mui/icons-material/MicNone';
 
 export default function SearchPopover() {
   const [anchorEl, setAnchorEl] = useState(null);
   const inputRef = useRef(null);
 
   const navigate = useNavigate();
+
+  const [query, setQuery] = useState('');
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef(null);
+
+  useEffect(() => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      console.error('Trình duyệt không hỗ trợ SpeechRecognition');
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'vi-VN';
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = event => {
+      const currentTranscript = Array.from(event.results)
+        .map(result => result[0])
+        .map(result => result.transcript)
+        .join('');
+      setQuery(currentTranscript);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+      if (query) {
+        navigate(`/search?productName=${encodeURIComponent(query)}`);
+      }
+    };
+
+    recognitionRef.current = recognition;
+
+    // Cleanup khi component unmount
+    return () => {
+      recognition.stop();
+    };
+  }, [query, navigate]);
+
+  const handleVoiceSearch = () => {
+    if (isListening) {
+      recognitionRef.current.stop();
+    } else {
+      recognitionRef.current.start();
+    }
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -22,7 +76,7 @@ export default function SearchPopover() {
 
   const handleSubmit = event => {
     event.preventDefault();
-    const query = inputRef.current.value.trim(); // Lấy giá trị tìm kiếm
+    setQuery(inputRef.current.value.trim()); // Lấy giá trị tìm kiếm
     if (query) {
       navigate(`/search?productName=${encodeURIComponent(query)}`); // Chuyển hướng đến trang search với query
     }
@@ -103,13 +157,27 @@ export default function SearchPopover() {
         <input
           ref={inputRef}
           type='text'
-          className='bg-gray-200 w-[300px] rounded-lg p-1'
+          className='bg-gray-200 w-full max-w-xs rounded-lg p-2'
           placeholder='Tìm sản phẩm...'
           onMouseDown={event => event.preventDefault()}
           onClick={handleClick}
           required
         />
-        <button type='submit' className='absolute top-1 right-2 m-0'>
+        <button
+          type='button'
+          onClick={handleVoiceSearch}
+          className='absolute top-1/2 transform -translate-y-1/2 right-12 p-2'
+        >
+          {isListening ? (
+            <KeyboardVoiceIcon className='text-primary' />
+          ) : (
+            <MicNoneIcon className='text-primary' />
+          )}
+        </button>
+        <button
+          type='submit'
+          className='absolute top-1/2 transform -translate-y-1/2 right-2 p-2'
+        >
           <SearchSharpIcon className='text-primary' />
         </button>
       </form>
