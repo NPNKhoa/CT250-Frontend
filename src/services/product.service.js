@@ -5,20 +5,24 @@ class productService {
     this.api = createApiClient(path);
   }
 
-  async getAll() {
-    return (await this.api.get('/')).data;
-  }
-
-  async getByName(productName, page, limit) {
-    const params = new URLSearchParams({
-      productName, 
-      page, 
-      limit
-    });
+    async getAll(query = {}, page, limit) {
+    if (!(query instanceof URLSearchParams)) {
+      query = new URLSearchParams(query);
+    }
   
-    return (await this.api.get(`/?${params.toString()}`)).data;
-  }
+    const params = new URLSearchParams();
   
+    if (query.get('productName')) params.append('productName', query.get('productName'));
+    if (query.get('productType')) params.append('productType', query.get('productType'));
+    if (query.get('brand')) params.append('brand', query.get('brand'));
+    if (query.get('minPrice')) params.append('minPrice', query.get('minPrice'));
+    if (query.get('maxPrice')) params.append('maxPrice', query.get('maxPrice'));
+  
+    if (page) params.append('page', page);
+    if (limit) params.append('limit', limit);
+  
+    return (await this.api.get('/', { params })).data;
+  }
 
   async getById(id) {
     return (await this.api.get(`/${id}`)).data;

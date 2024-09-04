@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import BreadcrumbsComponent from '@components/Breadcrumb';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import CheckIcon from '@mui/icons-material/Check';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
@@ -38,8 +38,14 @@ const ProductDetail = () => {
 
   const breadcrumbs = [
     { label: 'Trang chủ', href: '/' },
-    { label: 'Vợt cầu lông', href: '/products/vot-cau-long' },
-    { label: 'Vợt cầu lông Yonex', href: '/products/vot-cau-long-yonex' },
+    {
+      label: `${products.productType?.productTypeName}`,
+      // href: `/products?productType=${products.productType?.productTypeName}`,
+    },
+    {
+      label: `${products.productType?.productTypeName} ${products.productBrand?.brandName}`,
+      href: `/products?productType=${products.productType?.productTypeName}&brand=${products.productBrand?.brandName}`,
+    },
     {
       label: `${products.productName}`,
       href: `/products/${id}`,
@@ -149,10 +155,14 @@ const ProductDetail = () => {
     );
   };
 
-  const [openTypeIndex, setOpenTypeIndex] = useState(null);
+  const [openTypeIndices, setOpenTypeIndices] = useState([]);
 
   const toggleMenu = index => {
-    setOpenTypeIndex(openTypeIndex === index ? null : index);
+    setOpenTypeIndices(prevIndices =>
+      prevIndices.includes(index)
+        ? prevIndices.filter(i => i !== index)
+        : [...prevIndices, index]
+    );
   };
 
   return (
@@ -204,18 +214,22 @@ const ProductDetail = () => {
             <div className='flex items-center gap-3  mb-8'>
               <p className='text-2xl font-bold text-primary'>
                 {products.price &&
-                  (products.price * 0.8).toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND',
-                  })}
+                  (products.price * 0.8)
+                    .toLocaleString('vi-VN', {
+                      style: 'currency',
+                      currency: 'VND',
+                    })
+                    .replace('₫', 'đ')}
               </p>
               <p className='line-through text-gray-400'>
                 Giá niêm yết:{' '}
                 {products.price &&
-                  products.price.toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND',
-                  })}
+                  products.price
+                    .toLocaleString('vi-VN', {
+                      style: 'currency',
+                      currency: 'VND',
+                    })
+                    .replace('₫', 'đ')}
               </p>
             </div>
 
@@ -348,24 +362,26 @@ const ProductDetail = () => {
           </div>
           <div className='w-1/4 pt-3'>
             <div className='w-full max-w-xs p-4 bg-white rounded-lg shadow'>
-              <h2 className='text-lg font-bold flex justify-between items-center'>
+              <h2 className='text-lg font-bold flex justify-center items-center'>
                 DANH MỤC SẢN PHẨM
               </h2>
               <h3 className='m-2'>
                 {productTypes.map((type, index) => (
-                  <div className='' key={index}>
-                    {type.productTypeName}
-                    <button
-                      onClick={() => toggleMenu(index)}
-                      className='text-lg font-bold'
-                    >
-                      {openTypeIndex === index ? '-' : '+'} 
-                    </button>
+                  <div key={index}>
+                    <div className='flex justify-between items-center my-4'>
+                      <Link to={'/'}>{type.productTypeName}</Link>
+                      <button
+                        onClick={() => toggleMenu(index)}
+                        className='text-lg'
+                      >
+                        {openTypeIndices.includes(index) ? '-' : '+'}
+                      </button>
+                    </div>
                     <ul>
-                      {openTypeIndex === index &&
+                      {openTypeIndices.includes(index) &&
                         brands.map((brand, idx) => (
-                          <li key={idx} className='m-3'>
-                            {type.productTypeName.concat(` ${brand.brandName}`)}
+                          <li key={idx} className='m-4'>
+                            {`${type.productTypeName} ${brand.brandName}`}
                           </li>
                         ))}
                     </ul>

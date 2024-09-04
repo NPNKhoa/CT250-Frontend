@@ -10,7 +10,7 @@ import PaginationComponent from '@components/PaginationComponent';
 const SearchPage = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const query = searchParams.get('query');
+  const query = searchParams.get('productName');
   const page = parseInt(searchParams.get('page') || '', 10);
 
   const [products, setProducts] = useState([]);
@@ -28,7 +28,7 @@ const SearchPage = () => {
     const fetchProductTypes = async () => {
       try {
         setProducts([]);
-        const responseProduct = await productService.getByName(query, page, 10);
+        const responseProduct = await productService.getAll(searchParams, page, 10);
         setProducts(responseProduct.data);
         setTotalPage(responseProduct.meta.totalPages);
       } catch (error) {
@@ -54,7 +54,7 @@ const SearchPage = () => {
             ))}
           <div className='col-span-5 mt-4 flex justify-center'>
             <PaginationComponent
-              path={`${location.pathname}?query=${query}`}
+              path={`${location.pathname}`}
               totalPages={totalPage}
             />
           </div>

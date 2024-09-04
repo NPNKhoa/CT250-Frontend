@@ -11,7 +11,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await productService.getAll();
+        const response = await productService.getAll(null, 1, 5);
         setProducts(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);

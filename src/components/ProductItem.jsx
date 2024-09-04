@@ -15,7 +15,7 @@ const ProductItem = ({ imageUrl, name, price, productLink }) => {
 
   return (
     <div className='block bg-white rounded-lg shadow-md overflow-hidden w-60 h-86'>
-      <div className='flex justify-center items-center w-full h-3/4'>
+      <div className='flex justify-center items-center w-full h-2/3'>
         <Link to={`/${productLink}`}>
           <img
             src={imageUrl}
@@ -24,7 +24,7 @@ const ProductItem = ({ imageUrl, name, price, productLink }) => {
           />
         </Link>
       </div>
-      <div className='p-4 h-1/4'>
+      <div className='p-4 h-1/3'>
         <Link to={`/${productLink}`}>
           <h3 className='h-2/3 text-sm text-gray-800'>{name}</h3>
         </Link>

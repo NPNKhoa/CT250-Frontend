@@ -63,7 +63,7 @@ const routes = [
 
   {
     id: 'products',
-    path: '/products/:id',
+    path: '/products',
     element: <Products />,
   },
 
