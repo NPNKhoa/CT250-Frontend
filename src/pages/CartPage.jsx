@@ -1,35 +1,29 @@
-import { useState } from 'react';
+import  { useEffect, useState } from 'react';
+import {Link} from 'react-router-dom';
 import BreadcrumbsComponent from '@components/Breadcrumb';
 import DeleteForeverSharpIcon from '@mui/icons-material/DeleteForeverSharp';
 import CartIcon from '@assets/cart-icon.png';
 
+import cartService from '@services/cart.service';
+
 const CartPage = () => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      image:
-        'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-edge-saber-10-black-chinh-hang_1703023099.webp',
-      name: 'Vợt cầu lông Yonex NanoFlare 370 Speed (Blue) chính hãng',
-      quantity: 1,
-      price: 1919000,
-    },
-    {
-      id: 2,
-      image:
-        'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-edge-saber-10-black-chinh-hang_1703023099.webp',
-      name: 'Vợt Cầu Lông Apacs Power Concept 500 chính hãng',
-      quantity: 2,
-      price: 687000,
-    },
-    {
-      id: 3,
-      image:
-        'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-edge-saber-10-black-chinh-hang_1703023099.webp',
-      name: 'Vợt Cầu Lông Apacs Power Concept 500 chính hãng',
-      quantity: 2,
-      price: 687000,
-    },
-  ]);
+  const [cartItems, setCartItems] = useState([]);
+  const accessToken = localStorage.getItem('accessToken');
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const response = await cartService.getCartByUser(accessToken);
+        setCartItems(response.data.cart.cartItems);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchCart();
+  });
+
+  console.log(cartItems);
 
   const breadcrumbs = [
     { label: 'Trang chủ', href: '/' },
@@ -37,53 +31,42 @@ const CartPage = () => {
   ];
 
   const handleRemove = id => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+    cartService.deleteItem(accessToken, id);
   };
 
   const handleQuantityChange = (id, delta) => {
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id
-          ? {
-              ...item,
-              quantity: Math.max(1, item.quantity + delta),
-            }
-          : item
-      )
-    );
+    cartService.updateQuantity(accessToken, { productId: id, quantity: delta });
   };
 
   const calculateTotal = () => {
     return cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
+      (total, item) => total + item.itemPrice * item.quantity,
       0
     );
   };
 
   const handleOrderNow = () => {
-    if (cartItems.length === 0) {
-      alert('Giỏ hàng của bạn đang trống!');
-      return;
-    }
-
-    const orderDetails = cartItems.map(item => ({
-      id: item.id,
-      name: item.name,
-      quantity: item.quantity,
-      unitPrice: item.price,
-      totalPrice: item.price * item.quantity,
-    }));
-
-    alert(
-      `Thông tin đơn hàng:\n${JSON.stringify(
-        orderDetails,
-        null,
-        2
-      )}\n\nTổng cộng: ${calculateTotal().toLocaleString('vi-VN', {
-        style: 'currency',
-        currency: 'VND',
-      })}`
-    );
+    // if (cartItems.length === 0) {
+    //   alert('Giỏ hàng của bạn đang trống!');
+    //   return;
+    // }
+    // const orderDetails = cartItems.map(item => ({
+    //   id: item.id,
+    //   name: item.name,
+    //   quantity: item.quantity,
+    //   unitPrice: item.price,
+    //   totalPrice: item.price * item.quantity,
+    // }));
+    // alert(
+    //   `Thông tin đơn hàng:\n${JSON.stringify(
+    //     orderDetails,
+    //     null,
+    //     2
+    //   )}\n\nTổng cộng: ${calculateTotal().toLocaleString('vi-VN', {
+    //     style: 'currency',
+    //     currency: 'VND',
+    //   })}`
+    // );
   };
 
   return (
@@ -112,47 +95,58 @@ const CartPage = () => {
               </thead>
               <tbody>
                 {cartItems.map(item => (
-                  <tr key={item.id} className='border-b'>
+                  <tr key={item} className='border-b'>
                     <td className='flex items-center py-2 px-4'>
                       <img
-                        src={item.image}
-                        alt={item.name}
-                        className='w-24 h-24 object-cover rounded mr-4'
+                        src={item.product.productImagePath[0]}
+                        alt={item.product.productName}
+                        className='w-20 h-20 object-cover rounded mr-4'
                       />
                       <div>
-                        <p className='font-medium'>{item.name}</p>
+                        <Link to={`/products/detail/${item.product._id}`}>
+                          <p className='font-medium'>
+                            {item.product.productName}
+                          </p>
+                        </Link>
                       </div>
                     </td>
                     <td className='text-right py-2 px-4'>
-                      {item.price.toLocaleString('vi-VN', {
+                      {item.itemPrice.toLocaleString('vi-VN', {
                         style: 'currency',
                         currency: 'VND',
                       })}
                     </td>
                     <td className='text-center py-2 px-4'>
                       <button
-                        onClick={() => handleQuantityChange(item.id, -1)}
+                        onClick={() =>
+                          handleQuantityChange(item._id, item.quantity - 1)
+                        }
                         className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-l-full'
                       >
                         -
                       </button>
                       <span className='mx-3'>{item.quantity}</span>
                       <button
-                        onClick={() => handleQuantityChange(item.id, 1)}
+                        onClick={() =>
+                          handleQuantityChange(item._id, item.quantity + 1)
+                        }
                         className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-r-full'
                       >
                         +
                       </button>
                     </td>
                     <td className='text-right py-2 px-4 text-primary font-semibold'>
-                      {(item.price * item.quantity).toLocaleString('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND',
-                      })}
+                      {(item.itemPrice * item.quantity).toLocaleString(
+                        'vi-VN',
+                        {
+                          style: 'currency',
+                          currency: 'VND',
+                        }
+                      )}
                     </td>
                     <td className='text-center py-2 px-4'>
                       <button
-                        onClick={() => handleRemove(item.id)}
+                        onClick={() => handleRemove(item._id)}
                         className='text-primary hover:text-hover-primary'
                       >
                         <DeleteForeverSharpIcon />
