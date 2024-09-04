@@ -9,7 +9,11 @@ function ProfilePage() {
   // Lấy thông tin người dùng từ Redux store
   const user = useSelector(state => state.users.user);
   const accessToken = localStorage.getItem('accessToken');
+  // Lấy địa chỉ từ Redux store
+  const addresses = useSelector(state => state.address.addresses);
 
+  // Lọc địa chỉ mặc định
+  const defaultAddress = addresses.find(address => address.isDefault) || {};
   // Gọi API lấy thông tin người dùng khi component được mount
   useEffect(() => {
     if (accessToken) {
@@ -17,6 +21,9 @@ function ProfilePage() {
     }
   }, [dispatch, accessToken]);
 
+  const formattedAddress = defaultAddress?.detail
+    ? `${defaultAddress.commune}, ${defaultAddress.district}, ${defaultAddress.province}, ${defaultAddress.detail}`
+    : 'Chưa cập nhật';
   console.log(user);
 
   // Hiển thị thông tin người dùng
@@ -43,8 +50,7 @@ function ProfilePage() {
               {user?.phone || 'Chưa cập nhật'}
             </li>
             <li>
-              <span className='font-medium'>Địa chỉ:</span>{' '}
-              {user?.address?.detail || 'Chưa cập nhật'}
+              <span className='font-medium'>Địa chỉ:</span> {formattedAddress}
             </li>
           </ul>
           <button className='bg-primary hover:bg-hover-primary text-white font-semibold py-2 px-4 rounded mt-6 transition-colors duration-200'>

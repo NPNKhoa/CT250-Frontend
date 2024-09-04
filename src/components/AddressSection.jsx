@@ -1,25 +1,44 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import AddressFormDialog from '@components/AddressFormDialog';
-import { getUserAddressThunk } from '@redux/thunk/addressThunk';
+import {
+  getUserAddressThunk,
+  createAddressThunk,
+} from '@redux/thunk/addressThunk';
 
-function AddressSection({
-  handleClickOpen,
-  handleDelete,
-  handleSetDefault,
-  open,
-  handleClose,
-  handleFormSubmit,
-  editAddress,
-}) {
+function AddressSection() {
   const dispatch = useDispatch();
   const { addresses, loading, error } = useSelector(state => state.address);
+  const [open, setOpen] = useState(false);
+  const [editAddress, setEditAddress] = useState(null);
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
     dispatch(getUserAddressThunk(accessToken));
   }, [dispatch]);
+
+  const handleClickOpen = () => {
+    setEditAddress(null); // Reset the form for a new address
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleFormSubmit = async formData => {
+    const accessToken = localStorage.getItem('accessToken');
+
+    try {
+      await dispatch(
+        createAddressThunk({ addressData: formData, accessToken })
+      );
+      dispatch(getUserAddressThunk(accessToken)); // Re-fetch the addresses to update the list
+    } catch (error) {
+      console.error('Error adding address:', error);
+    }
+  };
 
   return (
     <div>
