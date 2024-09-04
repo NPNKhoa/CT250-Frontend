@@ -156,6 +156,10 @@ export default function SearchPopover() {
     }
   }, [open]);
 
+  const handleChange = (event) => {
+    setQuery(event.target.value);
+  };
+
   return (
     <div>
       <form action='#' className='relative' onSubmit={handleSubmit}>
@@ -167,6 +171,7 @@ export default function SearchPopover() {
           value={query}
           onMouseDown={event => event.preventDefault()}
           onClick={handleClick}
+          onChange={handleChange}
           required
         />
         <button
