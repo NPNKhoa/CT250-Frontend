@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 import productService from '@services/product.service';
 
@@ -10,10 +10,13 @@ import PaginationComponent from '@components/PaginationComponent';
 
 const Products = () => {
   const location = useLocation();
-  const query = new URLSearchParams(location.search);
-  const page = parseInt(query.get('page') || '', 10);
+  const query = useMemo(() => new URLSearchParams(location.search), [location.search]);
+  const page = parseInt(query.get('page') || '1', 10);
   const brand = query.get('brand') || '';
-  const type = query.get('type') || '';
+
+  const [selectedMinPrice, setSelectedMinPrice] = useState(null);
+  const [selectedMaxPrice, setSelectedMaxPrice] = useState(null);
+  const [selectedBrand, setSelectedBrand] = useState([]);
 
   const [products, setProducts] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
@@ -22,7 +25,24 @@ const Products = () => {
     const fetchProductTypes = async () => {
       try {
         setProducts([]);
-        const responseProduct = await productService.getByName(brand, page, 12);
+        if (selectedBrand.length > 0) {
+          query.set('brand', selectedBrand.join(','));
+        } else {
+          query.delete('brand');
+        }
+        
+        if (selectedMinPrice !== null) {
+          query.set('minPrice', selectedMinPrice);
+        } else {
+          query.delete('minPrice');
+        }
+
+        if (selectedMaxPrice !== null) {
+          query.set('maxPrice', selectedMaxPrice);
+        } else {
+          query.delete('maxPrice');
+        }
+        const responseProduct = await productService.getAll(query, page, 12);
         setProducts(responseProduct.data);
         setTotalPage(responseProduct.meta.totalPages);
       } catch (error) {
@@ -31,7 +51,16 @@ const Products = () => {
     };
 
     fetchProductTypes();
-  }, [brand, page]);
+  }, [page, query, selectedBrand, selectedMinPrice, selectedMaxPrice]);
+
+  const handlePriceChange = (minPrice, maxPrice) => {
+    setSelectedMinPrice(minPrice);
+    setSelectedMaxPrice(maxPrice);
+  };
+
+  const handleBrandChange = (brands) => {
+    setSelectedBrand(brands);
+  };
 
   return (
     <>
@@ -40,16 +69,16 @@ const Products = () => {
           breadcrumbs={[
             { label: 'Trang chủ', href: '/' },
             {
-              label: `${products[0].productType?.productTypeName}`,
-              href: `/products/${type}`,
+              label: `${products[0].productTypeDetails?.productTypeName}`,
+              // href: `/products?productType=${type}`,
             },
-            { label: `${products[0].productType?.productTypeName} ${brand}` },
+            { label: `${products[0].productTypeDetails?.productTypeName} ${brand}` },
           ]}
         />
       )}
       <div className='flex p-4'>
         <div className='w-1/5 m-1'>
-          <Filter />
+          <Filter onPriceChange={handlePriceChange} onBrandChange={handleBrandChange} />
         </div>
         <div className='w-4/5 grid grid-cols-4 gap-1 ml-2'>
           {Array.isArray(products) &&
@@ -64,7 +93,7 @@ const Products = () => {
             ))}
           <div className='col-span-4 mt-4 flex justify-center'>
             <PaginationComponent
-              path={`${location.pathname}?brand=${brand}`}
+              path={`${location.pathname}`}
               totalPages={totalPage}
             />
           </div>

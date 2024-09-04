@@ -6,18 +6,28 @@ import PropTypes from 'prop-types';
 const PaginationComponent = ({ path, totalPages }) => {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
-  const page = parseInt(query.get('page') || '1', 10);
+  const currentPage = parseInt(query.get('page') || '1', 10);
+
   return (
     <Pagination
-      page={page}
+      page={currentPage}
       count={totalPages}
-      renderItem={(item) => (
-        <PaginationItem
-          component={Link}
-          to={`${path}${item.page === 1 ? '' : `&page=${item.page}`}`}
-          {...item}
-        />
-      )}
+      renderItem={(item) => {
+        const pageNumber = item.page;
+        // Clone query parameters and remove the existing 'page' parameter
+        const updatedQuery = new URLSearchParams(query.toString());
+        updatedQuery.set('page', pageNumber);
+        // Generate the URL for each page
+        const to = `${path}?${updatedQuery.toString()}`;
+
+        return (
+          <PaginationItem
+            component={Link}
+            to={to}
+            {...item}
+          />
+        );
+      }}
     />
   );
 };

@@ -24,7 +24,7 @@ export default function SearchPopover() {
     event.preventDefault();
     const query = inputRef.current.value.trim(); // Lấy giá trị tìm kiếm
     if (query) {
-      navigate(`/search?query=${encodeURIComponent(query)}`); // Chuyển hướng đến trang search với query
+      navigate(`/search?productName=${encodeURIComponent(query)}`); // Chuyển hướng đến trang search với query
     }
   };
 
@@ -114,7 +114,7 @@ export default function SearchPopover() {
         </button>
       </form>
 
-      <Popover
+      {/* <Popover
         id={id}
         open={open}
         anchorEl={anchorEl}
@@ -190,7 +190,7 @@ export default function SearchPopover() {
             ))}
           </div>
         </Typography>
-      </Popover>
+      </Popover> */}
     </div>
   );
 }

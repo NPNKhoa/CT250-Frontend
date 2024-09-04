@@ -89,12 +89,8 @@ const NavBar = () => {
                         {category.items.map((product, i) => (
                           <li key={i} className='text-gray-600 mb-1'>
                             <Link
-                              to={`/products/${category.title
-                                .toLowerCase()
-                                .replace(/ /g, '-')
-                                .normalize('NFD')
-                                .replace(/[\u0300-\u036f]/g, '')}?brand=${
-                                category.brand[i]
+                              to={`/products?productType=${encodeURIComponent(category.title)}&brand=${
+                                encodeURIComponent(category.brand[i])
                               }`}
                               onClick={() => setShowDropdown(false)}
                             >
