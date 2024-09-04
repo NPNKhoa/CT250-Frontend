@@ -40,7 +40,7 @@ const ProductDetail = () => {
     { label: 'Trang chủ', href: '/' },
     {
       label: `${products.productType?.productTypeName}`,
-      // href: `/products?productType=${products.productType?.productTypeName}`,
+      href: `/products?productType=${products.productType?.productTypeName}`,
     },
     {
       label: `${products.productType?.productTypeName} ${products.productBrand?.brandName}`,
