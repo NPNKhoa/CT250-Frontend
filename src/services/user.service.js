@@ -47,6 +47,19 @@ class UserService {
       );
     }
   }
+
+  async updatePassword(updatedData, accessToken) {
+    try {
+      const response = await this.api.put('/update-password', updatedData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.error || 'Error updating password');
+    }
+  }
 }
 
 export default new UserService();

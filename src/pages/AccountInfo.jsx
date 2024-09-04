@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom';
 import Avatar from '@assets/user.png';
 import PasswordInput from '@components/PasswordInput';
 import { useDispatch, useSelector } from 'react-redux';
-import { getLoggedInUser, updateUserInfoThunk } from '@redux/thunk/userThunk';
+import {
+  getLoggedInUser,
+  updatePasswordThunk,
+  updateUserInfoThunk,
+} from '@redux/thunk/userThunk';
 
 function AccountInfo() {
   const dispatch = useDispatch();
@@ -72,7 +76,7 @@ function AccountInfo() {
     };
 
     try {
-      console.log('Updating with data:', updatedData); // Debug output
+      // console.log('Updating with data:', updatedData);
       await dispatch(
         updateUserInfoThunk({ updatedData, accessToken })
       ).unwrap();
@@ -86,16 +90,33 @@ function AccountInfo() {
     }
   };
 
-  const handleSubmitPasswordReset = event => {
+  const handleSubmitPasswordReset = async event => {
     event.preventDefault();
+
     if (newPassword !== confirmPassword) {
       alert('Mật khẩu mới không khớp!');
       return;
     }
 
-    alert(
-      `Mật khẩu hiện tại: ${currentPassword}\nMật khẩu mới: ${newPassword}\nXác nhận mật khẩu mới: ${confirmPassword}`
-    );
+    const passwordData = {
+      oldPassword: currentPassword,
+      password: newPassword,
+      confirmPassword: confirmPassword,
+    };
+
+    try {
+      await dispatch(
+        updatePasswordThunk({ updatedData: passwordData, accessToken })
+      ).unwrap();
+
+      alert('Mật khẩu đã được thay đổi thành công.');
+      // Reset các trường mật khẩu sau khi thay đổi thành công
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+    } catch (error) {
+      alert(`Có lỗi xảy ra khi đổi mật khẩu: ${error.message || error}`);
+    }
   };
 
   const handleAvatarChange = event => {

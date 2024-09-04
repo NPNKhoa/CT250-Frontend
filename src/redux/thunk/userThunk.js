@@ -35,7 +35,7 @@ export const getLoggedInUser = createAsyncThunk(
 );
 
 export const updateUserInfoThunk = createAsyncThunk(
-  'user/updateUserInfo',
+  'users/updateUserInfo',
   async ({ updatedData, accessToken }, { rejectWithValue }) => {
     try {
       const response = await userService.updateUserInfo(
@@ -45,6 +45,21 @@ export const updateUserInfoThunk = createAsyncThunk(
       return response;
     } catch (error) {
       // Sử dụng rejectWithValue để gửi lỗi tùy chỉnh đến reducer
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const updatePasswordThunk = createAsyncThunk(
+  'users/updatePassword',
+  async ({ updatedData, accessToken }, { rejectWithValue }) => {
+    try {
+      const response = await userService.updatePassword(
+        updatedData,
+        accessToken
+      );
+      return response;
+    } catch (error) {
       return rejectWithValue(error.message);
     }
   }
