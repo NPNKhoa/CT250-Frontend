@@ -10,7 +10,10 @@ import PaginationComponent from '@components/PaginationComponent';
 
 const Products = () => {
   const location = useLocation();
-  const query = useMemo(() => new URLSearchParams(location.search), [location.search]);
+  const query = useMemo(
+    () => new URLSearchParams(location.search),
+    [location.search]
+  );
   const page = parseInt(query.get('page') || '1', 10);
   const brand = query.get('brand') || '';
 
@@ -25,23 +28,12 @@ const Products = () => {
     const fetchProductTypes = async () => {
       try {
         setProducts([]);
-        if (selectedBrand.length > 0) {
-          query.set('brand', selectedBrand.join(','));
-        } else {
-          query.delete('brand');
-        }
-        
-        if (selectedMinPrice !== null) {
-          query.set('minPrice', selectedMinPrice);
-        } else {
-          query.delete('minPrice');
-        }
+        if (selectedBrand.length > 0) query.set('brand', selectedBrand.join(','));
 
-        if (selectedMaxPrice !== null) {
-          query.set('maxPrice', selectedMaxPrice);
-        } else {
-          query.delete('maxPrice');
-        }
+        if (selectedMinPrice !== null) query.set('minPrice', selectedMinPrice);
+
+        if (selectedMaxPrice !== null) query.set('maxPrice', selectedMaxPrice);
+
         const responseProduct = await productService.getAll(query, page, 12);
         setProducts(responseProduct.data);
         setTotalPage(responseProduct.meta.totalPages);
@@ -58,7 +50,7 @@ const Products = () => {
     setSelectedMaxPrice(maxPrice);
   };
 
-  const handleBrandChange = (brands) => {
+  const handleBrandChange = brands => {
     setSelectedBrand(brands);
   };
 
@@ -72,13 +64,18 @@ const Products = () => {
               label: `${products[0].productTypeDetails?.productTypeName}`,
               // href: `/products?productType=${type}`,
             },
-            { label: `${products[0].productTypeDetails?.productTypeName} ${brand}` },
+            {
+              label: `${products[0].productTypeDetails?.productTypeName} ${brand}`,
+            },
           ]}
         />
       )}
       <div className='flex p-4'>
         <div className='w-1/5 m-1'>
-          <Filter onPriceChange={handlePriceChange} onBrandChange={handleBrandChange} />
+          <Filter
+            onPriceChange={handlePriceChange}
+            onBrandChange={handleBrandChange}
+          />
         </div>
         <div className='w-4/5 grid grid-cols-4 gap-1 ml-2'>
           {Array.isArray(products) &&
