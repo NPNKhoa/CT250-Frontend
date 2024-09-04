@@ -309,7 +309,7 @@ function AccountInfo() {
       </form>
 
       {/* data address */}
-      <div>
+      {/* <div>
         <button
           className='bg-primary hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4'
           onClick={handleClickOpen}
@@ -367,7 +367,7 @@ function AccountInfo() {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Reset Password */}
       <h2 className='text-2xl font-bold text-gray-800 my-6'>Đổi mật khẩu</h2>

@@ -40,7 +40,6 @@ export default function SearchPopover() {
         .map(result => result.transcript)
         .join('');
       setQuery(currentTranscript);
-      
     };
 
     recognition.onend = () => {
