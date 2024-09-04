@@ -46,11 +46,14 @@ export default function SearchPopover() {
         .join('');
       setQuery(currentTranscript);
     };
-    
+
     recognition.onend = () => {
       setIsListening(false);
       if (queryRef.current) {
         navigate(`/search?productName=${encodeURIComponent(queryRef.current)}`);
+        setTimeout(() => {
+          setQuery('');
+        }, 1000); // Xóa giá trị của input sau khi tìm kiếm
       }
     };
 
@@ -84,6 +87,9 @@ export default function SearchPopover() {
     setQuery(inputRef.current.value.trim()); // Lấy giá trị tìm kiếm
     if (query) {
       navigate(`/search?productName=${encodeURIComponent(query)}`); // Chuyển hướng đến trang search với query
+      setTimeout(() => {
+        setQuery('');
+      }, 1000);
     }
   };
 
@@ -165,7 +171,6 @@ export default function SearchPopover() {
           className='bg-gray-200 w-full max-w-xs rounded-lg p-2'
           placeholder='Tìm sản phẩm...'
           value={query}
-          onMouseDown={event => event.preventDefault()}
           onClick={handleClick}
           required
         />
