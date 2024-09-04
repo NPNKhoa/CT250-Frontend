@@ -10,9 +10,9 @@ export const createAddressThunk = createAsyncThunk(
         addressData,
         accessToken
       );
-      return response; // Trả về dữ liệu phản hồi nếu thành công
+      return response;
     } catch (error) {
-      return rejectWithValue(error.message); // Trả về thông điệp lỗi nếu thất bại
+      return rejectWithValue(error.message);
     }
   }
 );

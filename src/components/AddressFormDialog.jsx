@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -6,22 +6,19 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import { createAddressThunk } from '@redux/thunk/addressThunk'; // Nhập khẩu thunk cần thiết
 
-const AddressFormDialog = ({
-  open,
-  onClose,
-  onSubmit,
-  addressId,
-  accessToken,
-}) => {
-  const dispatch = useDispatch(); // Sử dụng hook dispatch của redux
+const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
+  const dispatch = useDispatch();
   const fullNameRef = useRef();
   const phoneNumberRef = useRef();
   const provinceRef = useRef();
   const districtRef = useRef();
   const communeRef = useRef();
   const detailRef = useRef();
+  const [isDefault, setIsDefault] = useState(false);
 
   const handleSubmit = async event => {
     event.preventDefault();
@@ -34,7 +31,7 @@ const AddressFormDialog = ({
       district: districtRef.current.value,
       commune: communeRef.current.value,
       detail: detailRef.current.value,
-      isDefault: false, // Đặt isDefault là false cho địa chỉ mới
+      isDefault: isDefault, // Sử dụng giá trị từ checkbox isDefault
     };
 
     // Thực hiện tạo địa chỉ qua thunk
@@ -116,6 +113,17 @@ const AddressFormDialog = ({
           fullWidth
           variant='standard'
           inputRef={detailRef}
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={isDefault}
+              onChange={event => setIsDefault(event.target.checked)}
+              name='isDefault'
+              color='primary'
+            />
+          }
+          label='Đặt làm địa chỉ mặc định'
         />
       </DialogContent>
       <DialogActions>
