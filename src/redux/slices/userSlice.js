@@ -4,6 +4,7 @@ import {
   getUserById,
   getLoggedInUser,
   updateUserInfoThunk,
+  updatePasswordThunk,
 } from '@redux/thunk/userThunk';
 
 const userSlice = createSlice({
@@ -50,6 +51,19 @@ const userSlice = createSlice({
         state.user = action.payload; // Cập nhật thông tin user sau khi cập nhật thành công
       })
       .addCase(updateUserInfoThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Thêm logic cho updateUserInfoThunk
+      .addCase(updatePasswordThunk.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updatePasswordThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(updatePasswordThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
