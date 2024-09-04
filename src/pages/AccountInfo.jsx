@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Avatar from '@assets/user.png';
 import PasswordInput from '@components/PasswordInput';
 import { useDispatch, useSelector } from 'react-redux';
-import { getLoggedInUser } from '@redux/thunk/userThunk';
+import { getLoggedInUser, updateUserInfoThunk } from '@redux/thunk/userThunk';
 
 function AccountInfo() {
   const dispatch = useDispatch();
@@ -19,17 +19,19 @@ function AccountInfo() {
     }
   }, [dispatch, accessToken]);
 
-  console.log(user);
-
   // Cập nhật userData khi dữ liệu người dùng thay đổi
   useEffect(() => {
     if (user) {
+      const formattedDateOfBirth = user.dateOfBirth
+        ? new Date(user.dateOfBirth).toISOString().split('T')[0]
+        : '';
+
       setUserData({
         email: user.email || '',
         fullName: user.fullname || '',
         phoneNumber: user.phone || '',
         gender: user.gender || '',
-        dateOfBirth: user.dateOfBirth || '',
+        dateOfBirth: formattedDateOfBirth,
         avatarImagePath: user.avatarImagePath || Avatar,
       });
     }
@@ -55,32 +57,33 @@ function AccountInfo() {
     setUserData(prevState => ({ ...prevState, [name]: value }));
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
 
-    const formData = new FormData();
-    formData.append('email', userData.email);
-    formData.append('fullName', userData.fullName);
-    formData.append('phoneNumber', userData.phoneNumber);
-    formData.append('gender', userData.gender);
-    formData.append('dateOfBirth', userData.dateOfBirth);
-    formData.append('avatarImagePath', avatar || userData.avatarImagePath);
+    const updatedData = {
+      email: userData.email || '',
+      fullname: userData.fullName || '',
+      phone: userData.phoneNumber || '',
+      gender: userData.gender || '',
+      dateOfBirth: userData.dateOfBirth || '',
+      avatarImagePath: avatar
+        ? URL.createObjectURL(avatar)
+        : userData.avatarImagePath,
+    };
 
-    let avatarImagePath = avatar
-      ? URL.createObjectURL(avatar)
-      : userData.avatarImagePath;
+    try {
+      console.log('Updating with data:', updatedData); // Debug output
+      await dispatch(
+        updateUserInfoThunk({ updatedData, accessToken })
+      ).unwrap();
 
-    const message = `
-      Email: ${userData.email}
-      Họ và tên: ${userData.fullName}
-      Số điện thoại: ${userData.phoneNumber}
-      Giới tính: ${userData.gender}
-      Ngày sinh: ${userData.dateOfBirth}
-      Avatar: ${avatar ? 'Đã cập nhật' : 'Không thay đổi'}
-      (Avatar Preview: ${avatarImagePath})
-    `;
+      // Tải lại dữ liệu người dùng sau khi cập nhật thành công
+      dispatch(getLoggedInUser(accessToken));
 
-    alert(message);
+      alert('Thông tin tài khoản đã được cập nhật thành công.');
+    } catch (error) {
+      alert(`Có lỗi xảy ra khi cập nhật thông tin: ${error.message || error}`);
+    }
   };
 
   const handleSubmitPasswordReset = event => {

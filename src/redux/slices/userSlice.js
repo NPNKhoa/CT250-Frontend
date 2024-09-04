@@ -1,6 +1,10 @@
 // userSlice.js
 import { createSlice } from '@reduxjs/toolkit';
-import { getUserById, getLoggedInUser } from '@redux/thunk/userThunk';
+import {
+  getUserById,
+  getLoggedInUser,
+  updateUserInfoThunk,
+} from '@redux/thunk/userThunk';
 
 const userSlice = createSlice({
   name: 'users',
@@ -33,6 +37,19 @@ const userSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(getLoggedInUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Thêm logic cho updateUserInfoThunk
+      .addCase(updateUserInfoThunk.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateUserInfoThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload; // Cập nhật thông tin user sau khi cập nhật thành công
+      })
+      .addCase(updateUserInfoThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

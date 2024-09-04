@@ -33,3 +33,19 @@ export const getLoggedInUser = createAsyncThunk(
     }
   }
 );
+
+export const updateUserInfoThunk = createAsyncThunk(
+  'user/updateUserInfo',
+  async ({ updatedData, accessToken }, { rejectWithValue }) => {
+    try {
+      const response = await userService.updateUserInfo(
+        updatedData,
+        accessToken
+      );
+      return response;
+    } catch (error) {
+      // Sử dụng rejectWithValue để gửi lỗi tùy chỉnh đến reducer
+      return rejectWithValue(error.message);
+    }
+  }
+);
