@@ -28,7 +28,8 @@ const Products = () => {
     const fetchProductTypes = async () => {
       try {
         setProducts([]);
-        if (selectedBrand.length > 0) query.set('brand', selectedBrand.join(','));
+        if (selectedBrand.length > 0)
+          query.set('brand', selectedBrand.join(','));
 
         if (selectedMinPrice !== null) query.set('minPrice', selectedMinPrice);
 
@@ -62,11 +63,15 @@ const Products = () => {
             { label: 'Trang chủ', href: '/' },
             {
               label: `${products[0].productTypeDetails?.productTypeName}`,
-              // href: `/products?productType=${type}`,
+              href: `/products?productType=${products[0].productTypeDetails?.productTypeName}`,
             },
-            {
-              label: `${products[0].productTypeDetails?.productTypeName} ${brand}`,
-            },
+            ...(brand
+              ? [
+                  {
+                    label: `${products[0].productTypeDetails?.productTypeName} ${brand}`,
+                  },
+                ]
+              : []),
           ]}
         />
       )}
