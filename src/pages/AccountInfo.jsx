@@ -8,6 +8,8 @@ import {
   updatePasswordThunk,
   updateUserInfoThunk,
 } from '@redux/thunk/userThunk';
+import { Button } from '@mui/material';
+import AddressFormDialog from '@components/AddressFormDialog';
 
 function AccountInfo() {
   const dispatch = useDispatch();
@@ -131,6 +133,88 @@ function AccountInfo() {
     }
   };
 
+  const mockAddresses = [
+    {
+      fullName: 'Minh Tú',
+      phoneNumber: '+84 337 731 011',
+      detail: 'Hẻm 98 Đường Trần Hưng Đạo',
+      commune: 'Phường An Nghiệp',
+      district: 'Quận Ninh Kiều',
+      province: 'Cần Thơ',
+      isDefault: true,
+    },
+    {
+      fullName: 'Minh Tú',
+      phoneNumber: '+84 337 731 011',
+      detail: 'Cầu Cực Lạc, Ấp Hiệp Thành Việt Thắng',
+      commune: 'Xã Việt Thắng',
+      district: 'Huyện Phú Tân',
+      province: 'Cà Mau',
+      isDefault: false,
+    },
+    {
+      fullName: 'Minh Tú',
+      phoneNumber: '+84 845 969 757',
+      detail: 'Cái nước',
+      commune: 'Thị trấn Cái Nước',
+      district: 'Huyện Cái Nước',
+      province: 'Cà Mau',
+      isDefault: false,
+    },
+  ];
+  const [editAddress, setEditAddress] = useState(null);
+  const [addresses, setAddresses] = useState([]);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    // Giả sử user.addresses là dữ liệu từ API hoặc dữ liệu ảo bạn vừa tạo
+    setAddresses(mockAddresses);
+  }, []);
+
+  const handleClickOpen = (index = null) => {
+    if (index !== null) {
+      setEditAddress(addresses[index]);
+    } else {
+      setEditAddress(null);
+    }
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setEditIndex(null);
+  };
+
+  const handleFormSubmit = formData => {
+    if (editAddress) {
+      setAddresses(prevAddresses =>
+        prevAddresses.map(address =>
+          address === editAddress
+            ? { ...formData, isDefault: address.isDefault }
+            : address
+        )
+      );
+    } else {
+      setAddresses(prevAddresses => [...prevAddresses, formData]);
+    }
+    handleClose();
+  };
+
+  const handleSetDefault = index => {
+    setAddresses(prevAddresses =>
+      prevAddresses.map((address, i) => ({
+        ...address,
+        isDefault: i === index,
+      }))
+    );
+  };
+  const handleDelete = index => {
+    if (window.confirm('Bạn có chắc chắn muốn xóa địa chỉ này?')) {
+      setAddresses(prevAddresses =>
+        prevAddresses.filter((_, i) => i !== index)
+      );
+    }
+  };
   return (
     <div className='container mx-auto px-4 w-full md:w-2/3 py-5'>
       <h1 className='text-3xl font-bold text-gray-800 my-6'>
@@ -139,6 +223,7 @@ function AccountInfo() {
       <button className='bg-primary hover:bg-hover-primary text-white font-bold py-2 px-4 rounded mb-6'>
         <Link to='/profile'>Quay lại</Link>
       </button>
+      {/* data info */}
       <form
         onSubmit={handleSubmit}
         className='bg-white p-6 rounded-lg shadow-md'
@@ -222,6 +307,67 @@ function AccountInfo() {
           Cập nhật
         </button>
       </form>
+
+      {/* data address */}
+      <div>
+        <button
+          className='bg-primary hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4'
+          onClick={handleClickOpen}
+        >
+          + Thêm địa chỉ mới
+        </button>
+
+        <AddressFormDialog
+          open={open}
+          onClose={handleClose}
+          onSubmit={handleFormSubmit}
+          address={editAddress}
+        />
+        <div className='mt-6'>
+          <h2 className='text-xl font-semibold mb-4'>Danh sách địa chỉ</h2>
+          {addresses.map((address, index) => (
+            <div key={index} className='border-t border-gray-300 py-4'>
+              <div className='flex justify-between'>
+                <div>
+                  <h3 className='text-lg font-semibold'>{address.fullName}</h3>
+                  <p className='text-gray-600'>{address.phoneNumber}</p>
+                  <p>{address.detail}</p>
+                  <p>
+                    {address.commune}, {address.district}, {address.province}
+                  </p>
+                  {address.isDefault && (
+                    <span className='text-red-500 font-bold'>Mặc định</span>
+                  )}
+                </div>
+                <div className='text-right'>
+                  <button
+                    className='text-blue-500 hover:underline'
+                    onClick={() => handleClickOpen(index)}
+                  >
+                    Cập nhật
+                  </button>
+                  {!address.isDefault && (
+                    <>
+                      <button
+                        className='ml-4 text-red-500 hover:underline'
+                        onClick={() => handleDelete(index)}
+                      >
+                        Xóa
+                      </button>
+                      <button
+                        className='block mt-2 text-gray-600 border border-gray-300 py-1 px-2 rounded'
+                        onClick={() => handleSetDefault(index)}
+                      >
+                        Thiết lập mặc định
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* Reset Password */}
       <h2 className='text-2xl font-bold text-gray-800 my-6'>Đổi mật khẩu</h2>
