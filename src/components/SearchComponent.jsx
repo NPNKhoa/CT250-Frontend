@@ -51,9 +51,7 @@ export default function SearchPopover() {
       setIsListening(false);
       if (queryRef.current) {
         navigate(`/search?productName=${encodeURIComponent(queryRef.current)}`);
-        setTimeout(() => {
-          setQuery('');
-        }, 1000); // Xóa giá trị của input sau khi tìm kiếm
+        setQuery(''); // Xóa giá trị của input sau khi tìm kiếm
       }
     };
 
@@ -87,9 +85,7 @@ export default function SearchPopover() {
     setQuery(inputRef.current.value.trim()); // Lấy giá trị tìm kiếm
     if (query) {
       navigate(`/search?productName=${encodeURIComponent(query)}`); // Chuyển hướng đến trang search với query
-      setTimeout(() => {
-        setQuery('');
-      }, 1000);
+      setQuery('');
     }
   };
 
@@ -162,7 +158,7 @@ export default function SearchPopover() {
     }
   }, [open]);
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     setQuery(event.target.value);
   };
 
