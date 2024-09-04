@@ -162,6 +162,10 @@ export default function SearchPopover() {
     }
   }, [open]);
 
+  const handleChange = (event) => {
+    setQuery(event.target.value);
+  };
+
   return (
     <div>
       <form action='#' className='relative' onSubmit={handleSubmit}>
@@ -172,6 +176,7 @@ export default function SearchPopover() {
           placeholder='Tìm sản phẩm...'
           value={query}
           onClick={handleClick}
+          onChange={handleChange}
           required
         />
         <button
