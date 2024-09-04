@@ -381,7 +381,11 @@ const ProductDetail = () => {
                       {openTypeIndices.includes(index) &&
                         brands.map((brand, idx) => (
                           <li key={idx} className='m-4'>
-                            {`${type.productTypeName} ${brand.brandName}`}
+                            <Link to={`/products?productType=${encodeURIComponent(type.productTypeName)}&brand=${
+                                encodeURIComponent(brand.brandName)
+                              }`}>
+                              {`${type.productTypeName} ${brand.brandName}`}
+                            </Link>
                           </li>
                         ))}
                     </ul>
