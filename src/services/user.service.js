@@ -1,4 +1,3 @@
-// userService.js
 import createApiClient from './api.service';
 
 class UserService {
@@ -9,7 +8,6 @@ class UserService {
   async getUserById(id) {
     try {
       const response = await this.api.get(`?id=${id}`);
-      console.log(response.data + 'hehe');
       return response.data;
     } catch (error) {
       throw new Error(error.response.data.error || 'Error fetching user data');

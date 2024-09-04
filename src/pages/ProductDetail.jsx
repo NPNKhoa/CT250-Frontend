@@ -8,16 +8,20 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 import Vnpay from '@assets/vnpay.png';
 import RatingSection from '@components/RatingSection';
+import Alert from '@components/Alert';
 
 import productService from '@services/product.service';
 import productTypeService from '@services/productType.service';
 import brandService from '@services/brand.service';
+import cartService from '@services/cart.service';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [products, setProducts] = useState({});
   const [productTypes, setProductTypes] = useState([]);
   const [brands, setBrands] = useState([]);
+
+  const [notification, setNotification] = useState({ message: '', type: '' });
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -140,19 +144,13 @@ const ProductDetail = () => {
   //     setQuantity(newValue);
   //   }
   // };
-
+  const accessToken = localStorage.getItem('accessToken');
   const handleAddToCart = () => {
-    alert(
-      `Đã thêm ${quantity} ${
-        products.productName
-      } vào giỏ hàng.\n\nThông tin sản phẩm:\nGiá: ${
-        products.price &&
-        (products.price * 0.8).toLocaleString('vi-VN', {
-          style: 'currency',
-          currency: 'VND',
-        })
-      }\nMã sản phẩm: VNB019090`
-    );
+    cartService.addToCart(accessToken, {
+      productId: products._id,
+      quantity: quantity,
+    });
+    setNotification({ message: 'Đã thêm vào giỏ hàng!', type: 'success' });
   };
 
   const [openTypeIndices, setOpenTypeIndices] = useState([]);
@@ -397,6 +395,7 @@ const ProductDetail = () => {
         </div>
         <RatingSection />
       </div>
+      <Alert message={notification.message} type={notification.type} />
     </>
   );
 };
