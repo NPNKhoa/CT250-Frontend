@@ -143,7 +143,7 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     alert(
-      `Đã thêm ${quantity} ${
+      `Đã thêmHình ảnh: ${currentImage}\n ${quantity} ${
         products.productName
       } vào giỏ hàng.\n\nThông tin sản phẩm:\nGiá: ${
         products.price &&
@@ -151,7 +151,7 @@ const ProductDetail = () => {
           style: 'currency',
           currency: 'VND',
         })
-      }\nMã sản phẩm: VNB019090`
+      }\nSoLuong ${quantity}`
     );
   };
 
@@ -381,9 +381,11 @@ const ProductDetail = () => {
                       {openTypeIndices.includes(index) &&
                         brands.map((brand, idx) => (
                           <li key={idx} className='m-4'>
-                            <Link to={`/products?productType=${encodeURIComponent(type.productTypeName)}&brand=${
-                                encodeURIComponent(brand.brandName)
-                              }`}>
+                            <Link
+                              to={`/products?productType=${encodeURIComponent(
+                                type.productTypeName
+                              )}&brand=${encodeURIComponent(brand.brandName)}`}
+                            >
                               {`${type.productTypeName} ${brand.brandName}`}
                             </Link>
                           </li>
