@@ -76,9 +76,9 @@ function AddressSection() {
   // };
 
   return (
-    <div className='mt-5'>
+    <div className=''>
       <button
-        className='bg-primary hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4'
+        className='bg-primary hover:bg-red-600 text-white font-bold py-2 px-4 rounded'
         onClick={handleClickOpen}
       >
         + Thêm địa chỉ mới
@@ -97,17 +97,22 @@ function AddressSection() {
         {error && <p>Error: {error}</p>}
         {addresses.length > 0 ? (
           addresses.map((address, index) => (
-            <div key={index} className='border-t border-gray-300 py-4'>
+            <div key={index} className='border-t border-gray-300 py-3'>
               <div className='flex justify-between'>
                 <div>
-                  <h3 className='text-lg font-semibold'>{address.fullname}</h3>
-                  <p className='text-gray-600'>{address.phone}</p>
+                  <div className='flex items-center'>
+                    <h3 className='text-lg font-semibold'>
+                      {address.fullname}
+                    </h3>
+                    <div className='border-r-2 border-gray-300 h-6 mx-4' />
+                    <p className='text-gray-600'>{address.phone}</p>
+                  </div>
                   <p>{address.detail}</p>
                   <p>
                     {address.commune}, {address.district}, {address.province}
                   </p>
                   {address.isDefault && (
-                    <span className='text-red-500 font-bold'>Mặc định</span>
+                    <span className='text-red-500 font-bold '>Mặc định</span>
                   )}
                 </div>
                 <div className='text-right'>
