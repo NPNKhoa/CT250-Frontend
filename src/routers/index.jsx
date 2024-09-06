@@ -10,7 +10,7 @@ import Products from '@pages/Products';
 import CartPage from '@pages/CartPage';
 import SearchPage from '@pages/SearchPage';
 import ProfilePage from '@pages/ProfilePage';
-import AccountInfo from '@pages/AccountInfo';
+// import AccountInfo from '@pages/AccountInfo';
 
 const routes = [
   {
@@ -85,11 +85,11 @@ const routes = [
     element: <ProfilePage />,
   },
 
-  {
-    id: 'accountinfo',
-    path: '/accountinfo',
-    element: <AccountInfo />,
-  },
+  // {
+  //   id: 'accountinfo',
+  //   path: '/accountinfo',
+  //   element: <AccountInfo />,
+  // },
 ];
 
 export default routes;
