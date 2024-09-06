@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
   AccountCircle,
-  CreditCard,
+  // CreditCard,
   LocationOn,
   Lock,
   Notifications,
@@ -12,12 +12,9 @@ import Avatar from '@assets/user.png';
 import UserProfileForm from '@components/ProfilePage/UserProfileForm'; // Đường dẫn component của bạn
 import PasswordResetForm from '@components/ProfilePage/PasswordResetForm'; // Đường dẫn component của bạn
 // import AddressSection from './AddressSection'; // Đường dẫn component của bạn
-import {
-  getLoggedInUser,
-  updatePasswordThunk,
-  updateUserInfoThunk,
-} from '@redux/thunk/userThunk';
+import { getLoggedInUser } from '@redux/thunk/userThunk';
 import { useDispatch, useSelector } from 'react-redux';
+import AddressSection from '@components/AddressSection';
 
 function ProfilePage() {
   const [selectedTab, setSelectedTab] = useState('profile'); // Mặc định là "profile"
@@ -32,141 +29,33 @@ function ProfilePage() {
     }
   }, [dispatch, accessToken]);
 
-  const [userData, setUserData] = useState({
-    email: '',
-    fullName: '',
-    phoneNumber: '',
-    gender: '',
-    dateOfBirth: '',
-    avatarImagePath: '',
-  });
-
-  const [avatar, setAvatar] = useState('');
-  const [avatarPreview, setAvatarPreview] = useState('');
-
-  useEffect(() => {
-    if (user) {
-      const formattedDateOfBirth = user.dateOfBirth
-        ? new Date(user.dateOfBirth).toISOString().split('T')[0]
-        : '';
-
-      setUserData({
-        email: user.email || '',
-        fullName: user.fullname || '',
-        phoneNumber: user.phone || '',
-        gender: user.gender || '',
-        dateOfBirth: formattedDateOfBirth,
-        avatarImagePath: user.avatarImagePath || Avatar,
-      });
-    }
-  }, [user]);
-
-  const handleAvatarChange = event => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatar(file);
-        setAvatarPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleChange = event => {
-    const { name, value } = event.target;
-    setUserData(prevState => ({ ...prevState, [name]: value }));
-  };
-
-  const handleSubmit = async event => {
-    event.preventDefault();
-    const updatedData = {
-      email: userData.email,
-      fullname: userData.fullName,
-      phone: userData.phoneNumber,
-      gender: userData.gender,
-      dateOfBirth: userData.dateOfBirth,
-      avatarImagePath: avatar
-        ? URL.createObjectURL(avatar)
-        : userData.avatarImagePath,
-    };
-
-    try {
-      await dispatch(
-        updateUserInfoThunk({ updatedData, accessToken })
-      ).unwrap();
-      dispatch(getLoggedInUser(accessToken));
-      alert('Thông tin tài khoản đã được cập nhật.');
-    } catch (error) {
-      alert(`Cập nhật thông tin thất bại: ${error.message}`);
-    }
-  };
-
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-
-  const handleSubmitPasswordReset = async event => {
-    event.preventDefault();
-    if (newPassword !== confirmPassword) {
-      alert('Mật khẩu mới không khớp!');
-      return;
-    }
-
-    try {
-      await dispatch(
-        updatePasswordThunk({
-          updatedData: {
-            oldPassword: currentPassword,
-            password: newPassword,
-            confirmPassword,
-          },
-          accessToken,
-        })
-      ).unwrap();
-
-      alert('Mật khẩu đã được thay đổi thành công.');
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-    } catch (error) {
-      alert(`Đổi mật khẩu thất bại: ${error.message}`);
-    }
-  };
-
-  const handleChangePassword = e => {
-    const { name, value } = e.target;
-    if (name === 'currentPassword') setCurrentPassword(value);
-    if (name === 'newPassword') setNewPassword(value);
-    if (name === 'confirmPassword') setConfirmPassword(value);
-  };
+  const tabs = [
+    { id: 'profile', label: 'Hồ Sơ', icon: <AccountCircle /> },
+    { id: 'address', label: 'Địa Chỉ', icon: <LocationOn /> },
+    { id: 'change-password', label: 'Đổi Mật Khẩu', icon: <Lock /> },
+    { id: 'orders', label: 'Đơn Mua', icon: <ShoppingCart /> },
+    {
+      id: 'notification-settings',
+      label: 'Cài Đặt Thông Báo',
+      icon: <Notifications />,
+    },
+    {
+      id: 'privacy-settings',
+      label: 'Những Thiết Lập Riêng Tư',
+      icon: <Security />,
+    },
+  ];
 
   const renderContent = () => {
     switch (selectedTab) {
       case 'profile':
-        return (
-          <UserProfileForm
-            userData={userData}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            handleAvatarChange={handleAvatarChange}
-            avatarPreview={avatarPreview}
-          />
-        );
+        return <UserProfileForm />;
       // case 'bank':
       //   return <BankComponent />;
-      // case 'address':
-      //   return <AddressSection />;
+      case 'address':
+        return <AddressSection />;
       case 'change-password':
-        return (
-          <PasswordResetForm
-            currentPassword={currentPassword}
-            newPassword={newPassword}
-            confirmPassword={confirmPassword}
-            handleChangePassword={handleChangePassword}
-            handleSubmitPasswordReset={handleSubmitPasswordReset}
-          />
-        );
+        return <PasswordResetForm />;
       // case 'notification-settings':
       //   return <NotificationSettingsComponent />;
       // case 'privacy-settings':
@@ -190,93 +79,28 @@ function ProfilePage() {
               className='mx-auto rounded-full mb-2 size-24 border-2 border-primary'
             />
             <p className='text-lg font-bold'>{user?.fullname}</p>
-            <button className='text-blue-500 hover:underline'>Sửa Hồ Sơ</button>
+            <button
+              className='text-blue-500 hover:underline'
+              onClick={() => setSelectedTab('profile')}
+            >
+              Sửa Hồ Sơ
+            </button>
           </div>
           <ul className='space-y-3'>
-            <li>
-              <button
-                className={`flex items-center gap-2 w-full text-left py-2 px-4 rounded-lg transition-colors ${
-                  selectedTab === 'profile'
-                    ? 'bg-primary text-white'
-                    : 'hover:bg-gray-100'
-                }`}
-                onClick={() => setSelectedTab('profile')}
-              >
-                <AccountCircle /> <span>Hồ Sơ</span>
-              </button>
-            </li>
-            <li>
-              <button
-                className={`flex items-center gap-2 w-full text-left py-2 px-4 rounded-lg transition-colors ${
-                  selectedTab === 'bank'
-                    ? 'bg-primary text-white'
-                    : 'hover:bg-gray-100'
-                }`}
-                onClick={() => setSelectedTab('bank')}
-              >
-                <CreditCard /> <span>Ngân Hàng</span>
-              </button>
-            </li>
-            <li>
-              <button
-                className={`flex items-center gap-2 w-full text-left py-2 px-4 rounded-lg transition-colors ${
-                  selectedTab === 'address'
-                    ? 'bg-primary text-white'
-                    : 'hover:bg-gray-100'
-                }`}
-                onClick={() => setSelectedTab('address')}
-              >
-                <LocationOn /> <span>Địa Chỉ</span>
-              </button>
-            </li>
-            <li>
-              <button
-                className={`flex items-center gap-2 w-full text-left py-2 px-4 rounded-lg transition-colors ${
-                  selectedTab === 'change-password'
-                    ? 'bg-primary text-white'
-                    : 'hover:bg-gray-100'
-                }`}
-                onClick={() => setSelectedTab('change-password')}
-              >
-                <Lock /> <span>Đổi Mật Khẩu</span>
-              </button>
-            </li>
-            <li>
-              <button
-                className={`flex items-center gap-2 w-full text-left py-2 px-4 rounded-lg transition-colors ${
-                  selectedTab === 'notification-settings'
-                    ? 'bg-primary text-white'
-                    : 'hover:bg-gray-100'
-                }`}
-                onClick={() => setSelectedTab('notification-settings')}
-              >
-                <Notifications /> <span>Cài Đặt Thông Báo</span>
-              </button>
-            </li>
-            <li>
-              <button
-                className={`flex items-center gap-2 w-full text-left py-2 px-4 rounded-lg transition-colors ${
-                  selectedTab === 'privacy-settings'
-                    ? 'bg-primary text-white'
-                    : 'hover:bg-gray-100'
-                }`}
-                onClick={() => setSelectedTab('privacy-settings')}
-              >
-                <Security /> <span>Những Thiết Lập Riêng Tư</span>
-              </button>
-            </li>
-            <li>
-              <button
-                className={`flex items-center gap-2 w-full text-left py-2 px-4 rounded-lg transition-colors ${
-                  selectedTab === 'orders'
-                    ? 'bg-primary text-white'
-                    : 'hover:bg-gray-100'
-                }`}
-                onClick={() => setSelectedTab('orders')}
-              >
-                <ShoppingCart /> <span>Đơn Mua</span>
-              </button>
-            </li>
+            {tabs.map(tab => (
+              <li key={tab.id}>
+                <button
+                  className={`flex items-center gap-2 w-full text-left py-2 px-4 rounded-lg transition-colors ${
+                    selectedTab === tab.id
+                      ? 'bg-primary text-white'
+                      : 'hover:bg-gray-100'
+                  }`}
+                  onClick={() => setSelectedTab(tab.id)}
+                >
+                  {tab.icon} <span>{tab.label}</span>
+                </button>
+              </li>
+            ))}
           </ul>
         </div>
 

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 import AddressFormDialog from '@components/AddressFormDialog';
 import {
   getUserAddressThunk,
@@ -18,11 +18,6 @@ function AddressSection() {
     dispatch(getUserAddressThunk(accessToken));
   }, [dispatch]);
 
-  const handleClickOpen = () => {
-    setEditAddress(null); // Reset the form for a new address
-    setOpen(true);
-  };
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -39,6 +34,46 @@ function AddressSection() {
       console.error('Error adding address:', error);
     }
   };
+
+  const handleClickOpen = (index = null) => {
+    if (index !== null) {
+      setEditAddress(addresses[index]);
+    } else {
+      setEditAddress(null);
+    }
+    setOpen(true);
+  };
+
+  // const handleFormSubmit = formData => {
+  //   if (editAddress) {
+  //     setAddresses(prevAddresses =>
+  //       prevAddresses.map(address =>
+  //         address === editAddress
+  //           ? { ...formData, isDefault: address.isDefault }
+  //           : address
+  //       )
+  //     );
+  //   } else {
+  //     setAddresses(prevAddresses => [...prevAddresses, formData]);
+  //   }
+  //   handleClose();
+  // };
+
+  // const handleSetDefault = index => {
+  //   setAddresses(prevAddresses =>
+  //     prevAddresses.map((address, i) => ({
+  //       ...address,
+  //       isDefault: i === index,
+  //     }))
+  //   );
+  // };
+  // const handleDelete = index => {
+  //   if (window.confirm('Bạn có chắc chắn muốn xóa địa chỉ này?')) {
+  //     setAddresses(prevAddresses =>
+  //       prevAddresses.filter((_, i) => i !== index)
+  //     );
+  //   }
+  // };
 
   return (
     <div className='mt-5'>
@@ -86,13 +121,13 @@ function AddressSection() {
                     <>
                       <button
                         className='ml-4 text-red-500 hover:underline'
-                        onClick={() => handleDelete(index)}
+                        // onClick={() => handleDelete(index)}
                       >
                         Xóa
                       </button>
                       <button
                         className='block mt-2 text-gray-600 border border-gray-300 py-1 px-2 rounded'
-                        onClick={() => handleSetDefault(index)}
+                        // onClick={() => handleSetDefault(index)}
                       >
                         Thiết lập mặc định
                       </button>

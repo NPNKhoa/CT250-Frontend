@@ -1,12 +1,88 @@
 import Avatar from '@assets/user.png';
+import { getLoggedInUser, updateUserInfoThunk } from '@redux/thunk/userThunk';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-function UserProfileForm({
-  userData,
-  handleChange,
-  handleSubmit,
-  handleAvatarChange,
-  avatarPreview,
-}) {
+function UserProfileForm() {
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.users.user);
+  const accessToken = localStorage.getItem('accessToken');
+
+  useEffect(() => {
+    if (accessToken) {
+      dispatch(getLoggedInUser(accessToken));
+    }
+  }, [dispatch, accessToken]);
+
+  const [userData, setUserData] = useState({
+    email: '',
+    fullName: '',
+    phoneNumber: '',
+    gender: '',
+    dateOfBirth: '',
+    avatarImagePath: '',
+  });
+
+  const [avatar, setAvatar] = useState('');
+  const [avatarPreview, setAvatarPreview] = useState('');
+
+  useEffect(() => {
+    if (user) {
+      const formattedDateOfBirth = user.dateOfBirth
+        ? new Date(user.dateOfBirth).toISOString().split('T')[0]
+        : '';
+
+      setUserData({
+        email: user.email || '',
+        fullName: user.fullname || '',
+        phoneNumber: user.phone || '',
+        gender: user.gender || '',
+        dateOfBirth: formattedDateOfBirth,
+        avatarImagePath: user.avatarImagePath || Avatar,
+      });
+    }
+  }, [user]);
+
+  const handleAvatarChange = event => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatar(file);
+        setAvatarPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleChange = event => {
+    const { name, value } = event.target;
+    setUserData(prevState => ({ ...prevState, [name]: value }));
+  };
+
+  const handleSubmit = async event => {
+    event.preventDefault();
+    const updatedData = {
+      email: userData.email,
+      fullname: userData.fullName,
+      phone: userData.phoneNumber,
+      gender: userData.gender,
+      dateOfBirth: userData.dateOfBirth,
+      avatarImagePath: avatar
+        ? URL.createObjectURL(avatar)
+        : userData.avatarImagePath,
+    };
+
+    try {
+      await dispatch(
+        updateUserInfoThunk({ updatedData, accessToken })
+      ).unwrap();
+      dispatch(getLoggedInUser(accessToken));
+      alert('Thông tin tài khoản đã được cập nhật.');
+    } catch (error) {
+      alert(`Cập nhật thông tin thất bại: ${error.message}`);
+    }
+  };
   return (
     <form onSubmit={handleSubmit} className=''>
       <div className='mb-4 flex items-center'>
@@ -59,7 +135,7 @@ function UserProfileForm({
                 name={field}
                 value={userData[field]}
                 onChange={handleChange}
-                className='shadow appearance-none border rounded w-full p-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                className='shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
               >
                 <option value=''>Chọn giới tính</option>
                 <option value='male'>Nam</option>
@@ -73,7 +149,7 @@ function UserProfileForm({
                 name={field}
                 value={userData[field]}
                 onChange={handleChange}
-                className='shadow appearance-none border rounded w-full p-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                className='shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
                 required
               />
             )}
@@ -83,7 +159,7 @@ function UserProfileForm({
 
       <button
         type='submit'
-        className='bg-primary hover:bg-hover-primary w-full text-white font-bold p-4 rounded'
+        className='bg-primary hover:bg-hover-primary w-full text-white font-bold p-3 rounded'
       >
         Cập nhật
       </button>
