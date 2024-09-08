@@ -16,6 +16,7 @@ import {
   PhoneCallbackSharp as PhoneCallbackSharpIcon,
   PlaceSharp as PlaceSharpIcon,
 } from '@mui/icons-material';
+import Avatar from '@assets/user.png';
 import { getLoggedInUser } from '@redux/thunk/userThunk';
 
 // Custom hook for handling modal states
@@ -127,10 +128,14 @@ const Header = () => {
               <span className='border border-gray-300 flex justify-center items-center p-1 rounded-full bg-white w-10 h-10'>
                 {user ? (
                   <img
-                    src={`http://localhost:5000/${userExist?.avatarImagePath.replace(
-                      /\\/g,
-                      '//'
-                    )}`}
+                    src={
+                      user && userExist.avatarImagePath
+                        ? `http://localhost:5000/${userExist.avatarImagePath.replace(
+                            /\\/g,
+                            '/'
+                          )}`
+                        : Avatar
+                    }
                     alt='User avatar'
                     className='rounded-full '
                   />
