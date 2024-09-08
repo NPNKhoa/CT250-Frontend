@@ -58,6 +58,24 @@ class UserService {
       throw new Error(error.response?.data?.error || 'Error updating password');
     }
   }
+
+  async changeAvatar(avatarFile, accessToken) {
+    try {
+      const formData = new FormData();
+      formData.append('avatarImagePath', avatarFile);
+
+      const response = await this.api.put('/update-avatar', formData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.error || 'Error changing avatar');
+    }
+  }
 }
 
 export default new UserService();

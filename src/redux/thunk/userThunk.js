@@ -64,3 +64,18 @@ export const updatePasswordThunk = createAsyncThunk(
     }
   }
 );
+
+// Thunk để thay đổi avatar
+export const changeAvatarThunk = createAsyncThunk(
+  'users/changeAvatar',
+  async ({ avatarFile, accessToken }, { rejectWithValue }) => {
+    try {
+      const response = await userService.changeAvatar(avatarFile, accessToken);
+      return response;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.error || 'Error changing avatar'
+      );
+    }
+  }
+);
