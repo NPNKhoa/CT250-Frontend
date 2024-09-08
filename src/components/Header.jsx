@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, setCredentials } from '@redux/slices/authSlice';
+
 import {
   AccountCircleSharp as AccountCircleSharpIcon,
   AddShoppingCartSharp as AddShoppingCartSharpIcon,
@@ -15,6 +16,7 @@ import {
   PhoneCallbackSharp as PhoneCallbackSharpIcon,
   PlaceSharp as PlaceSharpIcon,
 } from '@mui/icons-material';
+import { getLoggedInUser } from '@redux/thunk/userThunk';
 
 // Custom hook for handling modal states
 const useModalState = (initialState = false) => {
@@ -36,6 +38,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.authUser);
 
+  const userExist = useSelector(state => state.users.user);
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
@@ -121,10 +124,23 @@ const Header = () => {
               onMouseEnter={handleMouseEnterAccount}
               onMouseLeave={handleMouseLeaveAccount}
             >
-              <span className='border border-gray-300 p-1 flex justify-center items-center rounded-full bg-white w-10 h-10'>
-                <AccountCircleSharpIcon className='text-primary' />
+              <span className='border border-gray-300 flex justify-center items-center p-1 rounded-full bg-white w-10 h-10'>
+                {user ? (
+                  <img
+                    src={`http://localhost:5000/${userExist?.avatarImagePath.replace(
+                      /\\/g,
+                      '//'
+                    )}`}
+                    alt='User avatar'
+                    className='rounded-full '
+                  />
+                ) : (
+                  <AccountCircleSharpIcon className='text-primary' />
+                )}
               </span>
-              <h3 className='font-thin text-xs uppercase mt-1'>Tài khoản</h3>
+              <h3 className='font-thin text-xs uppercase mt-1'>
+                {user ? userExist?.fullname : 'Tài khoản'}
+              </h3>
             </div>
             {isModalAccount && (
               <div

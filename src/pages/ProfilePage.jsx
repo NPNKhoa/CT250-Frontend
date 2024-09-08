@@ -74,7 +74,14 @@ function ProfilePage() {
         <div className='w-full lg:w-1/4 bg-white p-6 rounded-lg shadow-md'>
           <div className='text-center mb-4'>
             <img
-              src={Avatar}
+              src={
+                user?.avatarImagePath
+                  ? `http://localhost:5000/${user.avatarImagePath.replace(
+                      /\\/g,
+                      '//'
+                    )}`
+                  : Avatar
+              }
               alt='User avatar'
               className='mx-auto rounded-full mb-2 size-24 border-2 border-primary'
             />
