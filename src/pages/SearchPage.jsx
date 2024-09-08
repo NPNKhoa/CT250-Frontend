@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import BreadcrumbsComponent from '@components/Breadcrumb';
+import BreadcrumbsComponent from '@components/common/Breadcrumb';
 
 import productService from '@services/product.service';
 
 import ProductItem from '@components/ProductItem';
-import PaginationComponent from '@components/PaginationComponent';
+import PaginationComponent from '@components/common/PaginationComponent';
 
 const SearchPage = () => {
   const location = useLocation();
@@ -28,7 +28,11 @@ const SearchPage = () => {
     const fetchProductTypes = async () => {
       try {
         setProducts([]);
-        const responseProduct = await productService.getAll(searchParams, page, 10);
+        const responseProduct = await productService.getAll(
+          searchParams,
+          page,
+          10
+        );
         setProducts(responseProduct.data);
         setTotalPage(responseProduct.meta.totalPages);
       } catch (error) {
@@ -42,23 +46,23 @@ const SearchPage = () => {
     <>
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
       <div className='grid grid-cols-5 gap-1 m-6'>
-          {Array.isArray(products) &&
-            products.map((product, index) => (
-              <ProductItem
-                key={index}
-                imageUrl={product.productImagePath[0]}
-                name={product.productName}
-                price={product.price}
-                productLink={`products/detail/${product._id}`}
-              />
-            ))}
-          <div className='col-span-5 mt-4 flex justify-center'>
-            <PaginationComponent
-              path={`${location.pathname}`}
-              totalPages={totalPage}
+        {Array.isArray(products) &&
+          products.map((product, index) => (
+            <ProductItem
+              key={index}
+              imageUrl={product.productImagePath[0]}
+              name={product.productName}
+              price={product.price}
+              productLink={`products/detail/${product._id}`}
             />
-          </div>
+          ))}
+        <div className='col-span-5 mt-4 flex justify-center'>
+          <PaginationComponent
+            path={`${location.pathname}`}
+            totalPages={totalPage}
+          />
         </div>
+      </div>
     </>
   );
 };

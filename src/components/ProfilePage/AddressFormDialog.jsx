@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Autocomplete, TextField, FormControl, InputLabel } from '@mui/material';
+import { Autocomplete, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -11,6 +11,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { createAddressThunk } from '@redux/thunk/addressThunk'; // Nhập khẩu thunk cần thiết
 import openApiService from '@services/open-api.service';
 
+// eslint-disable-next-line react/prop-types
 const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
   const dispatch = useDispatch();
   const fullNameRef = useRef();
@@ -67,7 +68,7 @@ const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     event.preventDefault();
 
     // Lấy giá trị từ các TextField
@@ -124,31 +125,49 @@ const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
         <Autocomplete
           id='province'
           options={provinceData}
-          getOptionLabel={(option) => option.name}
+          getOptionLabel={option => option.name}
           value={province}
           onChange={handleProvinceChange}
-          renderInput={(params) => (
-            <TextField {...params} label='Tỉnh/ Thành phố' margin='dense' variant='standard' required />
+          renderInput={params => (
+            <TextField
+              {...params}
+              label='Tỉnh/ Thành phố'
+              margin='dense'
+              variant='standard'
+              required
+            />
           )}
         />
         <Autocomplete
           id='district'
           options={districtData}
-          getOptionLabel={(option) => option.name}
+          getOptionLabel={option => option.name}
           value={district}
           onChange={handleDistrictChange}
-          renderInput={(params) => (
-            <TextField {...params} label='Quận/ Huyện' margin='dense' variant='standard' required />
+          renderInput={params => (
+            <TextField
+              {...params}
+              label='Quận/ Huyện'
+              margin='dense'
+              variant='standard'
+              required
+            />
           )}
         />
         <Autocomplete
           id='commune'
           options={wardData}
-          getOptionLabel={(option) => option.name}
+          getOptionLabel={option => option.name}
           value={commune}
           onChange={(event, newValue) => setCommune(newValue)}
-          renderInput={(params) => (
-            <TextField {...params} label='Phường/ Xã' margin='dense' variant='standard' required />
+          renderInput={params => (
+            <TextField
+              {...params}
+              label='Phường/ Xã'
+              margin='dense'
+              variant='standard'
+              required
+            />
           )}
         />
         <TextField
@@ -165,7 +184,7 @@ const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
           control={
             <Checkbox
               checked={isDefault}
-              onChange={(event) => setIsDefault(event.target.checked)}
+              onChange={event => setIsDefault(event.target.checked)}
               name='isDefault'
               color='primary'
             />

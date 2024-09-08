@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@components/Alert';
 import { loginThunk } from '@redux/thunk/authThunk';
-import PasswordInput from '@components/PasswordInput';
+import PasswordInput from '@components/common/PasswordInput';
 
 const LoginPage = () => {
   const navigate = useNavigate();

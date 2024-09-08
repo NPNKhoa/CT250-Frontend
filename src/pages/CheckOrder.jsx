@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import BreadcrumbsComponent from '@components/Breadcrumb';
+import BreadcrumbsComponent from '@components/common/Breadcrumb';
 
 const CheckOrder = () => {
   const [orderCode, setOrderCode] = useState('');

@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
-import BreadcrumbsComponent from '@components/Breadcrumb';
+import BreadcrumbsComponent from '@components/common/Breadcrumb';
 import { Link, useParams } from 'react-router-dom';
 
 import CheckIcon from '@mui/icons-material/Check';
@@ -146,13 +146,11 @@ const ProductDetail = () => {
   // };
   const accessToken = localStorage.getItem('accessToken');
   const handleAddToCart = () => {
-
     cartService.addToCart(accessToken, {
       productId: products._id,
       quantity: quantity,
     });
     setNotification({ message: 'Đã thêm vào giỏ hàng!', type: 'success' });
-
   };
 
   const [openTypeIndices, setOpenTypeIndices] = useState([]);

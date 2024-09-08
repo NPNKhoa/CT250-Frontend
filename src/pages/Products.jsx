@@ -5,8 +5,8 @@ import productService from '@services/product.service';
 
 import ProductItem from '@components/ProductItem';
 import Filter from '@components/Filter';
-import BreadcrumbsComponent from '@components/Breadcrumb';
-import PaginationComponent from '@components/PaginationComponent';
+import BreadcrumbsComponent from '@components/common/Breadcrumb';
+import PaginationComponent from '@components/common/PaginationComponent';
 
 const Products = () => {
   const location = useLocation();
