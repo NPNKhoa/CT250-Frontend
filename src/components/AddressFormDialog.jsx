@@ -1,8 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Autocomplete, TextField, FormControl, InputLabel } from '@mui/material';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -17,9 +16,9 @@ const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
   const fullNameRef = useRef();
   const phoneNumberRef = useRef();
   const detailRef = useRef();
-  const [province, setProvince] = useState('');
-  const [district, setDistrict] = useState('');
-  const [commune, setCommune] = useState('');
+  const [province, setProvince] = useState(null);
+  const [district, setDistrict] = useState(null);
+  const [commune, setCommune] = useState(null);
   const [isDefault, setIsDefault] = useState(false);
 
   const [provinceData, setProvinceData] = useState([]);
@@ -38,31 +37,33 @@ const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
     fetchProvinces();
   }, []);
 
-  const handleProvinceChange = async (event) => {
-    const selectedProvince = event.target.value;
-    setProvince(selectedProvince);
-    setDistrict('');
-    setCommune('');
+  const handleProvinceChange = async (event, newValue) => {
+    setProvince(newValue);
+    setDistrict(null);
+    setCommune(null);
     setDistrictData([]);
     setWardData([]);
-    try {
-      const districts = await openApiService.getDistricts(selectedProvince.code);
-      setDistrictData(districts);
-    } catch (error) {
-      console.error('Error fetching districts:', error);
+    if (newValue) {
+      try {
+        const districts = await openApiService.getDistricts(newValue.code);
+        setDistrictData(districts);
+      } catch (error) {
+        console.error('Error fetching districts:', error);
+      }
     }
   };
 
-  const handleDistrictChange = async (event) => {
-    const selectedDistrict = event.target.value;
-    setDistrict(selectedDistrict);
-    setCommune('');
+  const handleDistrictChange = async (event, newValue) => {
+    setDistrict(newValue);
+    setCommune(null);
     setWardData([]);
-    try {
-      const wards = await openApiService.getWards(selectedDistrict.code);
-      setWardData(wards);
-    } catch (error) {
-      console.error('Error fetching wards:', error);
+    if (newValue) {
+      try {
+        const wards = await openApiService.getWards(newValue.code);
+        setWardData(wards);
+      } catch (error) {
+        console.error('Error fetching wards:', error);
+      }
     }
   };
 
@@ -73,9 +74,9 @@ const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
     const formData = {
       fullname: fullNameRef.current.value,
       phone: phoneNumberRef.current.value,
-      province: province.name,
-      district: district.name,
-      commune: commune.name,
+      province: province?.name || '',
+      district: district?.name || '',
+      commune: commune?.name || '',
       detail: detailRef.current.value,
       isDefault: isDefault, // Sử dụng giá trị từ checkbox isDefault
     };
@@ -120,54 +121,36 @@ const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
           variant='standard'
           inputRef={phoneNumberRef}
         />
-        <FormControl fullWidth margin='dense' variant='standard'>
-          <InputLabel id='province-label'>Tỉnh/ Thành phố</InputLabel>
-          <Select
-            labelId='province-label'
-            id='province'
-            value={province}
-            onChange={handleProvinceChange}
-            required
-          >
-            {provinceData.map((province) => (
-              <MenuItem key={province.code} value={province}>
-                {province.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl fullWidth margin='dense' variant='standard'>
-          <InputLabel id='district-label'>Quận/ Huyện</InputLabel>
-          <Select
-            labelId='district-label'
-            id='district'
-            value={district}
-            onChange={handleDistrictChange}
-            required
-          >
-            {districtData.map((district) => (
-              <MenuItem key={district.code} value={district}>
-                {district.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl fullWidth margin='dense' variant='standard'>
-          <InputLabel id='commune-label'>Phường/ Xã</InputLabel>
-          <Select
-            labelId='commune-label'
-            id='commune'
-            value={commune}
-            onChange={(event) => setCommune(event.target.value)}
-            required
-          >
-            {wardData.map((ward) => (
-              <MenuItem key={ward.code} value={ward}>
-                {ward.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <Autocomplete
+          id='province'
+          options={provinceData}
+          getOptionLabel={(option) => option.name}
+          value={province}
+          onChange={handleProvinceChange}
+          renderInput={(params) => (
+            <TextField {...params} label='Tỉnh/ Thành phố' margin='dense' variant='standard' required />
+          )}
+        />
+        <Autocomplete
+          id='district'
+          options={districtData}
+          getOptionLabel={(option) => option.name}
+          value={district}
+          onChange={handleDistrictChange}
+          renderInput={(params) => (
+            <TextField {...params} label='Quận/ Huyện' margin='dense' variant='standard' required />
+          )}
+        />
+        <Autocomplete
+          id='commune'
+          options={wardData}
+          getOptionLabel={(option) => option.name}
+          value={commune}
+          onChange={(event, newValue) => setCommune(newValue)}
+          renderInput={(params) => (
+            <TextField {...params} label='Phường/ Xã' margin='dense' variant='standard' required />
+          )}
+        />
         <TextField
           required
           margin='dense'
