@@ -45,6 +45,20 @@ class authService {
   async getRole() {
     return (await this.api.get('/roles')).data;
   }
+
+  async refreshToken(refreshToken) {
+    return (
+      await this.api.post(
+        '/refresh',
+        { refreshToken },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+    ).data;
+  }
 }
 
 export default new authService();
