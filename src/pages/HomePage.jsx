@@ -4,9 +4,9 @@ import Carousel from '@components/Carousel';
 import ProductItem from '@components/ProductItem';
 
 import productService from '@services/product.service';
+import FeatureBoxes from '@components/FeatureBoxes';
 
 const HomePage = () => {
-
   const [products, setProducts] = useState({});
   useEffect(() => {
     const fetchProducts = async () => {
@@ -17,7 +17,7 @@ const HomePage = () => {
         console.error('Error fetching products:', error);
       }
     };
-  
+
     fetchProducts();
   }, []);
 
@@ -26,6 +26,7 @@ const HomePage = () => {
       <section className='relative'>
         <Carousel />
       </section>
+      <FeatureBoxes />
 
       <section className='py-6 bg-white'>
         <div className='container mx-auto px-4 text-center'>
@@ -45,15 +46,16 @@ const HomePage = () => {
             Sản phẩm nổi bật
           </h2>
           <div className='grid grid-cols-5 gap-3'>
-            {Array.isArray(products) && products.map((product, index) => (
-              <ProductItem
-                key={index}
-                imageUrl={product.productImagePath[0]}
-                name={product.productName}
-                price={product.price}
-                productLink={`products/detail/${product._id}`}
-              />
-            ))}
+            {Array.isArray(products) &&
+              products.map((product, index) => (
+                <ProductItem
+                  key={index}
+                  imageUrl={product.productImagePath[0]}
+                  name={product.productName}
+                  price={product.price}
+                  productLink={`products/detail/${product._id}`}
+                />
+              ))}
           </div>
         </div>
       </section>
