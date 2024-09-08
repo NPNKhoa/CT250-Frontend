@@ -34,21 +34,25 @@ const FeatureBoxes = () => {
   ];
 
   return (
-    <div className='flex flex-wrap justify-center gap-4 p-4 my-6'>
-      {features.map((feature, index) => (
-        <div
-          key={index}
-          className='bg-white shadow-md rounded-lg p-6 flex items-start space-x-4 border border-gray-200 transition-transform transform hover:scale-105 max-w-xs w-full'
-        >
-          <div>{feature.icon}</div>
-          <div className='flex-1'>
-            <h3 className='text-lg font-semibold text-primary mb-2'>
-              {feature.title}
-            </h3>
-            <p className='text-gray-600 text-sm'>{feature.description}</p>
+    <div className='container mx-auto p-4'>
+      <div className='flex flex-wrap justify-center gap-4 mt-4'>
+        {features.map((feature, index) => (
+          <div
+            key={index}
+            className='bg-white shadow-md rounded-lg p-5 flex items-start space-x-4 border border-gray-200 transition-transform transform hover:scale-105 max-w-xs w-[300px]'
+          >
+            <div>{feature.icon}</div>
+            <div className='flex-1'>
+              <h3 className='text-lg font-semibold text-primary mb-2'>
+                {feature.title}
+              </h3>
+              <p className='text-gray-600 text-sm  text-justify'>
+                {feature.description}
+              </p>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
