@@ -4,15 +4,15 @@ import { Link } from 'react-router-dom';
 const slides = [
   {
     url: 'https://cdn.shopvnb.com/img/1920x640/uploads/slider/ynx-eclp-banner_1695178004.webp',
-    link: 'https://example.com/slide1',
+    link: '#',
   },
   {
     url: 'https://cdn.shopvnb.com/img/1920x640/uploads/slider/banner-sale-12_1695182579.webp',
-    link: 'https://example.com/slide2',
+    link: '#',
   },
   {
     url: 'https://cdn.shopvnb.com/img/1920x640/uploads/slider/nanoflare-800_1698800723.webp',
-    link: 'https://example.com/slide3',
+    link: '#',
   },
 ];
 
