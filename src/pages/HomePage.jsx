@@ -114,6 +114,28 @@ const HomePage = () => {
       {/* feature */}
       <FeatureBoxes />
 
+      {/* products saleeee*/}
+      <section className='py-4'>
+        <div className='container mx-auto px-4'>
+          <h2 className='text-3xl font-bold text-center hover:text-primary mb-4 uppercase'>
+            Flash Sale
+          </h2>
+          <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[30vw] mx-auto'></span>
+          <div className='grid grid-cols-5 gap-3'>
+            {Array.isArray(products) &&
+              products.map((product, index) => (
+                <ProductItem
+                  key={index}
+                  imageUrl={product.productImagePath[0]}
+                  name={product.productName}
+                  price={product.price}
+                  productLink={`products/detail/${product._id}`}
+                />
+              ))}
+          </div>
+        </div>
+      </section>
+
       {/* products */}
       <section className='py-6 bg-white'>
         <div className='container mx-auto px-4 text-center'>

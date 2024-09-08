@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // import Button from '@mui/material/Button';
-import AddressFormDialog from '@components/AddressFormDialog';
+import AddressFormDialog from '@components/ProfilePage/AddressFormDialog';
 import {
   getUserAddressThunk,
   createAddressThunk,

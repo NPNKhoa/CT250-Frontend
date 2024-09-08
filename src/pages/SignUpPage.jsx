@@ -4,7 +4,7 @@ import SignUpImg from '@assets/register.png';
 import userIcon from '@assets/user.png';
 import authService from '@services/auth.service';
 import Alert from '@components/Alert';
-import PasswordInput from '@components/PasswordInput';
+import PasswordInput from '@components/common/PasswordInput';
 
 const SignUpPage = () => {
   const navigate = useNavigate();

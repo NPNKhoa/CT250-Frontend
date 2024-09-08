@@ -14,7 +14,7 @@ import PasswordResetForm from '@components/ProfilePage/PasswordResetForm'; // Đ
 // import AddressSection from './AddressSection'; // Đường dẫn component của bạn
 import { getLoggedInUser } from '@redux/thunk/userThunk';
 import { useDispatch, useSelector } from 'react-redux';
-import AddressSection from '@components/AddressSection';
+import AddressSection from '@components/ProfilePage/AddressSection';
 
 function ProfilePage() {
   const [selectedTab, setSelectedTab] = useState('profile'); // Mặc định là "profile"

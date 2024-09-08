@@ -1,6 +1,6 @@
-import  { useEffect, useState } from 'react';
-import {Link} from 'react-router-dom';
-import BreadcrumbsComponent from '@components/Breadcrumb';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import BreadcrumbsComponent from '@components/common/Breadcrumb';
 import DeleteForeverSharpIcon from '@mui/icons-material/DeleteForeverSharp';
 import CartIcon from '@assets/cart-icon.png';
 

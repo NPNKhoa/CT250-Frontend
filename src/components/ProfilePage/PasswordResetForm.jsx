@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import PasswordInput from '@components/PasswordInput';
+import PasswordInput from '@components/common/PasswordInput';
 import { useDispatch } from 'react-redux';
 import { updatePasswordThunk } from '@redux/thunk/userThunk';
 
