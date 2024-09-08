@@ -1,6 +1,6 @@
-import MinhTu from "@assets/co-founder/minhtu.jpg";
-import NguyenKhoa from "@assets/co-founder/nguyenkhoa.jpg";
-import HoaiBao from "@assets/co-founder/hoaibao.jpg";
+import MinhTu from '@assets/co-founder/minhtu.jpg';
+import NguyenKhoa from '@assets/co-founder/nguyenkhoa.jpg';
+import HoaiBao from '@assets/co-founder/hoaibao.jpg';
 
 const AboutUsPage = () => {
   return (
@@ -15,7 +15,8 @@ const AboutUsPage = () => {
             về việc cung cấp sản phẩm chất lượng cao và dịch vụ khách hàng xuất
             sắc. Được thành lập vào năm 2024, chúng tôi đã không ngừng mở rộng
             và đổi mới để đáp ứng nhu cầu của khách hàng.
-          </p><br/>
+          </p>
+          <br />
           <p className='text-gray-600 text-lg'>
             Hiện nay, Hệ thống cửa hàng cầu lông VNB đã có hơn 50 chi nhánh trải
             dài trên khắp mọi miền Đất nước. Với tiêu chí luôn đảm bảo cung cấp
@@ -24,7 +25,8 @@ const AboutUsPage = () => {
             với nhiều phân khúc giá trải dài từ thấp đến cao nên các lông thủ
             cần mua gì cứ đến ngay với ShopVNB, chắc chắn sẽ làm các bạn vô cùng
             hài lòng.
-          </p><br/>
+          </p>
+          <br />
           <p className='text-gray-600 text-lg'>
             ShopVNB luôn là nơi cung cấp nhanh nhất các mặt hàng hot đến từ
             những thương hiệu top đầu thế giới như Yonex, Lining, Victor,

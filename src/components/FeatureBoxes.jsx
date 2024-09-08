@@ -34,7 +34,7 @@ const FeatureBoxes = () => {
   ];
 
   return (
-    <div className='flex flex-wrap justify-center gap-4 p-4'>
+    <div className='flex flex-wrap justify-center gap-4 p-4 my-6'>
       {features.map((feature, index) => (
         <div
           key={index}
