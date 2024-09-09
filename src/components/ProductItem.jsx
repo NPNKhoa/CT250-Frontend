@@ -14,8 +14,10 @@ const ProductItem = ({ imageUrl, name, price, productLink }) => {
   const formattedPrice = formatPriceToVND(price);
 
   return (
-    <div className='block bg-white rounded-lg shadow-md overflow-hidden w-60 h-86'>
-      <div className='flex justify-center items-center w-full h-2/3'>
+    <div className='bg-white rounded-lg shadow-md overflow-hidden'>
+      <div className='flex justify-center items-center w-full h-80'>
+        {' '}
+        {/* Đặt chiều cao cố định */}
         <Link to={`/${productLink}`}>
           <img
             src={imageUrl}
@@ -24,11 +26,13 @@ const ProductItem = ({ imageUrl, name, price, productLink }) => {
           />
         </Link>
       </div>
-      <div className='p-4 h-1/3'>
+
+      <div className='p-4 flex flex-col justify-between h-32'>
+        {' '}
         <Link to={`/${productLink}`}>
-          <h3 className='h-2/3 text-sm text-gray-800'>{name}</h3>
+          <h3 className='text-sm text-gray-800 line-clamp-2'>{name}</h3>
         </Link>
-        <p className='h-1/3 text-red-600 font-bold'>{formattedPrice}</p>
+        <p className='text-primary font-bold'>{formattedPrice}</p>
       </div>
     </div>
   );
