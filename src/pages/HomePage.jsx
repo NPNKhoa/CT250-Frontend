@@ -114,10 +114,10 @@ const HomePage = () => {
 
       <section className='py-6 bg-white'>
         <div className='container mx-auto px-4 text-center'>
-          <h1 className='text-4xl font-bold text-gray-800 mb-4'>
+          <h1 className='text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 mb-4'>
             Chào mừng đến với cửa hàng của chúng tôi!
           </h1>
-          <p className='text-gray-600 text-lg'>
+          <p className='text-base sm:text-lg md:text-xl text-gray-600'>
             Khám phá những sản phẩm mới nhất và ưu đãi hấp dẫn dành riêng cho
             bạn.
           </p>
@@ -134,14 +134,14 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* products */}
       <section className='py-4'>
         <div className='container mx-auto px-4'>
           <h2 className='text-3xl font-bold text-center hover:text-primary mb-4'>
             Sản phẩm nổi bật
           </h2>
           <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[30vw] mx-auto'></span>
-          <div className='grid grid-cols-5 gap-3'>
+
+          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 justify-items-center'>
             {Array.isArray(products) &&
               products.map((product, index) => (
                 <ProductItem

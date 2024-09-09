@@ -93,13 +93,13 @@ function SaleOffComponent() {
             <img
               src={product.image}
               alt={product.name}
-              className='w-full h-64 object-cover'
+              className='w-full h-80 object-cover'
             />
             <div className='p-4 flex flex-col justify-between h-32'>
               <h3 className='text-sm text-gray-800 line-clamp-2'>
                 {product.name}
               </h3>
-              <p className='text-red-600 font-bold'>{product.price}</p>
+              <p className='text-primary font-bold'>{product.price}</p>
 
               {/* Thanh Hot */}
               <div className='flex items-center'>

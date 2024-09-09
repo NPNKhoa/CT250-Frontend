@@ -131,8 +131,11 @@ const Footer = () => {
 
       <div className='py-3 bg-black text-center'>
         <p className='text-white text-sm'>
-          © Copyright {new Date().getFullYear()} By BaKaTu | GĐ/Sở hữu website:
-          Nguyễn Minh Tứ
+          © Copyright {new Date().getFullYear()} By BaKaTu
+          <span className='hidden sm:inline'> - </span>
+          <span className='block sm:inline'>
+            GĐ/Sở hữu website: Nguyễn Minh Tứ
+          </span>
         </p>
       </div>
     </div>
