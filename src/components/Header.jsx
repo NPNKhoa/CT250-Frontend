@@ -17,7 +17,7 @@ import {
   PlaceSharp as PlaceSharpIcon,
 } from '@mui/icons-material';
 import Avatar from '@assets/user.png';
-import { getLoggedInUser } from '@redux/thunk/userThunk';
+// import { getLoggedInUser } from '@redux/thunk/userThunk';
 
 // Custom hook for handling modal states
 const useModalState = (initialState = false) => {
@@ -129,8 +129,8 @@ const Header = () => {
                 {user ? (
                   <img
                     src={
-                      user && userExist.avatarImagePath
-                        ? `http://localhost:5000/${userExist.avatarImagePath.replace(
+                      user
+                        ? `http://localhost:5000/${userExist?.avatarImagePath.replace(
                             /\\/g,
                             '/'
                           )}`

@@ -123,7 +123,7 @@ const CartPage = () => {
                         }
                         className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-l-full'
                       >
-                        -
+                        <span className='p-[2px]'>-</span>
                       </button>
                       <span className='mx-3'>{item.quantity}</span>
                       <button
@@ -132,7 +132,7 @@ const CartPage = () => {
                         }
                         className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-r-full'
                       >
-                        +
+                        <span>+</span>
                       </button>
                     </td>
                     <td className='text-right py-2 px-4 text-primary font-semibold'>
