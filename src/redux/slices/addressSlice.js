@@ -68,7 +68,9 @@ const addressSlice = createSlice({
       })
       .addCase(deleteAddressThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.addresses = state.addresses.filter(address => address._id !== action.payload._id);
+        state.addresses = state.addresses.map(address =>
+          address._id === action.payload._id ? action.payload : address
+        );
       })
       .addCase(deleteAddressThunk.rejected, (state, action) => {
         state.loading = false;
