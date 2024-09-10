@@ -34,6 +34,21 @@ export const updateAddressThunk = createAsyncThunk(
   }
 );
 
+export const deleteAddressThunk = createAsyncThunk(
+  'address/deleteAddress',
+  async ({id, accessToken }, { rejectWithValue }) => {
+    try {
+      const response = await addressService.deleteAddress(
+        id,
+        accessToken
+      );
+      return response; 
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const getUserAddressThunk = createAsyncThunk(
   'address/getUserAddress',
   async (accessToken, { rejectWithValue }) => {
