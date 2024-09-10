@@ -1,5 +1,5 @@
-import { useRef, useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Autocomplete, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -8,15 +8,16 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { createAddressThunk } from '@redux/thunk/addressThunk'; // Nhập khẩu thunk cần thiết
+import { createAddressThunk, updateAddressThunk, getUserAddressThunk } from '@redux/thunk/addressThunk';
 import openApiService from '@services/open-api.service';
+import PropTypes from 'prop-types';
 
-// eslint-disable-next-line react/prop-types
-const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
+const AddressFormDialog = ({ open, onClose, addressData = {} }) => {
   const dispatch = useDispatch();
-  const fullNameRef = useRef();
-  const phoneNumberRef = useRef();
-  const detailRef = useRef();
+  const { error } = useSelector(state => state.address);
+  const [fullName, setFullName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [detail, setDetail] = useState('');
   const [province, setProvince] = useState(null);
   const [district, setDistrict] = useState(null);
   const [commune, setCommune] = useState(null);
@@ -25,6 +26,18 @@ const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
   const [provinceData, setProvinceData] = useState([]);
   const [districtData, setDistrictData] = useState([]);
   const [wardData, setWardData] = useState([]);
+
+  useEffect(() => {
+    if (addressData) {
+      setFullName(addressData.fullname || '');
+      setPhoneNumber(addressData.phone || '');
+      setDetail(addressData.detail || '');
+      setProvince({ name: addressData.province || '', code: addressData.provinceCode || '' });
+      setDistrict({ name: addressData.district || '', code: addressData.districtCode || '' });
+      setCommune({ name: addressData.commune || '', code: addressData.communeCode || '' });
+      setIsDefault(addressData.isDefault || false);
+    }
+  }, [addressData]);
 
   useEffect(() => {
     const fetchProvinces = async () => {
@@ -71,29 +84,37 @@ const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
   const handleSubmit = async event => {
     event.preventDefault();
 
-    // Lấy giá trị từ các TextField
     const formData = {
-      fullname: fullNameRef.current.value,
-      phone: phoneNumberRef.current.value,
+      fullname: fullName,
+      phone: phoneNumber,
       province: province?.name || '',
       district: district?.name || '',
       commune: commune?.name || '',
-      detail: detailRef.current.value,
-      isDefault: isDefault, // Sử dụng giá trị từ checkbox isDefault
+      detail: detail,
+      isDefault: isDefault,
     };
 
-    // Thực hiện tạo địa chỉ qua thunk
     try {
-      await dispatch(
-        createAddressThunk({
-          addressData: formData,
-          accessToken: accessToken, // Thay accessToken bằng token hiện tại
-        })
-      );
-      onSubmit(formData); // Gọi hàm onSubmit với dữ liệu form sau khi tạo địa chỉ thành công
-      onClose(); // Đóng dialog sau khi submit
+      if (addressData && addressData._id) {
+        await dispatch(
+          updateAddressThunk({
+            updatedData: { ...formData },
+            id: addressData._id,
+            accessToken: localStorage.getItem('accessToken'),
+          })
+        );
+      } else {
+        await dispatch(
+          createAddressThunk({
+            addressData: formData,
+            accessToken: localStorage.getItem('accessToken'),
+          })
+        );
+      }
+      dispatch(getUserAddressThunk(localStorage.getItem('accessToken')));
+      onClose();
     } catch (error) {
-      console.error('Error creating address:', error);
+      console.error('Error creating/updating address:', error);
     }
   };
 
@@ -101,6 +122,7 @@ const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Địa chỉ mới</DialogTitle>
       <DialogContent>
+        {error && <div style={{ color: 'red' }}>Error: {error}</div>}
         <TextField
           autoFocus
           required
@@ -110,7 +132,8 @@ const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
           type='text'
           fullWidth
           variant='standard'
-          inputRef={fullNameRef}
+          value={fullName}
+          onChange={e => setFullName(e.target.value)}
         />
         <TextField
           required
@@ -120,7 +143,8 @@ const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
           type='tel'
           fullWidth
           variant='standard'
-          inputRef={phoneNumberRef}
+          value={phoneNumber}
+          onChange={e => setPhoneNumber(e.target.value)}
         />
         <Autocomplete
           id='province'
@@ -128,6 +152,7 @@ const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
           getOptionLabel={option => option.name}
           value={province}
           onChange={handleProvinceChange}
+          isOptionEqualToValue={(option, value) => option.code === value.code}
           renderInput={params => (
             <TextField
               {...params}
@@ -144,6 +169,7 @@ const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
           getOptionLabel={option => option.name}
           value={district}
           onChange={handleDistrictChange}
+          isOptionEqualToValue={(option, value) => option.code === value.code}
           renderInput={params => (
             <TextField
               {...params}
@@ -160,6 +186,7 @@ const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
           getOptionLabel={option => option.name}
           value={commune}
           onChange={(event, newValue) => setCommune(newValue)}
+          isOptionEqualToValue={(option, value) => option.code === value.code}
           renderInput={params => (
             <TextField
               {...params}
@@ -178,7 +205,8 @@ const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
           type='text'
           fullWidth
           variant='standard'
-          inputRef={detailRef}
+          value={detail}
+          onChange={e => setDetail(e.target.value)}
         />
         <FormControlLabel
           control={
@@ -202,6 +230,12 @@ const AddressFormDialog = ({ open, onClose, onSubmit, accessToken }) => {
       </DialogActions>
     </Dialog>
   );
+};
+
+AddressFormDialog.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  addressData: PropTypes.object,
 };
 
 export default AddressFormDialog;

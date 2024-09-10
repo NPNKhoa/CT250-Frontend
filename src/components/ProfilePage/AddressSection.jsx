@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import AddressFormDialog from '@components/ProfilePage/AddressFormDialog';
 import {
   getUserAddressThunk,
-  createAddressThunk,
+  deleteAddressThunk,
+  setDefaultAddressThunk,
 } from '@redux/thunk/addressThunk';
 
 function AddressSection() {
@@ -22,64 +23,28 @@ function AddressSection() {
     setOpen(false);
   };
 
-  const handleFormSubmit = async formData => {
-    const accessToken = localStorage.getItem('accessToken');
-
-    try {
-      await dispatch(
-        createAddressThunk({ addressData: formData, accessToken })
-      );
-      dispatch(getUserAddressThunk(accessToken)); // Re-fetch the addresses to update the list
-    } catch (error) {
-      console.error('Error adding address:', error);
-    }
-  };
-
   const handleClickOpen = (index = null) => {
     if (index !== null) {
       setEditAddress(addresses[index]);
-    } else {
-      setEditAddress(null);
-    }
+    } else setEditAddress({});
     setOpen(true);
   };
 
-  // const handleFormSubmit = formData => {
-  //   if (editAddress) {
-  //     setAddresses(prevAddresses =>
-  //       prevAddresses.map(address =>
-  //         address === editAddress
-  //           ? { ...formData, isDefault: address.isDefault }
-  //           : address
-  //       )
-  //     );
-  //   } else {
-  //     setAddresses(prevAddresses => [...prevAddresses, formData]);
-  //   }
-  //   handleClose();
-  // };
+  const handleSetDefault = index => {
+    const accessToken = localStorage.getItem('accessToken');
+    dispatch(setDefaultAddressThunk({ id: addresses[index]._id, accessToken: accessToken }));
+  };
 
-  // const handleSetDefault = index => {
-  //   setAddresses(prevAddresses =>
-  //     prevAddresses.map((address, i) => ({
-  //       ...address,
-  //       isDefault: i === index,
-  //     }))
-  //   );
-  // };
-  // const handleDelete = index => {
-  //   if (window.confirm('Bạn có chắc chắn muốn xóa địa chỉ này?')) {
-  //     setAddresses(prevAddresses =>
-  //       prevAddresses.filter((_, i) => i !== index)
-  //     );
-  //   }
-  // };
+  const handleDelete = index => {
+    const accessToken = localStorage.getItem('accessToken');
+    dispatch(deleteAddressThunk({ id: addresses[index]._id, accessToken: accessToken }));
+  };
 
   return (
     <div className=''>
       <button
         className='bg-primary hover:bg-red-600 text-white font-bold py-2 px-4 rounded'
-        onClick={handleClickOpen}
+        onClick={() => handleClickOpen()}
       >
         + Thêm địa chỉ mới
       </button>
@@ -87,8 +52,7 @@ function AddressSection() {
       <AddressFormDialog
         open={open}
         onClose={handleClose}
-        onSubmit={handleFormSubmit}
-        address={editAddress}
+        addressData={editAddress}
       />
 
       <div className='mt-6'>
@@ -126,13 +90,13 @@ function AddressSection() {
                     <>
                       <button
                         className='ml-4 text-red-500 hover:underline'
-                        // onClick={() => handleDelete(index)}
+                        onClick={() => handleDelete(index)}
                       >
                         Xóa
                       </button>
                       <button
                         className='block mt-2 text-gray-600 border border-gray-300 py-1 px-2 rounded'
-                        // onClick={() => handleSetDefault(index)}
+                        onClick={() => handleSetDefault(index)}
                       >
                         Thiết lập mặc định
                       </button>

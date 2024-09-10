@@ -37,7 +37,7 @@ class AddressService {
 
   async getUserAddress(accessToken) {
     try {
-      const response = await this.api.get(`/`, {
+      const response = await this.api.get('/', {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -61,6 +61,26 @@ class AddressService {
     } catch (error) {
       throw new Error(
         error.response?.data?.error || 'Error deleting address'
+      );
+    }
+  }
+
+  async setDefaultAddress(id, accessToken) {
+    try {
+      const response = await this.api.put(
+        `/set-default/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    }
+    catch (error) {
+      throw new Error(
+        error.response?.data?.error || 'Error setting default address'
       );
     }
   }
