@@ -64,6 +64,26 @@ class AddressService {
       );
     }
   }
+
+  async setDefaultAddress(id, accessToken) {
+    try {
+      const response = await this.api.put(
+        `/set-default/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    }
+    catch (error) {
+      throw new Error(
+        error.response?.data?.error || 'Error setting default address'
+      );
+    }
+  }
 }
 
 export default new AddressService();

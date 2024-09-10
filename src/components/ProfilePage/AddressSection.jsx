@@ -60,14 +60,10 @@ function AddressSection() {
   //   handleClose();
   // };
 
-  // const handleSetDefault = index => {
-  //   setAddresses(prevAddresses =>
-  //     prevAddresses.map((address, i) => ({
-  //       ...address,
-  //       isDefault: i === index,
-  //     }))
-  //   );
-  // };
+  const handleSetDefault = index => {
+    
+  };
+
   const handleDelete = index => {
     const accessToken = localStorage.getItem('accessToken');
     dispatch(deleteAddressThunk({ id: addresses[index]._id, accessToken: accessToken }));
@@ -131,7 +127,7 @@ function AddressSection() {
                       </button>
                       <button
                         className='block mt-2 text-gray-600 border border-gray-300 py-1 px-2 rounded'
-                        // onClick={() => handleSetDefault(index)}
+                        onClick={() => handleSetDefault(index)}
                       >
                         Thiết lập mặc định
                       </button>
