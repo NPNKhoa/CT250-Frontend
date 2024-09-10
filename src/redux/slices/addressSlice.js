@@ -59,7 +59,9 @@ const addressSlice = createSlice({
       })
       .addCase(getUserAddressThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        if (action.payload === "Can not found address for this user") {
+          state.addresses = [];
+        }
       })
 
       .addCase(deleteAddressThunk.pending, state => {
