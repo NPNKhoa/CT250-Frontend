@@ -2,6 +2,7 @@ import {
   createAddressThunk,
   getUserAddressThunk,
   updateAddressThunk,
+  deleteAddressThunk
 } from '@redux/thunk/addressThunk';
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -30,6 +31,7 @@ const addressSlice = createSlice({
         state.loading = false;
         state.error = action.payload; // Xử lý lỗi khi tạo địa chỉ
       })
+
       // Handle updateAddressThunk
       .addCase(updateAddressThunk.pending, state => {
         state.loading = true;
@@ -46,6 +48,7 @@ const addressSlice = createSlice({
         state.loading = false;
         state.error = action.payload; // Xử lý lỗi khi cập nhật địa chỉ
       })
+
       .addCase(getUserAddressThunk.pending, state => {
         state.loading = true;
         state.error = null;
@@ -55,6 +58,19 @@ const addressSlice = createSlice({
         state.addresses = action.payload.data;
       })
       .addCase(getUserAddressThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(deleteAddressThunk.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteAddressThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.addresses = state.addresses.filter(address => address._id !== action.payload._id);
+      })
+      .addCase(deleteAddressThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

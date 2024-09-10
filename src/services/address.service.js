@@ -8,7 +8,7 @@ class AddressService {
   async updateAddress(updatedData, id, accessToken) {
     try {
       const response = await this.api.put(
-        `/update-address/?id=${id}`,
+        `/${id}`,
         updatedData,
         {
           headers: {
@@ -26,8 +26,7 @@ class AddressService {
     try {
       const response = await this.api.post('/', addressData, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`
         },
       });
       return response.data;
@@ -47,6 +46,21 @@ class AddressService {
     } catch (error) {
       throw new Error(
         error.response?.data?.error || 'Error fetching user address'
+      );
+    }
+  }
+
+  async deleteAddress(id, accessToken) {
+    try {
+      const response = await this.api.delete(`/${id}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.error || 'Error deleting address'
       );
     }
   }
