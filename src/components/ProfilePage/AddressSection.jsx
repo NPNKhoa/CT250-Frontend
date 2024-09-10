@@ -5,6 +5,7 @@ import AddressFormDialog from '@components/ProfilePage/AddressFormDialog';
 import {
   getUserAddressThunk,
   createAddressThunk,
+  deleteAddressThunk,
 } from '@redux/thunk/addressThunk';
 
 function AddressSection() {
@@ -67,13 +68,11 @@ function AddressSection() {
   //     }))
   //   );
   // };
-  // const handleDelete = index => {
-  //   if (window.confirm('Bạn có chắc chắn muốn xóa địa chỉ này?')) {
-  //     setAddresses(prevAddresses =>
-  //       prevAddresses.filter((_, i) => i !== index)
-  //     );
-  //   }
-  // };
+  const handleDelete = index => {
+    const accessToken = localStorage.getItem('accessToken');
+    dispatch(deleteAddressThunk({ id: addresses[index]._id, accessToken: accessToken }));
+    dispatch(getUserAddressThunk(accessToken));
+  };
 
   return (
     <div className=''>
@@ -126,7 +125,7 @@ function AddressSection() {
                     <>
                       <button
                         className='ml-4 text-red-500 hover:underline'
-                        // onClick={() => handleDelete(index)}
+                        onClick={() => handleDelete(index)}
                       >
                         Xóa
                       </button>
