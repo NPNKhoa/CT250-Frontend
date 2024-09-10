@@ -37,7 +37,7 @@ class AddressService {
 
   async getUserAddress(accessToken) {
     try {
-      const response = await this.api.get(`/`, {
+      const response = await this.api.get('/', {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

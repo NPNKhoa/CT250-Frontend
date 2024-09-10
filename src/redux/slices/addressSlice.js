@@ -2,7 +2,8 @@ import {
   createAddressThunk,
   getUserAddressThunk,
   updateAddressThunk,
-  deleteAddressThunk
+  deleteAddressThunk,
+  setDefaultAddressThunk,
 } from '@redux/thunk/addressThunk';
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -59,9 +60,7 @@ const addressSlice = createSlice({
       })
       .addCase(getUserAddressThunk.rejected, (state, action) => {
         state.loading = false;
-        if (action.payload === "Can not found address for this user") {
-          state.addresses = [];
-        }
+        state.error = action.payload;
       })
 
       .addCase(deleteAddressThunk.pending, state => {
@@ -70,11 +69,25 @@ const addressSlice = createSlice({
       })
       .addCase(deleteAddressThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.addresses = state.addresses.map(address =>
-          address._id === action.payload._id ? action.payload : address
-        );
-      })
+        state.addresses = state.addresses.filter(address => address._id !== action.payload.data._id);
+      })      
       .addCase(deleteAddressThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(setDefaultAddressThunk.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(setDefaultAddressThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.addresses = state.addresses.map(address => ({
+          ...address,
+          isDefault: address._id === action.payload.data._id,
+        }));
+      })
+      .addCase(setDefaultAddressThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
