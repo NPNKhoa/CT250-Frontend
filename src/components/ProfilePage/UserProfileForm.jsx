@@ -56,13 +56,12 @@ function UserProfileForm() {
     }
   }, [user]);
 
-  // Khi avatar đã được cập nhật, gọi lại getLoggedInUser để làm mới thông tin người dùng
-  useEffect(() => {
-    if (avatarUpdated && accessToken) {
-      dispatch(getLoggedInUser(accessToken));
-      setAvatarUpdated(false); // Đặt lại trạng thái sau khi đã làm mới thông tin
-    }
-  }, [avatarUpdated, accessToken, dispatch]);
+  // useEffect(() => {
+  //   if (avatarUpdated && accessToken) {
+  //     dispatch(getLoggedInUser(accessToken));
+  //     setAvatarUpdated(false);
+  //   }
+  // }, [avatarUpdated, accessToken, dispatch]);
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -120,6 +119,8 @@ function UserProfileForm() {
     } catch (error) {
       alert(`Cập nhật thông tin thất bại: ${error.message}`);
     }
+
+    dispatch(getLoggedInUser(accessToken));
   };
 
   return (

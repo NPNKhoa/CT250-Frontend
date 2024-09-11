@@ -138,7 +138,7 @@ const Header = () => {
                   {user ? (
                     <img
                       src={
-                        user
+                        user && userExist?.avatarImagePath
                           ? `http://localhost:5000/${userExist?.avatarImagePath.replace(
                               /\\/g,
                               '/'
