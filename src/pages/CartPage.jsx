@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
 import DeleteForeverSharpIcon from '@mui/icons-material/DeleteForeverSharp';
 import CartIcon from '@assets/cart-icon.png';
@@ -16,6 +16,7 @@ const CartPage = () => {
   const { cart } = useSelector(state => state.cart);
   const cartItems = cart?.cartItems || [];
   const accessToken = localStorage.getItem('accessToken');
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getCartByUser(accessToken));
@@ -73,6 +74,7 @@ const CartPage = () => {
     //     currency: 'VND',
     //   })}`
     // );
+    setTimeout(() => navigate('/thankyou'), 1000);
   };
 
   return (

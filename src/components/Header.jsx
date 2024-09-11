@@ -109,7 +109,7 @@ const Header = () => {
               </div>
               {isModalContact && (
                 <div
-                  className='absolute top-12 mt-2 right-0 w-40 bg-white rounded-lg shadow-lg z-50'
+                  className='absolute top-12 mt-2 left-0 w-40 bg-white rounded-lg shadow-lg z-50'
                   onMouseEnter={handleMouseEnterContact}
                   onMouseLeave={handleMouseLeaveContact}
                 >
