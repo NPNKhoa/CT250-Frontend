@@ -18,10 +18,12 @@ function Cart() {
   }, [dispatch, accessToken]);
 
   const handleRemove = id => {
-    dispatch(deleteItem({
-      accessToken: accessToken,
-      id: id,
-    }));
+    dispatch(
+      deleteItem({
+        accessToken: accessToken,
+        id: id,
+      })
+    );
   };
 
   const handleQuantityChange = (id, delta) => {
@@ -87,7 +89,7 @@ function Cart() {
                     </button>
                   </div>
                   <div className='text-right font-bold text-primary'>
-                    {item.itemPrice.toLocaleString('vi-VN', {
+                    {(item.itemPrice * item.quantity).toLocaleString('vi-VN', {
                       style: 'currency',
                       currency: 'VND',
                     })}

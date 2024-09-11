@@ -27,10 +27,12 @@ const CartPage = () => {
   ];
 
   const handleRemove = id => {
-    dispatch(deleteItem({
-      accessToken: accessToken,
-      id: id,
-    }));
+    dispatch(
+      deleteItem({
+        accessToken: accessToken,
+        id: id,
+      })
+    );
   };
 
   const handleQuantityChange = (id, delta) => {
