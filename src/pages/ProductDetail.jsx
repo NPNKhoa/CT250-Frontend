@@ -13,7 +13,11 @@ import Alert from '@components/Alert';
 import productService from '@services/product.service';
 import productTypeService from '@services/productType.service';
 import brandService from '@services/brand.service';
+
 import cartService from '@services/cart.service';
+
+import { useDispatch } from 'react-redux';
+import { addToCart } from '@redux/thunk/cartThunk';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -144,12 +148,19 @@ const ProductDetail = () => {
   //     setQuantity(newValue);
   //   }
   // };
-  const accessToken = localStorage.getItem('accessToken');
+
+  const dispatch = useDispatch();
+
   const handleAddToCart = () => {
-    cartService.addToCart(accessToken, {
-      productId: products._id,
-      quantity: quantity,
-    });
+    dispatch(
+      addToCart({
+        accessToken: localStorage.getItem('accessToken'),
+        data: {
+          productId: products._id,
+          quantity: quantity,
+        },
+      })
+    );
     setNotification({ message: 'Đã thêm vào giỏ hàng!', type: 'success' });
   };
 

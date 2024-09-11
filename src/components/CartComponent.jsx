@@ -1,30 +1,36 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import DeleteForeverSharpIcon from '@mui/icons-material/DeleteForeverSharp';
-import cartService from '@services/cart.service';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getCartByUser,
+  updateQuantity,
+  deleteItem,
+} from '@redux/thunk/cartThunk';
 
 function Cart() {
-  const [cartItems, setCartItems] = useState([]);
+  const dispatch = useDispatch();
+  const { cart } = useSelector(state => state.cart);
+  const cartItems = cart?.cartItems || [];
   const accessToken = localStorage.getItem('accessToken');
 
   useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const response = await cartService.getCartByUser(accessToken);
-        setCartItems(response.data.cart.cartItems);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchCart();
-  });
+    dispatch(getCartByUser(accessToken));
+  }, [dispatch, accessToken]);
 
   const handleRemove = id => {
-    cartService.deleteItem(accessToken, id);
+    dispatch(deleteItem({
+      accessToken: accessToken,
+      id: id,
+    }));
   };
 
   const handleQuantityChange = (id, delta) => {
-    cartService.updateQuantity(accessToken, { productId: id, quantity: delta });
+    dispatch(
+      updateQuantity({
+        accessToken: accessToken,
+        data: { productId: id, quantity: delta },
+      })
+    );
   };
 
   const calculateTotal = () => {
@@ -44,7 +50,7 @@ function Cart() {
           {cartItems.map(item => (
             <div key={item} className='flex items-center mb-4'>
               <img
-                src={item.product.productImagePath[0]}
+                src={item.product.productImagePath?.[0] || ''}
                 alt={item.product.productName}
                 className='w-20 mr-2'
               />
