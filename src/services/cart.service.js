@@ -1,6 +1,6 @@
 import createApiClient from './api.service';
 
-class UserService {
+class CartService {
     constructor(path = '/cart') {
         this.api = createApiClient(path);
     }
@@ -53,4 +53,4 @@ class UserService {
     
 }
 
-export default new UserService();
+export default new CartService();

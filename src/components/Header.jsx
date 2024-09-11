@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, setCredentials } from '@redux/slices/authSlice';
+import { getCartByUser } from '@redux/thunk/cartThunk';
 
 import {
   AccountCircleSharp as AccountCircleSharpIcon,
@@ -38,12 +39,16 @@ const Header = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const cart = useSelector(state => state.cart);
+  const cartItems = cart.cart?.cartItems || [];
   const user = useSelector(state => state.auth.authUser);
 
   const userExist = useSelector(state => state.users.user);
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
+
+    dispatch(getCartByUser(accessToken));
 
     if (refreshToken && accessToken) {
       dispatch(setCredentials({ accessToken, refreshToken }));
@@ -207,7 +212,7 @@ const Header = () => {
                   Giỏ hàng
                 </h3>
                 <span className='absolute -top-1 right-6 bg-primary rounded-full text-white p-1 w-4 h-4 flex items-center justify-center text-xs'>
-                  0
+                  {cartItems.length}
                 </span>
               </Link>
               {isModalCart && (

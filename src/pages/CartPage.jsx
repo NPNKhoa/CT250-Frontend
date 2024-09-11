@@ -1,29 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
 import DeleteForeverSharpIcon from '@mui/icons-material/DeleteForeverSharp';
 import CartIcon from '@assets/cart-icon.png';
 
-import cartService from '@services/cart.service';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getCartByUser,
+  updateQuantity,
+  deleteItem,
+} from '@redux/thunk/cartThunk';
 
 const CartPage = () => {
-  const [cartItems, setCartItems] = useState([]);
+  const dispatch = useDispatch();
+  const { cart } = useSelector(state => state.cart);
+  const cartItems = cart?.cartItems || [];
   const accessToken = localStorage.getItem('accessToken');
 
   useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const response = await cartService.getCartByUser(accessToken);
-        setCartItems(response.data.cart.cartItems);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchCart();
-  });
-
-  console.log(cartItems);
+    dispatch(getCartByUser(accessToken));
+  }, [dispatch, accessToken]);
 
   const breadcrumbs = [
     { label: 'Trang chủ', href: '/' },
@@ -31,11 +27,19 @@ const CartPage = () => {
   ];
 
   const handleRemove = id => {
-    cartService.deleteItem(accessToken, id);
+    dispatch(deleteItem({
+      accessToken: accessToken,
+      id: id,
+    }));
   };
 
   const handleQuantityChange = (id, delta) => {
-    cartService.updateQuantity(accessToken, { productId: id, quantity: delta });
+    dispatch(
+      updateQuantity({
+        accessToken: accessToken,
+        data: { productId: id, quantity: delta },
+      })
+    );
   };
 
   const calculateTotal = () => {
@@ -76,7 +80,7 @@ const CartPage = () => {
         <h2 className='text-2xl font-bold mb-4'>Giỏ hàng của bạn</h2>
         {cartItems.length === 0 ? (
           <div className='flex flex-col items-center'>
-            <img src={CartIcon} alt='' className='w-48      ' />
+            <img src={CartIcon} alt='' className='w-48' />
             <p className='text-center text-lg text-gray-500'>
               Không có sản phẩm nào trong giỏ hàng của bạn
             </p>
@@ -95,10 +99,10 @@ const CartPage = () => {
               </thead>
               <tbody>
                 {cartItems.map(item => (
-                  <tr key={item} className='border-b'>
+                  <tr key={item._id} className='border-b'>
                     <td className='flex items-center py-2 px-4'>
                       <img
-                        src={item.product.productImagePath[0]}
+                        src={item.product.productImagePath?.[0] || ''}
                         alt={item.product.productName}
                         className='w-20 h-20 object-cover rounded mr-4'
                       />
