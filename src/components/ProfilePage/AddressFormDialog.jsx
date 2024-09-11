@@ -8,7 +8,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { createAddressThunk, updateAddressThunk, getUserAddressThunk } from '@redux/thunk/addressThunk';
+import {
+  createAddressThunk,
+  updateAddressThunk,
+  getUserAddressThunk,
+} from '@redux/thunk/addressThunk';
 import openApiService from '@services/open-api.service';
 import PropTypes from 'prop-types';
 
@@ -32,9 +36,18 @@ const AddressFormDialog = ({ open, onClose, addressData = {} }) => {
       setFullName(addressData.fullname || '');
       setPhoneNumber(addressData.phone || '');
       setDetail(addressData.detail || '');
-      setProvince({ name: addressData.province || '', code: addressData.provinceCode || '' });
-      setDistrict({ name: addressData.district || '', code: addressData.districtCode || '' });
-      setCommune({ name: addressData.commune || '', code: addressData.communeCode || '' });
+      setProvince({
+        name: addressData.province || '',
+        code: addressData.provinceCode || '',
+      });
+      setDistrict({
+        name: addressData.district || '',
+        code: addressData.districtCode || '',
+      });
+      setCommune({
+        name: addressData.commune || '',
+        code: addressData.communeCode || '',
+      });
       setIsDefault(addressData.isDefault || false);
     }
   }, [addressData]);
