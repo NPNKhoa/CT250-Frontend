@@ -17,12 +17,11 @@ class OrderService {
         }
       );
 
-      const provinceData = provinceRes.data.filter(
+      const provinceData = provinceRes.data.data.filter(
         item => item.ProvinceName === province
       );
 
-      const provinceId =
-        provinceData.length !== 0 ? provinceData[0].ProvinceID : 0;
+      const provinceId = provinceData.length !== 0 ? provinceData[0].ProvinceID : 0;
 
       const districtRes = await axios.get(
         'https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district',
@@ -34,63 +33,63 @@ class OrderService {
         }
       );
 
-      const districtData = districtRes.data.filter(item =>
-        item.NameExtension.includes(district)
+      const districtData = districtRes.data.data.filter(item =>
+        item.DistrictName === district
       );
 
-      const districtId =
-        districtData.length !== 0 ? districtData[0].DistrictID : 0;
+      const districtId = districtData.length !== 0 ? districtData[0].DistrictID : 0;
 
       const wardRes = await axios.get(
-        'https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id',
+        `https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=${districtId}`,
         {
           headers: {
             Token: import.meta.env.VITE_GHN_TOKEN_API,
-            district_id: districtId,
           },
         }
       );
 
-      const wardData = wardRes.data.filter(item =>
-        item.NameExtension.includes(ward)
+      const wardData = wardRes.data.data.filter(item =>
+        item.WardName === ward
       );
 
-      const wardCode = wardData.length !== 0 ? wardData.WardCode : 0;
+      const wardCode = wardData.length !== 0 ? wardData[0].WardCode : 0;
 
       return { districtId, wardCode };
     } catch (error) {
       throw new Error(
-        error.response.data.error || 'Error fetching thirty-part api'
+        error || 'Error fetching thirty-part api'
       );
     }
   }
 
-  async getDeliveryFee({ province, district, ward }, packageWeight) {
-    try {
-      const { districtId, wardCode } = await this.getDestinationCode({
-        province,
-        district,
-        ward,
-      });
+    async getDeliveryFee({ province, district, ward }, packageWeight) {
+      try {
+        const { districtId, wardCode } = await this.getDestinationCode({
+          province,
+          district,
+          ward,
+        });
 
-      const response = await axios.post(
-        'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/available-services',
-        JSON.stringify({
-          to_district_id: districtId, // This value must be an integer
-          to_ward_code: String.toString(wardCode), // This value must be a string
-          weight: packageWeight, // (gram)
-          service_id: 53321, // This value is temporary fixed
-          service_type_id: 3, // This value is temporary fixed
-        })
-      );
+        const response = await axios.post(
+          'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/available-services',
+          {
+            headers: {
+              Token: import.meta.env.VITE_GHN_TOKEN_API,
+              from_district: 710,
+              to_district: districtId,
+              shop_id: import.meta.env.VITE_GHN_SHOP_ID,
+            },
+          }
+        );
+        console.log(response);
 
-      return response.data;
-    } catch (error) {
-      throw new Error(
-        error.response.data.error || 'Error fetching thirty-part api'
-      );
+        // return response.data;
+      } catch (error) {
+        throw new Error(
+          error || 'Error fetching thirty-part api'
+        );
+      }
     }
-  }
 }
 
 export default new OrderService();

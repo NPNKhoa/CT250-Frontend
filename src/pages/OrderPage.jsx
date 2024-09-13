@@ -1,37 +1,17 @@
-import { getUserAddressThunk } from '@redux/thunk/addressThunk';
-import { getCartByUser } from '@redux/thunk/cartThunk';
-import { getLoggedInUser } from '@redux/thunk/userThunk';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-
-const products = [
-  {
-    id: 1,
-    image:
-      'https://shopvnb.com/img/180x180//uploads/gallery/tui-cau-long-yonex-bag2326t01r-black-light-lime-chinh-hang_1721681701.webp',
-    name: 'Túi cầu lông Yonex BAG2326T01R-Black/Light lime chính hãng',
-    price: 519000,
-  },
-  {
-    id: 2,
-    image:
-      'https://shopvnb.com/img/180x180//uploads/gallery/tui-cau-long-yonex-bag2326t01r-black-light-lime-chinh-hang_1721681701.webp',
-    name: 'Túi cầu lông Yonex BA253 Xám - Gia công',
-    price: 850000,
-  },
-];
+import { useSelector, useDispatch } from 'react-redux';
+// import { useNavigate } from 'react-router-dom';
+import { getUserAddressThunk } from '../redux/thunk/addressThunk';
+import orderSevice from '@services/order.service';
 
 function OrderPage() {
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const user = useSelector(state => state.users.user);
   const { addresses } = useSelector(state => state.address);
-
   const { cart } = useSelector(state => state.cart);
   const cartItems = cart?.cartItems || [];
-  const defaultAddress = addresses.find(address => address.isDefault) || {};
-  const accessToken = localStorage.getItem('accessToken');
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     fullname: '',
     phone: '',
@@ -41,35 +21,54 @@ function OrderPage() {
   });
 
   useEffect(() => {
-    dispatch(getLoggedInUser(accessToken));
-    dispatch(getCartByUser(accessToken));
-  }, [dispatch, accessToken]);
+    const accessToken = localStorage.getItem('accessToken');
+    dispatch(getUserAddressThunk(accessToken));
+  }, [dispatch]);
 
   useEffect(() => {
+    const defaultAddress = addresses.find(address => address.isDefault);
     if (user) {
       setFormData({
-        fullname: user.fullname || '',
-        phone: user.phone || '',
-        address: addresses.length > 0 ? addresses[0].address : '', // Lấy địa chỉ đầu tiên nếu có
+        fullname: defaultAddress?.fullname || '',
+        phone: defaultAddress?.phone || '',
+        address: defaultAddress
+          ? `${defaultAddress.detail}, ${defaultAddress.commune}, ${defaultAddress.district}, ${defaultAddress.province}`
+          : '',
         email: user.email || '',
-        notes: user.notes || '',
+        notes: '',
       });
     }
   }, [user, addresses]);
+
+  useEffect(() => {
+    const fetchDeliveryFee = async () => {
+      const response = await orderSevice.getDestinationCode({
+        province: 'Kiên Giang',
+        district: 'Huyện Vĩnh Thuận',
+        ward: 'Xã Vĩnh Phong',
+      }, 1000);
+      console.log(response);
+    };
+    fetchDeliveryFee();
+  }, []);
 
   const handleChange = e => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleAddressChange = e => {
-    const { value } = e.target;
-    setFormData({ ...formData, address: value });
+  const handleAddressSelect = index => {
+    const selectedAddress = addresses[index];
+    if (selectedAddress) {
+      setFormData({
+        ...formData,
+        address: `${selectedAddress.detail}, ${selectedAddress.commune}, ${selectedAddress.district}, ${selectedAddress.province}`,
+        fullname: selectedAddress.fullname || formData.fullname,
+        phone: selectedAddress.phone || formData.phone,
+      });
+    }
+    setIsModalOpen(false);
   };
-
-  const formattedAddress = defaultAddress?.detail
-    ? `${defaultAddress.commune}, ${defaultAddress.district}, ${defaultAddress.province}, ${defaultAddress.detail}`
-    : 'Chưa cập nhật';
 
   const calculateTotal = () => {
     return cartItems.reduce(
@@ -79,137 +78,178 @@ function OrderPage() {
   };
 
   return (
-    <div className='container mx-auto py-8 px-4'>
-      <h1 className='text-3xl font-bold text-center mb-4'>VNBSports</h1>
-      <h2 className='text-xl font-semibold text-center mb-6'>
-        Đơn hàng ( {cartItems.length} sản phẩm)
-      </h2>
-
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
-        {/* Thông tin nhận hàng */}
-        <div className='bg-white shadow-md rounded-lg p-6'>
-          <h3 className='text-xl font-semibold mb-4'>Thông tin nhận hàng</h3>
-          <div className='space-y-4'>
-            <input
-              type='text'
-              name='fullname'
-              value={formData.fullname}
-              onChange={handleChange}
-              placeholder='Họ và tên'
-              className='w-full p-2 border border-gray-300 rounded'
-            />
-            <input
-              type='text'
-              name='phone'
-              value={formData.phone}
-              onChange={handleChange}
-              placeholder='Số điện thoại'
-              className='w-full p-2 border border-gray-300 rounded'
-            />
-            <input
-              type='text'
-              name='address'
-              value={formattedAddress}
-              onChange={handleAddressChange}
-              placeholder='Địa chỉ'
-              className='w-full p-2 border border-gray-300 rounded'
-            />
-            <input
-              type='email'
-              name='email'
-              value={formData.email}
-              onChange={handleChange}
-              placeholder='Email'
-              className='w-full p-2 border border-gray-300 rounded'
-            />
-            <textarea
-              name='notes'
-              value={formData.notes}
-              onChange={handleChange}
-              placeholder='Ghi chú'
-              className='w-full p-2 border border-gray-300 rounded'
-              rows='4'
-            />
-          </div>
-        </div>
-
-        {/* Thanh toán */}
-        <div className='bg-white shadow-md rounded-lg p-6'>
-          <h3 className='text-xl font-semibold mb-4'>Thanh toán</h3>
-          <div className='flex flex-col space-y-2 mb-4'>
-            <label className='flex items-center'>
-              <input type='radio' name='payment' value='cod' defaultChecked />
-              <span className='ml-2'>Thanh toán khi nhận hàng (COD)</span>
-            </label>
-            <label className='flex items-center'>
-              <input type='radio' name='payment' value='bank' />
-              <span className='ml-2'>Thanh toán qua ví VNPay</span>
-            </label>
+    <div className='bg-gray-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8'>
+      <div className='max-w-7xl mx-auto'>
+        <div className='grid grid-cols-1 lg:grid-cols-5 gap-6'>
+          {/* Thông tin liên hệ và giao hàng */}
+          <div className='bg-white shadow-lg rounded-lg p-6 lg:col-span-2'>
+            <h2 className='text-lg font-semibold text-gray-900'>
+              Thông tin nhận hàng
+            </h2>
+            <div className='mt-4'>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className='w-34 p-3 bg-primary text-white rounded focus:outline-none focus:ring-2  hover:bg-hover-primary'
+              >
+                Chọn địa chỉ
+              </button>
+              <input
+                type='text'
+                name='fullname'
+                value={formData.fullname}
+                onChange={handleChange}
+                placeholder='Họ và tên'
+                className='w-full mt-4 p-3 border border-gray-300 rounded-md'
+              />
+              <input
+                type='text'
+                name='phone'
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder='Số điện thoại'
+                className='w-full mt-4 p-3 border border-gray-300 rounded-md'
+              />
+              <input
+                type='text'
+                name='address'
+                value={formData.address}
+                onChange={handleChange}
+                placeholder='Địa chỉ'
+                className='w-full mt-4 p-3 border border-gray-300 rounded-md'
+              />
+              <input
+                type='email'
+                name='email'
+                value={formData.email}
+                onChange={handleChange}
+                placeholder='Email'
+                className='w-full mt-4 p-3 border border-gray-300 rounded-md'
+              />
+              <textarea
+                name='notes'
+                value={formData.notes}
+                onChange={handleChange}
+                placeholder='Ghi chú'
+                className='w-full mt-4 p-3 border border-gray-300 rounded-md'
+                rows='4'
+              />
+            </div>
           </div>
 
-          {/* Bảng sản phẩm */}
-          <div className='mb-4'>
-            <table className='w-full border-collapse'>
-              <thead>
-                <tr className='bg-gray-100'>
-                  <th className='text-left py-2 px-4 border-b'>Sản phẩm</th>
-                  <th className='text-right py-2 px-4 border-b'>Giá</th>
-                </tr>
-              </thead>
-              <tbody>
+          {/* Tóm tắt đơn hàng */}
+          <div className='bg-white shadow-lg rounded-lg p-6 lg:col-span-3'>
+            <h3 className='text-lg font-semibold text-gray-900 mb-4'>
+              Phương thức thanh toán
+            </h3>
+            <div className='flex flex-col space-y-2 mb-4'>
+              <label className='flex items-center space-x-2'>
+                <input
+                  type='radio'
+                  name='payment'
+                  value='cod'
+                  defaultChecked
+                  className='form-radio h-4 w-4 text-blue-600 transition duration-150 ease-in-out'
+                />
+                <span className='text-gray-700'>
+                  Thanh toán khi nhận hàng (COD)
+                </span>
+              </label>
+              <label className='flex items-center space-x-2'>
+                <input
+                  type='radio'
+                  name='payment'
+                  value='bank'
+                  className='form-radio h-4 w-4 text-blue-600 transition duration-150 ease-in-out'
+                />
+                <span className='text-gray-700'>Thanh toán qua ví VNPay</span>
+              </label>
+            </div>
+            <div className='border-t'>
+              <h2 className='text-lg font-semibold text-gray-900 mt-4'>
+                Chi tiết đơn hàng
+              </h2>
+              <div className='mt-4'>
                 {cartItems.map(item => (
-                  <tr key={item.id} className='border-b'>
-                    <td className='py-2 px-4 flex items-center space-x-4'>
-                      <img
-                        src={item.product.productImagePath?.[0] || ''}
-                        alt={item.product.productName}
-                        className='w-16 h-16 object-cover rounded-md'
-                      />
-                      <span> {item.product.productName}</span>
-                    </td>
-                    <td className='text-right py-2 px-4'>
-                      {(item.itemPrice * item.quantity).toLocaleString(
-                        'vi-VN',
-                        {
-                          style: 'currency',
-                          currency: 'VND',
-                        }
-                      )}
-                    </td>
-                  </tr>
+                  <div
+                    key={item.id}
+                    className='flex items-center space-x-4 py-2'
+                  >
+                    <img
+                      src={item.product.productImagePath?.[0] || ''}
+                      alt={item.product.productName}
+                      className='w-16 h-16 object-cover rounded-md'
+                    />
+                    <div>
+                      <h3 className='text-gray-900'>
+                        {item.product.productName}
+                      </h3>
+                      <p className='text-gray-500'>Số lượng: {item.quantity}</p>
+                      <p>
+                        {(item.itemPrice * item.quantity).toLocaleString(
+                          'vi-VN',
+                          {
+                            style: 'currency',
+                            currency: 'VND',
+                          }
+                        )}
+                      </p>
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-              <tfoot>
-                <tr className='font-bold'>
-                  <td className='text-right py-2 px-4 border-t'>Tổng cộng</td>
-                  <td className='text-right py-2 px-4 border-t'>
+              </div>
+              <div className='mt-6 border-t border-gray-200 pt-4'>
+                <div className='flex justify-between'>
+                  <span className='text-gray-500'>Tổng tiền hàng:</span>
+                  <span className='text-gray-900'>
                     {calculateTotal().toLocaleString('vi-VN', {
                       style: 'currency',
                       currency: 'VND',
                     })}
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
+                  </span>
+                </div>
+                <div className='flex justify-between mt-2'>
+                  <span className='text-gray-500'>Phí vận chyển:</span>
+                  <span className='text-gray-900'>000</span>
+                </div>
+                <div className='flex justify-between mt-4 text-lg font-medium'>
+                  <span>Tổng cộng:</span>
+                  <span className='text-gray-900'>$75.52</span>
+                </div>
+              </div>
 
-          {/* Nút hành động */}
-          <div className='flex justify-end space-x-4'>
-            <button
-              className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
-              onClick={() => navigate('/cart')}
-            >
-              Sửa giỏ hàng
-            </button>
-            <button
-              className='bg-primary hover:bg-hover-primary text-white font-bold py-2 px-4 rounded'
-              onClick={() => navigate('/thankyou')}
-            >
-              Đặt hàng
-            </button>
+              <button className='mt-6 w-full font-semibold bg-primary text-white py-3 rounded-md text-lg hover:bg-hover-primary'>
+                Xác nhận đặt hàng
+              </button>
+            </div>
           </div>
         </div>
       </div>
+      {isModalOpen && (
+        <div className='fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center'>
+          <div className='bg-white rounded-lg p-6 w-1/2 max-h-1/2 overflow-y-auto'>
+            <h3 className='text-xl font-semibold mb-4'>Chọn địa chỉ</h3>
+            <ul className='space-y-2'>
+              {addresses.map((address, index) => (
+                <li
+                  key={index}
+                  className='p-3 border border-gray-300 rounded cursor-pointer hover:bg-gray-100'
+                  onClick={() => handleAddressSelect(index)}
+                >
+                  <div className='font-bold'>{address.fullname}</div>
+                  <div>{address.phone}</div>
+                  <div>{`${address.detail}, ${address.commune}, ${address.district}, ${address.province}`}</div>
+                </li>
+              ))}
+            </ul>
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className='mt-4 w-full p-3 bg-primary hover:bg-hover-primary text-white rounded focus:outline-none focus:ring-2 focus:ring-red-500'
+            >
+              Đóng
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
