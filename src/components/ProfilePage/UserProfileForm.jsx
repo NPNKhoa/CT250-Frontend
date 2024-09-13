@@ -6,6 +6,7 @@ import {
 } from '@redux/thunk/userThunk';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 function UserProfileForm() {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ function UserProfileForm() {
 
   const [avatarFile, setAvatarFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(Avatar);
-  const [avatarUpdated, setAvatarUpdated] = useState(false); // Trạng thái theo dõi avatar đã cập nhật
+  // const [avatarUpdated, setAvatarUpdated] = useState(false); // Trạng thái theo dõi avatar đã cập nhật
   const fileInputRef = useRef(null);
 
   // Lấy thông tin người dùng khi trang tải lần đầu hoặc accessToken thay đổi
@@ -94,11 +95,12 @@ function UserProfileForm() {
       if (fileInputRef.current) {
         fileInputRef.current.value = ''; // Reset giá trị của input file
       }
-      setAvatarUpdated(true); // Đánh dấu rằng avatar đã được cập nhật
+      // setAvatarUpdated(true); // Đánh dấu rằng avatar đã được cập nhật
     } catch (error) {
       console.log(error);
       alert('Failed to update avatar.');
     }
+    dispatch(getLoggedInUser(accessToken));
   };
 
   const handleSubmit = async event => {
@@ -125,27 +127,28 @@ function UserProfileForm() {
 
   return (
     <form onSubmit={handleSubmit} className=''>
-      <div className='mb-4 flex items-center'>
-        <div className='flex items-center border py-3 px-5 rounded-xl bg-gray-200'>
+      <div className='flex items-center mb-4'>
+        <div className='relative'>
+          <img
+            src={avatarPreview}
+            alt='Avatar Preview'
+            className='w-32 h-32 object-cover rounded-full border-2 border-gray-300'
+          />
+
           <label
             htmlFor='avatar'
-            className='block text-gray-700 text-sm font-bold mb-2 mr-4'
+            className='absolute bottom-1 right-1 bg-gray-100 p-1 rounded-full cursor-pointer hover:bg-gray-200 transition'
           >
-            Avatar:
+            <input
+              type='file'
+              id='avatar'
+              ref={fileInputRef}
+              accept='image/*'
+              onChange={handleAvatarChange}
+              className='hidden'
+            />
+            <CameraAltIcon className='text-gray-700' fontSize='small' />
           </label>
-          <input
-            type='file'
-            id='avatar'
-            ref={fileInputRef}
-            accept='image/*'
-            onChange={handleAvatarChange}
-            className='mb-4'
-          />
-          <img
-            src={avatarPreview} // Hiển thị avatar preview
-            alt='Avatar Preview'
-            className='w-24 h-24 object-cover rounded-full'
-          />
         </div>
         <button
           type='button'

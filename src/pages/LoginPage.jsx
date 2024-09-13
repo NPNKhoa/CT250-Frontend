@@ -8,6 +8,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@components/Alert';
 import { loginThunk } from '@redux/thunk/authThunk';
 import PasswordInput from '@components/common/PasswordInput';
+import { getLoggedInUser } from '@redux/thunk/userThunk';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -18,6 +19,10 @@ const LoginPage = () => {
   const loading = useSelector(state => state.auth.loading);
   const error = useSelector(state => state.auth.error);
   const authUser = useSelector(state => state.auth.authUser);
+
+  const handleGoogleLogin = () => {
+    window.location.href = 'http://localhost:5000/auth/google';
+  };
 
   const handleChange = useCallback(e => {
     const { id, value } = e.target;
@@ -35,6 +40,7 @@ const LoginPage = () => {
   useEffect(() => {
     if (authUser) {
       setNotification({ message: 'Login successful!', type: 'success' });
+      dispatch(getLoggedInUser(localStorage.getItem('accessToken')));
       const timer = setTimeout(() => navigate('/'), 1000);
       return () => clearTimeout(timer);
     } else if (error) {
@@ -43,7 +49,7 @@ const LoginPage = () => {
         type: 'error',
       });
     }
-  }, [authUser, error, navigate]);
+  }, [authUser, error, navigate, dispatch]);
 
   const loginForm = useMemo(
     () => (
@@ -108,7 +114,7 @@ const LoginPage = () => {
             <GoogleButton
               type='light'
               className='w-full rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300'
-              onClick={() => console.log('Google button clicked')}
+              onClick={handleGoogleLogin}
             />
           </div>
           <p className='text-center mt-4'>
