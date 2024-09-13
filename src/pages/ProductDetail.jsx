@@ -190,17 +190,14 @@ const ProductDetail = () => {
                 className='w-96 h-96 object-contain'
               />
               <div className='flex space-x-4 mt-4'>
-                {images.map((image, index) => (
+                {images.slice(0, 5).map((image, index) => (
                   <img
                     key={index}
                     src={image}
                     alt={`Hình ảnh ${index + 1}`}
-                    className={`w-20 h-24 cursor-pointer object-contain border  rounded-lg
-                        ${
-                          currentImage === image
-                            ? 'border-primary'
-                            : 'border-gray-300'
-                        } hover:border-primary`}
+                    className={`w-20 h-24 cursor-pointer object-contain border rounded-lg
+        ${currentImage === image ? 'border-primary' : 'border-gray-300'}
+        hover:border-primary`}
                     onClick={() => handleImageClick(image)}
                   />
                 ))}
