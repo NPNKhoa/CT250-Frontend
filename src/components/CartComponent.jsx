@@ -6,9 +6,11 @@ import {
   updateQuantity,
   deleteItem,
 } from '@redux/thunk/cartThunk';
+import { useNavigate } from 'react-router-dom';
 
 function Cart() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { cart } = useSelector(state => state.cart);
   const cartItems = cart?.cartItems || [];
   const accessToken = localStorage.getItem('accessToken');
@@ -110,7 +112,10 @@ function Cart() {
           })}
         </p>
       </div>
-      <button className='bg-primary hover:bg-hover-primary w-full text-white font-bold mt-2 py-2 px-4 rounded'>
+      <button
+        className='bg-primary hover:bg-hover-primary w-full text-white font-bold mt-2 py-2 px-4 rounded'
+        onClick={() => navigate('/order')}
+      >
         Đặt hàng ngay
       </button>
     </div>

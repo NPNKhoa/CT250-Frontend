@@ -74,7 +74,7 @@ const CartPage = () => {
     //     currency: 'VND',
     //   })}`
     // );
-    setTimeout(() => navigate('/thankyou'), 1000);
+    setTimeout(() => navigate('/order'), 1000);
   };
 
   return (

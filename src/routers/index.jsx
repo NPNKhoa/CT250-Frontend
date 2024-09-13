@@ -11,6 +11,7 @@ import CartPage from '@pages/CartPage';
 import SearchPage from '@pages/SearchPage';
 import ProfilePage from '@pages/ProfilePage';
 import ThankYouPage from '@pages/ThankYouPage';
+import OrderPage from '@pages/OrderPage';
 // import AccountInfo from '@pages/AccountInfo';
 
 const routes = [
@@ -84,6 +85,12 @@ const routes = [
     id: 'profile',
     path: '/profile',
     element: <ProfilePage />,
+  },
+
+  {
+    id: 'orderpage',
+    path: '/order',
+    element: <OrderPage />,
   },
 
   {
