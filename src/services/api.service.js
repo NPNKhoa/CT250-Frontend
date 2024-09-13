@@ -39,14 +39,9 @@ const createApiClient = (path) => {
         async (error) => {
             const originalRequest = error.config;
 
-            // Bỏ qua làm mới token nếu endpoint là chính xác '/auth/refresh'
-            if (originalRequest.url.endsWith('/auth/refresh')) {
-                return Promise.reject(error);
-            }
-
             const refreshToken = localStorage.getItem("refreshToken");
 
-            if (error.response.status === 401 && !originalRequest._retry && refreshToken) {
+            if (error.response.data.error === 'Token expired!' && !originalRequest._retry && refreshToken) {
                 originalRequest._retry = true;
 
                 try {
@@ -62,17 +57,16 @@ const createApiClient = (path) => {
                     localStorage.setItem("accessToken", newAccessToken);
                     localStorage.setItem("refreshToken", newRefreshToken);
 
-                    // Cập nhật header Authorization với accessToken mới
                     originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
 
-                    // Gửi lại yêu cầu ban đầu với accessToken mới
                     return axios(originalRequest);
                 } catch (refreshError) {
-                    console.error("Làm mới token thất bại:", refreshError);
-                    localStorage.removeItem("accessToken");
-                    localStorage.removeItem("refreshToken");
-                    window.location.href = "/login";
-                    return Promise.reject(refreshError);
+                    if (refreshError.response && refreshError.response.data.error === 'Token expired!') {
+                        // localStorage.removeItem("accessToken");
+                        localStorage.removeItem("refreshToken");
+                        window.location.href = "/login";
+                        return Promise.reject(refreshError);
+                    }
                 }
             }
             return Promise.reject(error);
