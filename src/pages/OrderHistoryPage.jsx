@@ -53,6 +53,19 @@ function OrderHistoryPage() {
     setSelectedOrder(null);
   };
 
+  const getStatusClass = (status) => {
+    switch (status) {
+      case 'Đã giao hàng':
+        return 'text-green-600';
+      case 'Đang xử lý':
+        return 'text-yellow-600';
+      case 'Đã hủy':
+        return 'text-red-600';
+      default:
+        return 'text-gray-600';
+    }
+  };
+
   return (
     <>
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
@@ -92,11 +105,13 @@ function OrderHistoryPage() {
                         currency: 'VND',
                       })}
                     </td>
-                    <td className='py-2 px-4 border-b text-center'>{order.status}</td>
+                    <td className={`py-2 px-4 border-b text-center ${getStatusClass(order.status)}`}>
+                      {order.status}
+                    </td>
                     <td className='py-2 px-4 border-b text-center'>
                       <button
                         onClick={() => handleViewDetails(order)}
-                        className='px-3 py-1 bg-green-500 text-white rounded hover:bg-green-700'
+                        className='px-3 py-1 bg-blue-500 text-white rounded hover:bg-bule-700'
                       >
                         Xem chi tiết
                       </button>
