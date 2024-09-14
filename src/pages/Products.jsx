@@ -14,28 +14,41 @@ const Products = () => {
     () => new URLSearchParams(location.search),
     [location.search]
   );
-  const page = parseInt(query.get('page') || '1', 10);
-  const brand = query.get('brand') || '';
 
   const [selectedMinPrice, setSelectedMinPrice] = useState(null);
   const [selectedMaxPrice, setSelectedMaxPrice] = useState(null);
   const [selectedBrand, setSelectedBrand] = useState([]);
-
+  const sortOption = 'price';
+  const [isDesc, setIsDesc] = useState('false');
   const [products, setProducts] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
+
+  const page = parseInt(query.get('page') || '1', 10);
+  const brand = query.get('brand') || '';
 
   useEffect(() => {
     const fetchProductTypes = async () => {
       try {
-        setProducts([]);
+        const updatedQuery = new URLSearchParams(location.search);
+
         if (selectedBrand.length > 0)
-          query.set('brand', selectedBrand.join(','));
+          updatedQuery.set('brand', selectedBrand.join(','));
+        if (selectedMinPrice !== null)
+          updatedQuery.set('minPrice', selectedMinPrice);
+        if (selectedMaxPrice !== null)
+          updatedQuery.set('maxPrice', selectedMaxPrice);
 
-        if (selectedMinPrice !== null) query.set('minPrice', selectedMinPrice);
+        // Cập nhật tham số sắp xếp
+        updatedQuery.set('sortBy', sortOption);
+        updatedQuery.set('isDesc', isDesc);
 
-        if (selectedMaxPrice !== null) query.set('maxPrice', selectedMaxPrice);
-
-        const responseProduct = await productService.getAll(query, page, 12);
+        const responseProduct = await productService.getAll(
+          updatedQuery,
+          page,
+          12,
+          sortOption,
+          isDesc
+        );
         setProducts(responseProduct.data);
         setTotalPage(responseProduct.meta.totalPages);
       } catch (error) {
@@ -44,7 +57,15 @@ const Products = () => {
     };
 
     fetchProductTypes();
-  }, [page, query, selectedBrand, selectedMinPrice, selectedMaxPrice]);
+  }, [
+    location.search,
+    selectedBrand,
+    selectedMinPrice,
+    selectedMaxPrice,
+    sortOption,
+    isDesc,
+    page,
+  ]);
 
   const handlePriceChange = (minPrice, maxPrice) => {
     setSelectedMinPrice(minPrice);
@@ -53,6 +74,11 @@ const Products = () => {
 
   const handleBrandChange = brands => {
     setSelectedBrand(brands);
+  };
+
+  const handleSortChange = e => {
+    const value = e.target.value;
+    setIsDesc(value === 'desc' ? 'true' : 'false');
   };
 
   return (
@@ -82,17 +108,40 @@ const Products = () => {
             onBrandChange={handleBrandChange}
           />
         </div>
-        <div className='w-4/5 grid grid-cols-4 gap-1 ml-2'>
-          {Array.isArray(products) &&
-            products.map((product, index) => (
-              <ProductItem
-                key={index}
-                imageUrl={product.productImagePath[0]}
-                name={product.productName}
-                price={product.price}
-                productLink={`products/detail/${product._id}`}
-              />
-            ))}
+        <div className='w-4/5 ml-2'>
+          <div className='container mx-auto flex justify-between px-5 border bg-gray-50 rounded-lg'>
+            <h1 className='text-xl font-bold my-4'>
+              {products && products.length > 0
+                ? `${products[0].productTypeDetails?.productTypeName} ${brand}`
+                : 'Loading ...'}
+            </h1>
+            <div className='flex items-center space-x-2'>
+              <span className='font-semibold'>Sắp xếp:</span>
+              <select
+                value={sortOption}
+                onChange={handleSortChange}
+                className='border border-gray-300 py-1 px-3 rounded-md focus:outline-none'
+              >
+                <option value='default'>Mặc định</option>
+                <option value='asc'>Giá tăng dần</option>
+                <option value='desc'>Giá giảm dần</option>
+              </select>
+            </div>
+          </div>
+
+          <div className='grid grid-cols-4 gap-1'>
+            {Array.isArray(products) &&
+              products.map((product, index) => (
+                <ProductItem
+                  key={index}
+                  imageUrl={product.productImagePath[0]}
+                  name={product.productName}
+                  price={product.price}
+                  productLink={`products/detail/${product._id}`}
+                />
+              ))}
+          </div>
+
           <div className='col-span-4 mt-4 flex justify-center'>
             <PaginationComponent
               path={`${location.pathname}`}
