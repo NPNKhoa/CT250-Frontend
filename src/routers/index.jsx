@@ -12,6 +12,7 @@ import SearchPage from '@pages/SearchPage';
 import ProfilePage from '@pages/ProfilePage';
 import ThankYouPage from '@pages/ThankYouPage';
 import OrderPage from '@pages/OrderPage';
+import OrderHistoryPage from '@pages/OrderHistoryPage';
 // import AccountInfo from '@pages/AccountInfo';
 
 const routes = [
@@ -88,7 +89,7 @@ const routes = [
   },
 
   {
-    id: 'orderpage',
+    id: 'order',
     path: '/order',
     element: <OrderPage />,
   },
@@ -97,6 +98,12 @@ const routes = [
     id: 'thankyou',
     path: '/thankyou',
     element: <ThankYouPage />,
+  },
+
+  {
+    id: 'order-history',
+    path: '/order-history',
+    element: <OrderHistoryPage />,
   },
 ];
 
