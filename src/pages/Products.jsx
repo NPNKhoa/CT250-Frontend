@@ -18,7 +18,8 @@ const Products = () => {
   const [selectedMinPrice, setSelectedMinPrice] = useState(null);
   const [selectedMaxPrice, setSelectedMaxPrice] = useState(null);
   const [selectedBrand, setSelectedBrand] = useState([]);
-  const sortOption = 'price';
+  const sortBy = 'price';
+  const [sortOption, setSortOption] = useState(query.get('sortBy'));
   const [isDesc, setIsDesc] = useState('false');
   const [products, setProducts] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
@@ -46,7 +47,7 @@ const Products = () => {
           updatedQuery,
           page,
           12,
-          sortOption,
+          sortBy,
           isDesc
         );
         setProducts(responseProduct.data);
@@ -78,6 +79,7 @@ const Products = () => {
 
   const handleSortChange = e => {
     const value = e.target.value;
+    setSortOption(value);
     setIsDesc(value === 'desc' ? 'true' : 'false');
   };
 
