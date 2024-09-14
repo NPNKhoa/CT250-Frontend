@@ -19,6 +19,8 @@ function OrderPage() {
     email: '',
     notes: '',
   });
+  const [selectedAddress, setSelectedAddress] = useState({});
+  const [deliveryFee, setDeliveryFee] = useState(0);
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
@@ -27,6 +29,7 @@ function OrderPage() {
 
   useEffect(() => {
     const defaultAddress = addresses.find(address => address.isDefault);
+    setSelectedAddress(defaultAddress);
     if (user) {
       setFormData({
         fullname: defaultAddress?.fullname || '',
@@ -41,16 +44,18 @@ function OrderPage() {
   }, [user, addresses]);
 
   useEffect(() => {
-    const fetchDeliveryFee = async () => {
-      const response = await orderSevice.getDestinationCode({
-        province: 'Kiên Giang',
-        district: 'Huyện Vĩnh Thuận',
-        ward: 'Xã Vĩnh Phong',
-      }, 1000);
-      console.log(response);
+    const fetchDeliveryFee = async address => {
+      const response = await orderSevice.getDeliveryFee({
+        province: address.province
+          .replace('Tỉnh ', '')
+          .replace('Thành phố ', ''),
+        district: address.district,
+        ward: address.commune,
+      });
+      setDeliveryFee(response);
     };
-    fetchDeliveryFee();
-  }, []);
+    fetchDeliveryFee(selectedAddress);
+  }, [selectedAddress]);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -59,6 +64,7 @@ function OrderPage() {
 
   const handleAddressSelect = index => {
     const selectedAddress = addresses[index];
+    setSelectedAddress(selectedAddress);
     if (selectedAddress) {
       setFormData({
         ...formData,
@@ -97,7 +103,7 @@ function OrderPage() {
                 type='text'
                 name='fullname'
                 value={formData.fullname}
-                onChange={handleChange}
+                // onChange={handleChange}
                 placeholder='Họ và tên'
                 className='w-full mt-4 p-3 border border-gray-300 rounded-md'
               />
@@ -105,7 +111,7 @@ function OrderPage() {
                 type='text'
                 name='phone'
                 value={formData.phone}
-                onChange={handleChange}
+                // onChange={handleChange}
                 placeholder='Số điện thoại'
                 className='w-full mt-4 p-3 border border-gray-300 rounded-md'
               />
@@ -113,7 +119,7 @@ function OrderPage() {
                 type='text'
                 name='address'
                 value={formData.address}
-                onChange={handleChange}
+                // onChange={handleChange}
                 placeholder='Địa chỉ'
                 className='w-full mt-4 p-3 border border-gray-300 rounded-md'
               />
@@ -121,14 +127,14 @@ function OrderPage() {
                 type='email'
                 name='email'
                 value={formData.email}
-                onChange={handleChange}
+                // onChange={handleChange}
                 placeholder='Email'
                 className='w-full mt-4 p-3 border border-gray-300 rounded-md'
               />
               <textarea
                 name='notes'
                 value={formData.notes}
-                onChange={handleChange}
+                // onChange={handleChange}
                 placeholder='Ghi chú'
                 className='w-full mt-4 p-3 border border-gray-300 rounded-md'
                 rows='4'
@@ -209,11 +215,21 @@ function OrderPage() {
                 </div>
                 <div className='flex justify-between mt-2'>
                   <span className='text-gray-500'>Phí vận chyển:</span>
-                  <span className='text-gray-900'>000</span>
+                  <span className='text-gray-900'>
+                    {deliveryFee.toLocaleString('vi-VN', {
+                      style: 'currency',
+                      currency: 'VND',
+                    })}
+                  </span>
                 </div>
                 <div className='flex justify-between mt-4 text-lg font-medium'>
                   <span>Tổng cộng:</span>
-                  <span className='text-gray-900'>$75.52</span>
+                  <span className='text-gray-900'>
+                    {(calculateTotal() + deliveryFee).toLocaleString('vi-VN', {
+                      style: 'currency',
+                      currency: 'VND',
+                    })}
+                  </span>
                 </div>
               </div>
 

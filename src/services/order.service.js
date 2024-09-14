@@ -62,7 +62,7 @@ class OrderService {
     }
   }
 
-    async getDeliveryFee({ province, district, ward }, packageWeight) {
+    async getDeliveryFee({ province, district, ward }) {
       try {
         const { districtId, wardCode } = await this.getDestinationCode({
           province,
@@ -71,19 +71,30 @@ class OrderService {
         });
 
         const response = await axios.post(
-          'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/available-services',
+          'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
+          {
+            from_district_id: 1572,  // Quận Ninh Kiều
+            from_ward_code: '550113', // Phường Xuân Khánh
+            service_id: 53321, // Hàng nhẹ
+            service_type_id: 2, // Giao hàng thương mại
+            to_district_id: districtId,
+            to_ward_code: wardCode,
+            height: 10, // Chiều cao (cm)
+            length: 70, // Chiều dài (cm)
+            width: 15, // Chiều rộng (cm)
+            weight: 85, // Trọng lượng (gram)
+            insurance_value: 0, // Dùng để khai báo giá trị lô hàng. GHN sẽ căn cứ vào giá trị này để bồi thường nếu có sự cố ngoài ý muốn (thất lạc, bể vỡ…).
+            cod_failed_amount: 2000, // Số tiền thu hộ nếu giao hàng thất bại (VND)
+            coupon: null, // Mã giảm giá
+          },
           {
             headers: {
+              'Content-Type': 'application/json',
               Token: import.meta.env.VITE_GHN_TOKEN_API,
-              from_district: 710,
-              to_district: districtId,
-              shop_id: import.meta.env.VITE_GHN_SHOP_ID,
             },
           }
         );
-        console.log(response);
-
-        // return response.data;
+        return response.data.data.total;
       } catch (error) {
         throw new Error(
           error || 'Error fetching thirty-part api'
