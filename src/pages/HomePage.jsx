@@ -8,9 +8,33 @@ import FeatureBoxes from '@components/FeatureBoxes';
 import SaleBannerComponent from '@components/SaleBannerComponent';
 import ProductList from '@components/ProductList';
 import SaleOffComponent from '@components/SaleOffComponent';
+import axios from 'axios';
 
 const HomePage = () => {
+  const fetchTokens = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/get-tokens', {
+        withCredentials: true,
+      });
+      const { refreshToken } = response.data;
+      const data = await axios.post(
+        'http://localhost:5000/api/v1/auth/refresh',
+        {
+          refreshToken: refreshToken,
+        }
+      );
+      const newAccessToken = data.data.accessToken;
+      const newRefreshToken = data.data.refreshToken;
+
+      localStorage.setItem('accessToken', newAccessToken);
+      localStorage.setItem('refreshToken', newRefreshToken);
+    } catch (error) {
+      console.error('Error fetching tokens:', error);
+    }
+  };
+
   const [products, setProducts] = useState({});
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -22,6 +46,7 @@ const HomePage = () => {
     };
 
     fetchProducts();
+    fetchTokens();
   }, []);
 
   const productsBMT = [
