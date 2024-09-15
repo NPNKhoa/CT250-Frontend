@@ -13,7 +13,7 @@ import ProfilePage from '@pages/ProfilePage';
 import ThankYouPage from '@pages/ThankYouPage';
 import OrderPage from '@pages/OrderPage';
 import OrderHistoryPage from '@pages/OrderHistoryPage';
-// import AccountInfo from '@pages/AccountInfo';
+import TestPage from '@pages/TestPage';
 
 const routes = [
   {
@@ -104,6 +104,12 @@ const routes = [
     id: 'order-history',
     path: '/order-history',
     element: <OrderHistoryPage />,
+  },
+
+  {
+    id: 'order-history',
+    path: '/test',
+    element: <TestPage />,
   },
 ];
 

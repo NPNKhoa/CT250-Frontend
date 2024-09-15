@@ -1,14 +1,16 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import GoogleButton from 'react-google-button';
 import loginImg from '@assets/login.png';
 import userIcon from '@assets/user.png';
 import { useDispatch, useSelector } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@components/Alert';
-import { loginThunk } from '@redux/thunk/authThunk';
+import { loginThunk, loginWithGoogleThunk } from '@redux/thunk/authThunk';
 import PasswordInput from '@components/common/PasswordInput';
 import { getLoggedInUser } from '@redux/thunk/userThunk';
+
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -19,9 +21,19 @@ const LoginPage = () => {
   const loading = useSelector(state => state.auth.loading);
   const error = useSelector(state => state.auth.error);
   const authUser = useSelector(state => state.auth.authUser);
-  
-  const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:5000/auth/google';
+
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+  const handleSuccess = async response => {
+    const { email, name, picture } = jwtDecode(response?.credential);
+    const user = { fullname: name, email: email, avatarImagePath: picture };
+    await dispatch(loginWithGoogleThunk(user));
+    const timer = setTimeout(() => navigate('/'), 1000);
+    return () => clearTimeout(timer);
+  };
+
+  const handleError = error => {
+    console.error('Login Failed:', error);
   };
 
   const handleChange = useCallback(e => {
@@ -111,11 +123,11 @@ const LoginPage = () => {
             <span className='border-t border-gray-300 flex-grow ml-3'></span>
           </div>
           <div className='mb-4 flex justify-center'>
-            <GoogleButton
-              type='light'
-              className='w-full rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300'
-              onClick={handleGoogleLogin}
-            />
+            <GoogleOAuthProvider clientId={clientId}>
+              <div>
+                <GoogleLogin onSuccess={handleSuccess} onError={handleError} />
+              </div>
+            </GoogleOAuthProvider>
           </div>
           <p className='text-center mt-4'>
             <span className='cursor-pointer hover:text-primary'>
