@@ -96,7 +96,7 @@ const NavBar = () => {
                 className='py-1 text-white uppercase font-bold text-sm flex items-center'
                 onClick={
                   item.value !== 'products'
-                    ? e => {
+                    ? () => {
                         if (window.innerWidth < 1024) {
                           handleMenuToggle(); // Only hide the NavBar on small screens
                         }
@@ -135,7 +135,6 @@ const NavBar = () => {
                                 )}`}
                                 onClick={() => {
                                   setShowDropdown(false);
-                                  handleMenuToggle();
                                 }}
                               >
                                 {product}

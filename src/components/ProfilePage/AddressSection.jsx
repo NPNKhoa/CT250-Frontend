@@ -10,7 +10,7 @@ import {
 
 function AddressSection() {
   const dispatch = useDispatch();
-  const { addresses, loading, error } = useSelector(state => state.address);
+  const { addresses, loading } = useSelector(state => state.address);
   const [open, setOpen] = useState(false);
   const [editAddress, setEditAddress] = useState(null);
 
@@ -32,12 +32,19 @@ function AddressSection() {
 
   const handleSetDefault = index => {
     const accessToken = localStorage.getItem('accessToken');
-    dispatch(setDefaultAddressThunk({ id: addresses[index]._id, accessToken: accessToken }));
+    dispatch(
+      setDefaultAddressThunk({
+        id: addresses[index]._id,
+        accessToken: accessToken,
+      })
+    );
   };
 
   const handleDelete = index => {
     const accessToken = localStorage.getItem('accessToken');
-    dispatch(deleteAddressThunk({ id: addresses[index]._id, accessToken: accessToken }));
+    dispatch(
+      deleteAddressThunk({ id: addresses[index]._id, accessToken: accessToken })
+    );
   };
 
   return (
@@ -58,7 +65,6 @@ function AddressSection() {
       <div className='mt-6'>
         <h2 className='text-xl font-semibold mb-4'>Danh sách địa chỉ</h2>
         {loading && <p>Loading...</p>}
-        {error && <p>Error: {error}</p>}
         {addresses.length > 0 ? (
           addresses.map((address, index) => (
             <div key={index} className='border-t border-gray-300 py-3'>

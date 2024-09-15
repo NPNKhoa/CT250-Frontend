@@ -23,30 +23,31 @@ const CheckWarranty = () => {
       alert(`Số điện thoại đã nhập: ${warrantyCode}`);
     }
   };
+
   return (
     <>
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
       <div className='pb-10 container mx-auto px-4'>
-        <h1 className='text-4xl font-semibold mt-4 mb-6 text-left'>
+        <h1 className='text-2xl sm:text-3xl lg:text-4xl font-semibold mt-4 mb-6 text-left'>
           Kiểm tra bảo hành
         </h1>
         <div className='mb-4 text-left'>
-          <p className='font-medium text-lg'>Số điện thoại*</p>
+          <p className='font-medium text-base sm:text-lg'>Số điện thoại*</p>
         </div>
         <form
           onSubmit={handleSubmit}
-          className='flex flex-col items-start gap-4'
+          className='flex flex-col items-start gap-4 w-full'
         >
           <input
             type='text'
-            className='bg-gray-100 w-full max-w-lg rounded-lg p-3 outline-none bwarranty bwarranty-gray-300 focus:ring-2 focus:ring-primary transition duration-200'
+            className='bg-gray-100 w-full sm:max-w-md lg:max-w-lg rounded-lg p-3 outline-none border border-gray-300 focus:ring-2 focus:ring-primary transition duration-200'
             placeholder='Nhập số điện thoại...'
             value={warrantyCode}
             onChange={e => setWarrantyCode(e.target.value)}
           />
           <button
             type='submit'
-            className='bg-primary text-white py-3 px-4 rounded-lg hover:bg-primary-hover transition-colors w-3/12'
+            className='bg-primary text-white py-2 px-4 sm:py-3 sm:px-4 rounded-lg hover:bg-primary-hover transition-colors w-full sm:w-4/12 lg:w-3/12'
           >
             Tra cứu thông tin bảo hành
           </button>
