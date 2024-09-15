@@ -49,7 +49,7 @@ const NavBar = () => {
 
   const handleMenuToggle = () => {
     setShowMobileMenu(false);
-    setShowNavBar(false); // Thay đổi để ẩn cả NavBar
+    setShowNavBar(false);
   };
 
   return (
@@ -95,7 +95,13 @@ const NavBar = () => {
                 to={item.value !== 'products' ? `/${item.value}` : null}
                 className='py-1 text-white uppercase font-bold text-sm flex items-center'
                 onClick={
-                  item.value !== 'products' ? handleMenuToggle : undefined
+                  item.value !== 'products'
+                    ? e => {
+                        if (window.innerWidth < 1024) {
+                          handleMenuToggle(); // Only hide the NavBar on small screens
+                        }
+                      }
+                    : undefined
                 }
               >
                 {item.label}
