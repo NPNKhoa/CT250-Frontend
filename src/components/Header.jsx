@@ -116,7 +116,7 @@ const Header = () => {
                 </span>
               </p>
             </div>
-            <hr className='mt-3 w-full text-gray-300' />
+            {/* <hr className='mt-3 w-full text-gray-300' /> */}
           </div>
           <div className='hidden md:block'>
             <SearchComponent />
