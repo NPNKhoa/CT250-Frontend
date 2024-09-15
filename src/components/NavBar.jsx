@@ -41,24 +41,21 @@ const NavBar = () => {
         type.productTypeName.concat(` ${brand.brandName}`)
       ),
     ],
-    brand: [
-      ...brands.map(brand =>`${brand.brandName}`
-      ),
-    ],
+    brand: [...brands.map(brand => `${brand.brandName}`)],
   }));
 
   return (
     <div className='w-full'>
-      <div className='flex justify-center items-center gap-24 py-1 px-4 bg-primary relative'>
+      <div className='flex flex-col lg:flex-row lg:justify-center items-center gap-4 py-1 px-4 bg-primary relative'>
         {arr.map((item, index) => (
           <div
             key={index}
             className='relative group'
             onMouseEnter={() =>
-              item.value === 'products' && setShowDropdown(!showDropdown)
+              item.value === 'products' && setShowDropdown(true)
             }
             onMouseLeave={() =>
-              item.value === 'products' && setShowDropdown(!showDropdown)
+              item.value === 'products' && setShowDropdown(false)
             }
           >
             <Link
@@ -78,8 +75,8 @@ const NavBar = () => {
             </Link>
 
             {item.value === 'products' && showDropdown && (
-              <div className='absolute -left-80 w-screen top-auto py-2 bg-white shadow-lg z-50'>
-                <div className='max-w-screen-xl mx-auto flex flex-wrap justify-start p-4'>
+              <div className='absolute left-0 lg:left-auto w-full lg:w-screen top-auto py-2 bg-white shadow-lg z-50'>
+                <div className='max-w-screen-xl mx-auto flex flex-col lg:flex-row flex-wrap justify-start p-4'>
                   {productCategories.map((category, idx) => (
                     <div key={idx} className='w-full sm:w-1/2 lg:w-1/4 mb-4'>
                       <h3 className='text-primary font-semibold mb-2'>
@@ -89,9 +86,11 @@ const NavBar = () => {
                         {category.items.map((product, i) => (
                           <li key={i} className='text-gray-600 mb-1'>
                             <Link
-                              to={`/products?productType=${encodeURIComponent(category.title)}&brand=${
-                                encodeURIComponent(category.brand[i])
-                              }`}
+                              to={`/products?productType=${encodeURIComponent(
+                                category.title
+                              )}&brand=${encodeURIComponent(
+                                category.brand[i]
+                              )}`}
                               onClick={() => setShowDropdown(false)}
                             >
                               {product}

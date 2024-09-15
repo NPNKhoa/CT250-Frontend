@@ -1,13 +1,16 @@
-import NavBar from '@components/NavBar';
-import LogoImg from '@assets/logo.svg';
-import SearchComponent from '@components/SearchComponent';
-import CartComponent from '@components/CartComponent';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, setCredentials } from '@redux/slices/authSlice';
 import { getCartByUser } from '@redux/thunk/cartThunk';
-
+import { getLoggedInUser } from '@redux/thunk/userThunk';
+import NavBar from '@components/NavBar';
+import LogoImg from '@assets/logo.svg';
+import SearchComponent from '@components/SearchComponent';
+import CartComponent from '@components/CartComponent';
+import SearchIcon from '@mui/icons-material/Search';
+import MenuIcon from '@mui/icons-material/Menu';
+import Avatar from '@assets/user.png';
 import {
   AccountCircleSharp as AccountCircleSharpIcon,
   AddShoppingCartSharp as AddShoppingCartSharpIcon,
@@ -15,11 +18,7 @@ import {
   PersonAdd as PersonAddIcon,
   PersonSearchRounded as PersonSearchRoundedIcon,
   PhoneCallbackSharp as PhoneCallbackSharpIcon,
-  PlaceSharp as PlaceSharpIcon,
 } from '@mui/icons-material';
-import Avatar from '@assets/user.png';
-import { getLoggedInUser } from '@redux/thunk/userThunk';
-// import { getLoggedInUser } from '@redux/thunk/userThunk';
 
 // Custom hook for handling modal states
 const useModalState = (initialState = false) => {
@@ -36,14 +35,16 @@ const Header = () => {
     useModalState();
   const [isModalCart, handleMouseEnterCart, handleMouseLeaveCart] =
     useModalState();
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [isNavBarVisible, setIsNavBarVisible] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart);
   const cartItems = cart.cart?.cartItems || [];
   const user = useSelector(state => state.auth.authUser);
-
   const userExist = useSelector(state => state.users.user);
+
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
@@ -64,33 +65,68 @@ const Header = () => {
     navigate('/');
   };
 
+  const toggleSearch = () => {
+    setIsSearchVisible(prev => !prev);
+  };
+
+  const toggleNavBar = () => {
+    setIsNavBarVisible(prev => !prev);
+  };
+
   return (
     <>
-      <div className='bg-white '>
-        <div className='container mx-auto px-4 flex justify-center items-center'>
-          <div className='px-6 py-3'>
-            <Link to='/'>
-              <img src={LogoImg} alt='Logo' className='w-[60px]' />
-            </Link>
+      <div className='bg-white'>
+        <div className='container mx-auto px-4 flex sm:flex-row justify-between items-center py-4'>
+          <div className='flex items-center gap-4'>
+            <div className='px-6 py-3'>
+              <Link to='/'>
+                <img
+                  src={LogoImg}
+                  alt='Logo'
+                  className='w-[40px] sm:w-[60px]'
+                />
+              </Link>
+            </div>
+
+            {/* Biểu tượng điều khiển NavBar chỉ hiển thị trên màn hình nhỏ */}
+            <div
+              className='block md:hidden cursor-pointer'
+              onClick={toggleNavBar}
+            >
+              <MenuIcon className='text-primary' />
+            </div>
           </div>
 
-          <div className='px-6 flex flex-col items-center'>
-            <ul className='flex gap-10'>
-              <li className='flex gap-3 items-center'>
-                <PhoneCallbackSharpIcon className='text-primary' />
-                <p className='font-bold text-sm'>
-                  HOTLINE:{' '}
-                  <span className='text-primary px-2 hover:text-black'>
-                    0977508430 | 0792677415
-                  </span>
-                </p>
-              </li>
-
-              <li className='flex gap-3 relative'>
-                <SearchComponent />
-              </li>
-            </ul>
+          <div className='hidden sm:flex flex-col items-center'>
+            <div className='flex gap-3 items-center'>
+              <PhoneCallbackSharpIcon className='text-primary' />
+              <p className='font-bold text-sm'>
+                HOTLINE:{' '}
+                <span className='text-primary px-2 hover:text-black'>
+                  0977508430 | 0792677415
+                </span>
+              </p>
+            </div>
             <hr className='mt-3 w-full text-gray-300' />
+          </div>
+
+          <div className='relative flex items-center gap-3'>
+            {/* Biểu tượng kính lúp hiển thị trên màn hình nhỏ */}
+            <div
+              className='block md:hidden cursor-pointer'
+              onClick={toggleSearch}
+            >
+              <SearchIcon className='text-primary' />
+            </div>
+
+            {/* Thành phần tìm kiếm, ẩn trên màn hình nhỏ */}
+            <div
+              className={`absolute top-full left-0 w-full md:static md:w-auto md:flex md:items-center md:gap-3 transition-all duration-300 ease-in-out ${
+                isSearchVisible ? 'block' : 'hidden md:block'
+              }`}
+            >
+              <SearchComponent />
+            </div>
           </div>
 
           <div className='flex justify-center gap-6'>
@@ -103,7 +139,7 @@ const Header = () => {
                 <span className='border border-gray-300 p-1 flex justify-center items-center rounded-full bg-white w-10 h-10'>
                   <PersonSearchRoundedIcon className='text-primary' />
                 </span>
-                <h3 className='font-semibold text-sm uppercase mt-1'>
+                <h3 className='text-sm font-semibold mt-1 hidden sm:inline'>
                   Tra cứu
                 </h3>
               </div>
@@ -152,7 +188,7 @@ const Header = () => {
                     <AccountCircleSharpIcon className='text-primary' />
                   )}
                 </span>
-                <h3 className='font-semibold text-sm  uppercase mt-1'>
+                <h3 className='text-sm font-semibold mt-1 hidden sm:inline'>
                   {user ? userExist?.fullname : 'Tài khoản'}
                 </h3>
               </div>
@@ -208,7 +244,7 @@ const Header = () => {
                 <span className='border border-gray-300 p-1 flex justify-center items-center rounded-full bg-white w-10 h-10'>
                   <AddShoppingCartSharpIcon className='text-primary' />
                 </span>
-                <h3 className='font-semibold text-sm  uppercase mt-1'>
+                <h3 className='text-sm font-semibold mt-1 hidden sm:inline'>
                   Giỏ hàng
                 </h3>
                 <span className='absolute -top-1 right-6 bg-primary rounded-full text-white p-1 w-4 h-4 flex items-center justify-center text-xs'>
@@ -227,8 +263,15 @@ const Header = () => {
             </div>
           </div>
         </div>
+
+        {/* NavBar chỉ hiển thị trên màn hình nhỏ và khi toggle được bật */}
+        {isNavBarVisible && <NavBar />}
       </div>
-      <NavBar />
+
+      {/* NavBar luôn hiển thị trên màn hình lớn */}
+      <div className='hidden md:block'>
+        <NavBar />
+      </div>
     </>
   );
 };
