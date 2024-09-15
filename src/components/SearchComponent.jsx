@@ -85,7 +85,7 @@ export default function SearchPopover() {
     setQuery(inputRef.current.value.trim()); // Lấy giá trị tìm kiếm
     if (query) {
       navigate(`/search?productName=${encodeURIComponent(query)}`); // Chuyển hướng đến trang search với query
-      setQuery('');
+      setQuery(''); // Xóa giá trị tìm kiếm sau khi điều hướng
     }
   };
 
@@ -100,54 +100,7 @@ export default function SearchPopover() {
   ];
 
   const products = [
-    {
-      id: 1,
-      image:
-        'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-edge-saber-10-black-chinh-hang_1703023099.webp',
-      name: 'Áo Cầu Lông Yonex VM1055 Nam - Xanh',
-      price: 130000,
-      href: '/products/detail/66cc4b1ad8974d0480cfb05a',
-    },
-    {
-      id: 2,
-      image:
-        'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-edge-saber-10-black-chinh-hang_1703023099.webp',
-      name: 'Áo Cầu Lông Yonex VM1055 Nữ - Xanh',
-      price: 130000,
-      href: '/products/detail/66cc4b1ad8974d0480cfb05a',
-    },
-    {
-      id: 3,
-      image:
-        'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-edge-saber-10-black-chinh-hang_1703023099.webp',
-      name: 'Áo Cầu Lông Yonex VM1056 Nữ - Xanh',
-      price: 130000,
-      href: '/products/detail/66cc4b1ad8974d0480cfb05a',
-    },
-    {
-      id: 4,
-      image:
-        'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-edge-saber-10-black-chinh-hang_1703023099.webp',
-      name: 'Áo Cầu Lông Yonex VM1056 Nữ - Xanh',
-      price: 130000,
-      href: '/products/detail/66cc4b1ad8974d0480cfb05a',
-    },
-    {
-      id: 5,
-      image:
-        'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-edge-saber-10-black-chinh-hang_1703023099.webp',
-      name: 'Áo Cầu Lông Yonex VM1056 Nữ - Xanh',
-      price: 130000,
-      href: '/products/detail/66cc4b1ad8974d0480cfb05a',
-    },
-    {
-      id: 6,
-      image:
-        'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-edge-saber-10-black-chinh-hang_1703023099.webp',
-      name: 'Áo Cầu Lông Yonex VM1056 Nữ - Xanh',
-      price: 130000,
-      href: '/products/detail/66cc4b1ad8974d0480cfb05a',
-    },
+    // Các sản phẩm như bạn đã cung cấp
   ];
 
   useEffect(() => {
@@ -163,35 +116,41 @@ export default function SearchPopover() {
   };
 
   return (
-    <div>
-      <form action='#' className='relative' onSubmit={handleSubmit}>
-        <input
-          ref={inputRef}
-          type='text'
-          className='bg-gray-200 w-[60vw] max-w-xs rounded-lg p-2'
-          placeholder='Tìm sản phẩm...'
-          value={query}
-          onClick={handleClick}
-          onChange={handleChange}
-          required
-        />
-        <button
-          type='button'
-          onClick={handleVoiceSearch}
-          className='absolute top-1/2 transform -translate-y-1/2 right-12 p-2'
-        >
-          {isListening ? (
-            <KeyboardVoiceIcon className='text-primary' />
-          ) : (
-            <MicNoneIcon className='text-primary' />
-          )}
-        </button>
-        <button
-          type='submit'
-          className='absolute top-1/2 transform -translate-y-1/2 right-2 p-2'
-        >
-          <SearchSharpIcon className='text-primary' />
-        </button>
+    <div className='flex justify-center'>
+      <form
+        action='#'
+        className='relative w-[90%] sm:w-full max-w-md mb-2 sm:mb-0'
+        onSubmit={handleSubmit}
+      >
+        <div className='relative'>
+          <input
+            ref={inputRef}
+            type='text'
+            className='border border-gray-400 sm:bg-gray-200 w-full rounded-lg p-2 pl-10 pr-16'
+            placeholder='Tìm sản phẩm...'
+            value={query}
+            onClick={handleClick}
+            onChange={handleChange}
+            required
+          />
+          <button
+            type='button'
+            onClick={handleVoiceSearch}
+            className='absolute top-1/2 transform -translate-y-1/2 left-2 p-2'
+          >
+            {isListening ? (
+              <KeyboardVoiceIcon className='text-primary' />
+            ) : (
+              <MicNoneIcon className='text-primary' />
+            )}
+          </button>
+          <button
+            type='submit'
+            className='absolute top-1/2 transform -translate-y-1/2 right-2 p-2'
+          >
+            <SearchSharpIcon className='text-primary' />
+          </button>
+        </div>
       </form>
 
       {/* <Popover
@@ -207,23 +166,20 @@ export default function SearchPopover() {
           vertical: 'top',
           horizontal: 'left',
         }}
-        onEntered={() => {
-          setTimeout(() => {
-            inputRef.current?.focus(); // Focus khi Popover đã hiển thị
-          }, 0);
-        }}
         PaperProps={{
           style: {
-            width: inputRef.current ? inputRef.current.offsetWidth : 'auto',
-            maxHeight: '80vh', // Giới hạn chiều cao của Popover
+            width: '100%', // Chiếm toàn bộ chiều rộng màn hình nhỏ
+            maxWidth: '80vw', // Đặt chiều rộng tối đa
+            maxHeight: '80vh', // Giới hạn chiều cao
             overflowY: 'auto', // Thêm thanh cuộn nếu nội dung vượt quá chiều cao
+            padding: '1rem', // Thêm padding để nội dung không bị sát viền
           },
         }}
       >
         <Typography sx={{ p: 2 }}>
-          <div className='text-lg font-semibold border-b-2 flex items-center gap-2'>
+          <div className='text-lg font-semibold border-b-2 flex items-center gap-2 mb-2'>
             <WhatshotSharpIcon className='text-primary' />
-            <h1 className=''>Tìm kiếm nhiều nhất</h1>
+            <h1>Tìm kiếm nhiều nhất</h1>
           </div>
 
           <div className='flex flex-wrap space-x-2 mb-4'>
@@ -239,7 +195,7 @@ export default function SearchPopover() {
             ))}
           </div>
 
-          <div className='grid grid-cols-1 gap-4'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
             {products.map(product => (
               <div
                 key={product.id}
@@ -255,7 +211,7 @@ export default function SearchPopover() {
 
                 <div className='p-2'>
                   <Link to={product.href}>
-                    <h3 className='text-sm font-semibold   hover:text-primary '>
+                    <h3 className='text-sm font-semibold hover:text-primary'>
                       {product.name}
                     </h3>
                   </Link>
