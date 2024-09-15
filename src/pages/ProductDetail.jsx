@@ -14,7 +14,7 @@ import productService from '@services/product.service';
 import productTypeService from '@services/productType.service';
 import brandService from '@services/brand.service';
 
-import cartService from '@services/cart.service';
+// import cartService from '@services/cart.service';
 
 import { useDispatch } from 'react-redux';
 import { addToCart } from '@redux/thunk/cartThunk';
