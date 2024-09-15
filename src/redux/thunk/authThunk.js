@@ -18,6 +18,23 @@ export const loginThunk = createAsyncThunk(
   }
 );
 
+export const loginWithGoogleThunk = createAsyncThunk(
+  'auth/loginWithGoogle',
+  async (credentials, { rejectWithValue }) => {
+    try {
+      const data = await authService.loginWithGoogle(credentials);
+
+      // Lưu access token và refresh token vào localStorage
+      localStorage.setItem('accessToken', data.data.accessToken);
+      localStorage.setItem('refreshToken', data.data.refreshToken);
+
+      return data.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.error);
+    }
+  }
+);
+
 // export const logoutThunk = createAsyncThunk(
 //   'auth/logout',
 //   async (_, { rejectWithValue }) => {

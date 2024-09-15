@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { loginThunk } from '@redux/thunk/authThunk';
+import { loginThunk, loginWithGoogleThunk } from '@redux/thunk/authThunk';
 
 const initialState = {
   authUser: null,
@@ -31,6 +31,19 @@ const authSlice = createSlice({
         state.authUser = action.payload;
       })
       .addCase(loginThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(loginWithGoogleThunk.pending, state => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(loginWithGoogleThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.authUser = action.payload;
+      })
+      .addCase(loginWithGoogleThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
