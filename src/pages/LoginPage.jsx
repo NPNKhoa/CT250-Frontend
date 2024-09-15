@@ -107,7 +107,7 @@ const LoginPage = () => {
 
   return (
     <section className='flex items-center justify-center py-10'>
-      <div className='max-w-3xl mx-auto bg-gray-100 p-5 rounded-lg shadow-md flex items-center'>
+      <div className='sm:max-w-3xl w-full mx-5 bg-gray-100 p-2 sm:p-5 rounded-lg shadow-md flex items-center'>
         <div className='w-1/2 hidden lg:block'>
           <img src={loginImg} alt='Login' className='rounded-lg' />
         </div>

@@ -18,7 +18,6 @@ import PropTypes from 'prop-types';
 
 const AddressFormDialog = ({ open, onClose, addressData = {} }) => {
   const dispatch = useDispatch();
-  const { error } = useSelector(state => state.address);
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [detail, setDetail] = useState('');
@@ -135,7 +134,6 @@ const AddressFormDialog = ({ open, onClose, addressData = {} }) => {
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Địa chỉ mới</DialogTitle>
       <DialogContent>
-        {error && <div style={{ color: 'red' }}>Error: {error}</div>}
         <TextField
           autoFocus
           required

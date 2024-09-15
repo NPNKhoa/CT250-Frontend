@@ -107,28 +107,6 @@ const SignUpPage = () => {
             )}
           </div>
         ))}
-        {/* <div className='mb-4'>
-          <select
-            id='gender'
-            value={credentials.gender}
-            onChange={handleChange}
-            className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary'
-            required
-          >
-            <option value=''>Select Gender</option>
-            <option value='male'>Male</option>
-            <option value='female'>Female</option>
-            <option value='other'>Other</option>
-          </select>
-        </div> */}
-        {/* Uncomment the file input if you want to allow image uploads */}
-        {/* <div className='mb-4'>
-        <input
-          type='file'
-          onChange={handleFileChange}
-          className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary'
-        />
-      </div> */}
         <button
           type='submit'
           className='w-full bg-primary text-white py-3 rounded-lg hover:bg-hover-primary transition duration-300'
@@ -141,8 +119,8 @@ const SignUpPage = () => {
   );
 
   return (
-    <section className='flex items-center justify-center min-h-screen bg-white py-5'>
-      <div className='max-w-3xl mx-auto bg-gray-100 p-5 rounded-lg shadow-md flex items-center'>
+    <section className='flex items-center justify-center bg-white py-5'>
+      <div className='sm:max-w-3xl w-full mx-5 bg-gray-100 p-5 rounded-lg shadow-md flex items-center'>
         <div className='w-1/2 hidden lg:block'>
           <img src={SignUpImg} alt='Sign Up' className='rounded-lg' />
         </div>
