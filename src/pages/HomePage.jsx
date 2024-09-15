@@ -46,7 +46,7 @@ const HomePage = () => {
     };
 
     fetchProducts();
-    fetchTokens();
+    if (!localStorage.getItem('refreshToken')) fetchTokens();
   }, []);
 
   const productsBMT = [
