@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
+import FeedbackService from '@services/feedback.service'; // Đảm bảo đường dẫn chính xác
+import Alert from '@components/Alert'; // Đảm bảo đường dẫn chính xác
+import CircularProgress from '@mui/material/CircularProgress';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -8,18 +11,53 @@ const ContactPage = () => {
     phone: '',
     message: '',
   });
+  const [alert, setAlert] = useState({ message: '', type: '' });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = e => {
     const { name, value } = e.target;
     setFormData(prevData => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     const { name, email, phone, message } = formData;
-    alert(
-      `Tên: ${name}\nEmail: ${email}\nSố điện thoại: ${phone}\nNội dung: ${message}`
-    );
+    setLoading(true);
+
+    const accessToken = localStorage.getItem('accessToken');
+
+    try {
+      // Gọi API để gửi phản hồi
+      await FeedbackService.createFeedback(
+        {
+          senderName: name,
+          senderEmail: email,
+          senderPhone: phone,
+          question: message,
+        },
+        accessToken
+      );
+
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        message: '',
+      });
+
+      // Hiển thị thông báo thành công
+      setAlert({
+        message: 'Phản hồi của bạn đã được gửi thành công!',
+        type: 'success',
+      });
+    } catch (err) {
+      // Hiển thị thông báo lỗi
+      console.log(err);
+
+      setAlert({ message: 'Có lỗi xảy ra. Vui lòng thử lại!', type: 'error' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const breadcrumbs = [
@@ -30,7 +68,7 @@ const ContactPage = () => {
   return (
     <>
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
-      <div className='container mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8 '>
+      <div className='container mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8'>
         {/* Form */}
         <div className='w-full lg:w-1/2'>
           <h1 className='text-2xl font-bold mb-4'>Liên hệ với chúng tôi</h1>
@@ -108,9 +146,10 @@ const ContactPage = () => {
             </div>
             <button
               type='submit'
+              disabled={loading}
               className='w-full px-4 py-2 bg-primary text-white font-semibold rounded-md shadow-sm hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2'
             >
-              Gửi
+              {loading ? <CircularProgress color='inherit' size={20} /> : 'Gửi'}
             </button>
           </form>
         </div>
@@ -134,6 +173,8 @@ const ContactPage = () => {
           </div>
         </div>
       </div>
+      {/* Hiển thị thông báo */}
+      {alert.message && <Alert message={alert.message} type={alert.type} />}
     </>
   );
 };
