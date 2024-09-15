@@ -76,7 +76,7 @@ const Carousel = () => {
 
       <button
         type='button'
-        className='absolute top-1/2 -left-4 z-30 flex items-center justify-center h-10 w-10 bg-white rounded-full shadow-lg hover:bg-gray-200 focus:outline-none'
+        className='absolute top-1/2 -left-4 md:-left-6 lg:-left-8 z-30 flex items-center justify-center h-10 w-10 bg-white rounded-full shadow-lg hover:bg-gray-200 focus:outline-none'
         onClick={() => changeSlide(-1)}
       >
         <svg
@@ -99,7 +99,7 @@ const Carousel = () => {
 
       <button
         type='button'
-        className='absolute top-1/2 -right-4 z-30 flex items-center justify-center h-10 w-10 bg-white rounded-full shadow-lg hover:bg-gray-200 focus:outline-none'
+        className='absolute top-1/2 -right-4 md:-right-6 lg:-right-8 z-30 flex items-center justify-center h-10 w-10 bg-white rounded-full shadow-lg hover:bg-gray-200 focus:outline-none'
         onClick={() => changeSlide(1)}
       >
         <svg
