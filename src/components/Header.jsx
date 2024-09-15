@@ -57,6 +57,7 @@ const Header = () => {
 
     if (accessToken) {
       dispatch(getLoggedInUser(accessToken));
+      dispatch(getCartByUser(accessToken));
     }
   }, [dispatch]);
 
