@@ -175,10 +175,12 @@ const Header = () => {
                     <img
                       src={
                         user && userExist?.avatarImagePath
-                          ? `http://localhost:5000/${userExist?.avatarImagePath.replace(
-                              /\\/g,
-                              '/'
-                            )}`
+                          ? userExist?.avatarImagePath.startsWith('http')
+                            ? userExist?.avatarImagePath
+                            : `http://localhost:5000/${userExist?.avatarImagePath.replace(
+                                /\\/g,
+                                '/'
+                              )}`
                           : Avatar
                       }
                       alt='User avatar'

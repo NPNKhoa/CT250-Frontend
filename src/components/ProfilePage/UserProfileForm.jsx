@@ -50,8 +50,13 @@ function UserProfileForm() {
 
       // Nếu người dùng đã có avatar thì hiển thị ảnh từ server
       setAvatarPreview(
-        user.avatarImagePath
-          ? `http://localhost:5000/${user.avatarImagePath.replace(/\\/g, '/')}`
+        user?.avatarImagePath
+          ? user?.avatarImagePath.startsWith('http')
+            ? user?.avatarImagePath
+            : `http://localhost:5000/${user?.avatarImagePath.replace(
+                /\\/g,
+                '/'
+              )}`
           : Avatar
       );
     }
