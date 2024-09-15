@@ -19,7 +19,7 @@ const LoginPage = () => {
   const loading = useSelector(state => state.auth.loading);
   const error = useSelector(state => state.auth.error);
   const authUser = useSelector(state => state.auth.authUser);
-
+  
   const handleGoogleLogin = () => {
     window.location.href = 'http://localhost:5000/auth/google';
   };
