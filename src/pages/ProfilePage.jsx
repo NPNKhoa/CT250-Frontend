@@ -75,11 +75,13 @@ function ProfilePage() {
           <div className='text-center mb-4'>
             <img
               src={
-                user?.avatarImagePath
-                  ? `http://localhost:5000/${user.avatarImagePath.replace(
-                      /\\/g,
-                      '//'
-                    )}`
+                user && user?.avatarImagePath
+                  ? user?.avatarImagePath.startsWith('http')
+                    ? user?.avatarImagePath
+                    : `http://localhost:5000/${user?.avatarImagePath.replace(
+                        /\\/g,
+                        '/'
+                      )}`
                   : Avatar
               }
               alt='User avatar'
