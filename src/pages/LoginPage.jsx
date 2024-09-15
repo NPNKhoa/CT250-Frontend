@@ -125,7 +125,11 @@ const LoginPage = () => {
           <div className='mb-4 flex justify-center'>
             <GoogleOAuthProvider clientId={clientId}>
               <div>
-                <GoogleLogin onSuccess={handleSuccess} onError={handleError} />
+                <GoogleLogin
+                  onSuccess={handleSuccess}
+                  onError={handleError}
+                  iconClassName='mr-2 text-blue-500' // Optional: to style the icon if needed
+                />
               </div>
             </GoogleOAuthProvider>
           </div>
