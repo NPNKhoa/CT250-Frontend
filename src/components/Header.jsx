@@ -76,9 +76,26 @@ const Header = () => {
   return (
     <>
       <div className='bg-white'>
-        <div className='container mx-auto px-4 flex sm:flex-row justify-between items-center py-4'>
+        <div className='container mx-auto px-4 flex sm:flex-row justify-between items-center py-2 '>
           <div className='flex items-center gap-4'>
-            <div className='px-6 py-3'>
+            {/* Biểu tượng điều khiển NavBar chỉ hiển thị trên màn hình nhỏ */}
+            <div
+              className='block md:hidden cursor-pointer'
+              onClick={toggleNavBar}
+            >
+              <MenuIcon className='text-primary' />
+            </div>
+
+            {/* Biểu tượng kính lúp hiển thị trên màn hình nhỏ */}
+            <div
+              className='block md:hidden cursor-pointer'
+              onClick={toggleSearch}
+            >
+              <SearchIcon className='text-primary' />
+            </div>
+
+            {/* Logo */}
+            <div className='px-6 py-3 mx-auto'>
               <Link to='/'>
                 <img
                   src={LogoImg}
@@ -86,14 +103,6 @@ const Header = () => {
                   className='w-[40px] sm:w-[60px]'
                 />
               </Link>
-            </div>
-
-            {/* Biểu tượng điều khiển NavBar chỉ hiển thị trên màn hình nhỏ */}
-            <div
-              className='block md:hidden cursor-pointer'
-              onClick={toggleNavBar}
-            >
-              <MenuIcon className='text-primary' />
             </div>
           </div>
 
@@ -109,24 +118,8 @@ const Header = () => {
             </div>
             <hr className='mt-3 w-full text-gray-300' />
           </div>
-
-          <div className='relative flex items-center gap-3'>
-            {/* Biểu tượng kính lúp hiển thị trên màn hình nhỏ */}
-            <div
-              className='block md:hidden cursor-pointer'
-              onClick={toggleSearch}
-            >
-              <SearchIcon className='text-primary' />
-            </div>
-
-            {/* Thành phần tìm kiếm, ẩn trên màn hình nhỏ */}
-            <div
-              className={`absolute top-full left-0 w-full md:static md:w-auto md:flex md:items-center md:gap-3 transition-all duration-300 ease-in-out ${
-                isSearchVisible ? 'block' : 'hidden md:block'
-              }`}
-            >
-              <SearchComponent />
-            </div>
+          <div className='hidden md:block'>
+            <SearchComponent />
           </div>
 
           <div className='flex justify-center gap-6'>
@@ -249,13 +242,13 @@ const Header = () => {
                 <h3 className='text-sm font-semibold mt-1 hidden sm:inline'>
                   Giỏ hàng
                 </h3>
-                <span className='absolute -top-1 right-6 bg-primary rounded-full text-white p-1 w-4 h-4 flex items-center justify-center text-xs'>
+                <span className='absolute -top-1 right-0 sm:right-4 bg-primary rounded-full text-white p-1 w-4 h-4 text-xs flex items-center justify-center'>
                   {cartItems.length}
                 </span>
               </Link>
               {isModalCart && (
                 <div
-                  className='absolute top-12 right-0 w-96 bg-white rounded-lg shadow-lg z-50'
+                  className='absolute top-12 right-0 w-80 sm:w-96 bg-white rounded-lg shadow-lg z-50 sm:right-0 sm:left-auto sm:mx-0 mx-2'
                   onMouseEnter={handleMouseEnterCart}
                   onMouseLeave={handleMouseLeaveCart}
                 >
@@ -266,10 +259,12 @@ const Header = () => {
           </div>
         </div>
 
-        {/* NavBar chỉ hiển thị trên màn hình nhỏ và khi toggle được bật */}
+        {/* Thanh tìm kiếm */}
+        {isSearchVisible && <SearchComponent />}
+
+        {/* NavBar */}
         {isNavBarVisible && <NavBar />}
       </div>
-
       {/* NavBar luôn hiển thị trên màn hình lớn */}
       <div className='hidden md:block'>
         <NavBar />

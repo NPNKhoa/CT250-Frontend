@@ -4,8 +4,14 @@ import { Breadcrumbs, Link, Typography } from '@mui/material';
 const BreadcrumbsComponent = ({ breadcrumbs }) => {
   return (
     <div className='bg-gray-200'>
-      <div role='presentation' className=' container mx-auto py-4 px-4'>
-        <Breadcrumbs aria-label='breadcrumb'>
+      <div
+        role='presentation'
+        className='container mx-auto py-4 px-4 mt-1 sm:mt-0'
+      >
+        <Breadcrumbs
+          aria-label='breadcrumb'
+          className='text-xs sm:text-sm md:text-base lg:text-lg'
+        >
           {breadcrumbs.map((breadcrumb, index) => {
             if (index === breadcrumbs.length - 1) {
               return (
