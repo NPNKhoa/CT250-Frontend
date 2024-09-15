@@ -35,18 +35,20 @@ const FeatureBoxes = () => {
 
   return (
     <div className='container mx-auto p-4'>
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4'>
+      <div className='grid grid-cols-2 lg:grid-cols-4 gap-4 mt-4'>
         {features.map((feature, index) => (
           <div
             key={index}
-            className='bg-white shadow-md rounded-lg p-5 flex flex-col items-center space-y-4 border border-gray-200 transition-transform transform hover:scale-105'
+            className='bg-white shadow-md rounded-lg p-2 sm:p-5 flex flex-col items-center space-y-2 border border-gray-200 transition-transform transform hover:scale-105'
           >
             <div>{feature.icon}</div>
             <div className='text-center'>
-              <h3 className='text-lg font-semibold text-primary mb-2'>
+              <h3 className='sm:text-lg text-xs font-semibold text-primary mb-2'>
                 {feature.title}
               </h3>
-              <p className='text-gray-600 text-sm'>{feature.description}</p>
+              <p className='text-gray-600 sm:text-sm text-xs'>
+                {feature.description}
+              </p>
             </div>
           </div>
         ))}
