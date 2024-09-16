@@ -141,8 +141,20 @@ const HomePage = () => {
             Sản phẩm nổi bật
           </h2>
           <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[30vw] mx-auto'></span>
-
-          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 justify-items-center'>
+          <div className='flex justify-between items-center mb-4'>
+            {/* Flash Sale và Countdown Timer */}
+            <div className='flex items-center space-x-4'></div>
+            {/* Link "Xem tất cả" */}
+            <div>
+              <a
+                href='/products?productType=Vợt%20cầu%20lông'
+                className='text-primary hover:underline'
+              >
+                Xem tất cả »
+              </a>
+            </div>
+          </div>
+          <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 justify-items-center'>
             {Array.isArray(products) &&
               products.map((product, index) => (
                 <ProductItem
