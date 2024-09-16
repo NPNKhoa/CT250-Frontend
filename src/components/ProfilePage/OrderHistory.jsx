@@ -68,10 +68,10 @@ function OrderHistory() {
                 </tr>
               </thead>
               <tbody>
-                {orders.map(order => (
+                {orders.map((order, index) => (
                   <tr key={order._id} className='hover:bg-gray-50'>
                     <td className='py-2 px-4 border-b text-center'>
-                      {order._id}
+                      #{index + 1}
                     </td>
                     <td className='py-2 px-4 border-b text-center'>
                       {new Date(order.orderDate).toLocaleDateString('vi-VN')}
@@ -112,7 +112,7 @@ function OrderHistory() {
               Chi tiết đơn hàng
             </h3>
             <p>
-              <strong>Mã đơn hàng:</strong> {selectedOrder._id}
+              <strong>Mã đơn hàng:</strong> #{orders.findIndex(order => order._id === selectedOrder._id) + 1}
             </p>
             <p>
               <strong>Ngày đặt:</strong>{' '}
