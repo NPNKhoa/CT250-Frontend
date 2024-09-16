@@ -15,9 +15,8 @@ const ProductItem = ({ imageUrl, name, price, productLink }) => {
 
   return (
     <div className='bg-white rounded-lg shadow-md overflow-hidden'>
-      <div className='flex justify-center items-center w-full h-80'>
-        {' '}
-        {/* Đặt chiều cao cố định */}
+      <div className='flex justify-center items-center w-full h-44 md:h-64 lg:h-80'>
+        {/* Điều chỉnh chiều cao theo kích thước màn hình */}
         <Link to={`/${productLink}`}>
           <img
             src={imageUrl}
@@ -27,12 +26,16 @@ const ProductItem = ({ imageUrl, name, price, productLink }) => {
         </Link>
       </div>
 
-      <div className='p-4 flex flex-col justify-between h-32'>
-        {' '}
+      <div className='p-4 flex flex-col justify-between h-28 md:h-32'>
+        {/* Điều chỉnh padding và chiều cao theo kích thước màn hình */}
         <Link to={`/${productLink}`}>
-          <h3 className='text-sm text-gray-800 line-clamp-2'>{name}</h3>
+          <h3 className='text-xs md:text-base text-gray-800 sm:line-clamp-2 line-clamp-3'>
+            {name}
+          </h3>
         </Link>
-        <p className='text-primary font-bold'>{formattedPrice}</p>
+        <p className='text-primary font-bold text-sm md:text-lg'>
+          {formattedPrice}
+        </p>
       </div>
     </div>
   );

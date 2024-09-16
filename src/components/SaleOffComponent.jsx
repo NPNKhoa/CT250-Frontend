@@ -84,7 +84,7 @@ function SaleOffComponent() {
       </div>
 
       {/* Grid sản phẩm */}
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4'>
+      <div className='grid grid-cols-2 lg:grid-cols-5 gap-4'>
         {products.map((product, index) => (
           <div
             key={index}
@@ -93,13 +93,15 @@ function SaleOffComponent() {
             <img
               src={product.image}
               alt={product.name}
-              className='w-full h-80 object-cover'
+              className='w-full h-44 sm:h-80 object-cover'
             />
             <div className='p-4 flex flex-col justify-between h-32'>
-              <h3 className='text-sm text-gray-800 line-clamp-2'>
+              <h3 className='text-xs sm:text-sm text-gray-800 line-clamp-2'>
                 {product.name}
               </h3>
-              <p className='text-primary font-bold'>{product.price}</p>
+              <p className='text-primary text-xs sm:text-sm font-bold'>
+                {product.price}
+              </p>
 
               {/* Thanh Hot */}
               <div className='flex items-center'>

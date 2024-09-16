@@ -104,25 +104,26 @@ const Products = () => {
         />
       )}
       <div className='flex p-4'>
-        <div className='w-1/5 m-1'>
+        <div className='hidden lg:block w-1/5 m-1'>
+          {/* Filter sẽ bị ẩn khi màn hình nhỏ hơn lg */}
           <Filter
             onPriceChange={handlePriceChange}
             onBrandChange={handleBrandChange}
           />
         </div>
-        <div className='w-4/5 ml-2'>
+        <div className='w-full lg:w-4/5 ml-2'>
           <div className='container mx-auto flex justify-between px-5 border bg-gray-50 rounded-lg'>
-            <h1 className='text-xl font-bold my-4'>
+            <h1 className='text-sm sm:text-xl font-bold my-4'>
               {products && products.length > 0
                 ? `${products[0].productTypeDetails?.productTypeName} ${brand}`
                 : 'Loading ...'}
             </h1>
             <div className='flex items-center space-x-2'>
-              <span className='font-semibold'>Sắp xếp:</span>
+              <span className='font-semibold text-sm sm:text-lg'>Sắp xếp:</span>
               <select
                 value={sortOption}
                 onChange={handleSortChange}
-                className='border border-gray-300 py-1 px-3 rounded-md focus:outline-none'
+                className='border text-xs sm:text-base border-gray-300 py-1 px-3 rounded-md focus:outline-none '
               >
                 <option value='default'>Mặc định</option>
                 <option value='asc'>Giá tăng dần</option>
@@ -131,7 +132,8 @@ const Products = () => {
             </div>
           </div>
 
-          <div className='grid grid-cols-4 gap-1'>
+          <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1'>
+            {/* Ẩn sản phẩm theo số cột khi kích thước màn hình thay đổi */}
             {Array.isArray(products) &&
               products.map((product, index) => (
                 <ProductItem

@@ -42,10 +42,11 @@ const SearchPage = () => {
 
     fetchProductTypes();
   }, [query, page]);
+
   return (
     <>
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
-      <div className='grid grid-cols-5 gap-1 m-6'>
+      <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 m-6'>
         {Array.isArray(products) &&
           products.map((product, index) => (
             <ProductItem
@@ -56,7 +57,7 @@ const SearchPage = () => {
               productLink={`products/detail/${product._id}`}
             />
           ))}
-        <div className='col-span-5 mt-4 flex justify-center'>
+        <div className='col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-5 mt-4 flex justify-center'>
           <PaginationComponent
             path={`${location.pathname}`}
             totalPages={totalPage}
