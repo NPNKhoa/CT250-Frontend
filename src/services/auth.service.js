@@ -38,8 +38,8 @@ class authService {
     ).data;
   }
 
-  async loginWithGoogle(data) {
-    return (await this.api.post('/login-with-google', data)).data;
+  async loginWithSocial(data) {
+    return (await this.api.post('/login-with-social', data)).data;
   }
 
   async addRole(data) {

@@ -18,11 +18,11 @@ export const loginThunk = createAsyncThunk(
   }
 );
 
-export const loginWithGoogleThunk = createAsyncThunk(
-  'auth/loginWithGoogle',
+export const loginWithSocialThunk = createAsyncThunk(
+  'auth/loginWithSocial',
   async (credentials, { rejectWithValue }) => {
     try {
-      const data = await authService.loginWithGoogle(credentials);
+      const data = await authService.loginWithSocial(credentials);
 
       // Lưu access token và refresh token vào localStorage
       localStorage.setItem('accessToken', data.data.accessToken);

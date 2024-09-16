@@ -5,12 +5,10 @@ import userIcon from '@assets/user.png';
 import { useDispatch, useSelector } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@components/Alert';
-import { loginThunk, loginWithGoogleThunk } from '@redux/thunk/authThunk';
+import { loginThunk, loginWithSocialThunk } from '@redux/thunk/authThunk';
 import PasswordInput from '@components/common/PasswordInput';
 import { getLoggedInUser } from '@redux/thunk/userThunk';
-
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from 'jwt-decode';
+import { LoginSocialFacebook, LoginSocialGoogle } from 'reactjs-social-login';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -23,13 +21,25 @@ const LoginPage = () => {
   const authUser = useSelector(state => state.auth.authUser);
 
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  const appId = import.meta.env.VITE_FACEBOOK_APP_ID;
 
-  const handleSuccess = async response => {
-    const { email, name, picture } = jwtDecode(response?.credential);
-    const user = { fullname: name, email: email, avatarImagePath: picture };
-    await dispatch(loginWithGoogleThunk(user));
-    const timer = setTimeout(() => navigate('/'), 1000);
-    return () => clearTimeout(timer);
+  const handleSuccess = async (response, social) => {
+    const { email, name, picture } = response;
+    let user = {};
+    if (social === 'google') {
+      user = { fullname: name, email: email, avatarImagePath: picture };
+    } else if (social === 'facebook') {
+      user = {
+        fullname: name,
+        email: email,
+        avatarImagePath: picture.data.url,
+      };
+    }
+    dispatch(loginWithSocialThunk(user));
+    if (user.email) {
+      const timer = setTimeout(() => navigate('/'), 1000);
+      return () => clearTimeout(timer);
+    }
   };
 
   const handleError = error => {
@@ -123,15 +133,54 @@ const LoginPage = () => {
             <span className='border-t border-gray-300 flex-grow ml-3'></span>
           </div>
           <div className='mb-4 flex justify-center'>
-            <GoogleOAuthProvider clientId={clientId}>
-              <div>
-                <GoogleLogin
-                  onSuccess={handleSuccess}
-                  onError={handleError}
-                  iconClassName='mr-2 text-blue-500' // Optional: to style the icon if needed
-                />
-              </div>
-            </GoogleOAuthProvider>
+            <LoginSocialGoogle
+              client_id={clientId}
+              onResolve={response => {
+                handleSuccess(response.data, 'google');
+              }}
+              onReject={error => {
+                handleError(error);
+              }}
+              className='w-full'
+            >
+              <button className='w-full group h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300 hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100'>
+                <div className='relative flex items-center space-x-4 justify-center'>
+                  <img
+                    src='https://img.icons8.com/?size=100&id=17949&format=png&color=000000'
+                    className='absolute left-0 w-5'
+                    alt='google logo'
+                  />
+                  <span className='block w-max font-semibold tracking-wide text-gray-700 text-sm transition duration-300 group-hover:text-blue-600 sm:text-base'>
+                    Đăng nhập với Google
+                  </span>
+                </div>
+              </button>
+            </LoginSocialGoogle>
+          </div>
+          <div className='mb-4 flex justify-center'>
+            <LoginSocialFacebook
+              appId={appId}
+              onResolve={response => {
+                handleSuccess(response.data, 'facebook');
+              }}
+              onReject={error => {
+                handleError(error);
+              }}
+              className='w-full justify-center'
+            >
+              <button className='w-full group h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300 hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100'>
+                <div className='relative flex items-center space-x-4 justify-center'>
+                  <img
+                    src='https://img.icons8.com/?size=100&id=13912&format=png&color=000000'
+                    className='absolute left-0 w-5'
+                    alt='google logo'
+                  />
+                  <span className='block w-max font-semibold tracking-wide text-gray-700 text-sm transition duration-300 group-hover:text-blue-600 sm:text-base'>
+                    Đăng nhập với Facebook
+                  </span>
+                </div>
+              </button>
+            </LoginSocialFacebook>
           </div>
           <p className='text-center mt-4'>
             <span className='cursor-pointer hover:text-primary'>
