@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getUserAddressThunk } from '../redux/thunk/addressThunk';
-import orderSevice from '@services/order.service';
+import orderService from '@services/order.service';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
+import { getCartByUser } from '@redux/thunk/cartThunk';
 
 function OrderPage() {
   const navigate = useNavigate();
@@ -22,6 +23,10 @@ function OrderPage() {
   });
   const [selectedAddress, setSelectedAddress] = useState({});
   const [deliveryFee, setDeliveryFee] = useState(0);
+
+  const selectedProductIds = JSON.parse(localStorage.getItem('selectedProductIds')) || [];
+
+  const filteredCartItems = cartItems.filter(item => selectedProductIds.includes(item._id));
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
@@ -46,7 +51,7 @@ function OrderPage() {
 
   useEffect(() => {
     const fetchDeliveryFee = async address => {
-      const response = await orderSevice.getDeliveryFee({
+      const response = await orderService.getDeliveryFee({
         province: address.province
           .replace('Tỉnh ', '')
           .replace('Thành phố ', ''),
@@ -77,8 +82,28 @@ function OrderPage() {
     setIsModalOpen(false);
   };
 
+  const handleSubmit = async () => {
+    const order = {
+      orderDetail: selectedProductIds,
+      shippingAddress: selectedAddress._id,
+      shippingMethod: "66e3b81baf451884b122e3d2",
+      paymentMethod: "66e0a282b22a38dc6d06e84c",
+      shippingFee: deliveryFee,
+      totalPrice: calculateTotal() + deliveryFee,
+    };
+    try {
+      const response = await orderService.createOrder(order);
+      if (response) {
+        navigate('/thankyou');
+      }
+      dispatch(getCartByUser(localStorage.getItem('accessToken')));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const calculateTotal = () => {
-    return cartItems.reduce(
+    return filteredCartItems.reduce(
       (total, item) => total + item.itemPrice * item.quantity,
       0
     );
@@ -112,7 +137,7 @@ function OrderPage() {
                   type='text'
                   name='fullname'
                   value={formData.fullname}
-                  // onChange={handleChange}
+                  onChange={handleChange}
                   placeholder='Họ và tên'
                   className='w-full mt-4 p-3 border border-gray-300 rounded-md'
                 />
@@ -120,7 +145,7 @@ function OrderPage() {
                   type='text'
                   name='phone'
                   value={formData.phone}
-                  // onChange={handleChange}
+                  onChange={handleChange}
                   placeholder='Số điện thoại'
                   className='w-full mt-4 p-3 border border-gray-300 rounded-md'
                 />
@@ -128,7 +153,7 @@ function OrderPage() {
                   type='text'
                   name='address'
                   value={formData.address}
-                  // onChange={handleChange}
+                  onChange={handleChange}
                   placeholder='Địa chỉ'
                   className='w-full mt-4 p-3 border border-gray-300 rounded-md'
                 />
@@ -136,14 +161,14 @@ function OrderPage() {
                   type='email'
                   name='email'
                   value={formData.email}
-                  // onChange={handleChange}
+                  onChange={handleChange}
                   placeholder='Email'
                   className='w-full mt-4 p-3 border border-gray-300 rounded-md'
                 />
                 <textarea
                   name='notes'
                   value={formData.notes}
-                  // onChange={handleChange}
+                  onChange={handleChange}
                   placeholder='Ghi chú'
                   className='w-full mt-4 p-3 border border-gray-300 rounded-md'
                   rows='4'
@@ -184,7 +209,7 @@ function OrderPage() {
                   Chi tiết đơn hàng
                 </h2>
                 <div className='mt-4'>
-                  {cartItems.map(item => (
+                  {filteredCartItems.map(item => (
                     <div
                       key={item.id}
                       className='flex items-center space-x-4 py-2'
@@ -225,7 +250,7 @@ function OrderPage() {
                     </span>
                   </div>
                   <div className='flex justify-between mt-2'>
-                    <span className='text-gray-500'>Phí vận chyển:</span>
+                    <span className='text-gray-500'>Phí vận chuyển:</span>
                     <span className='text-gray-900'>
                       {deliveryFee.toLocaleString('vi-VN', {
                         style: 'currency',
@@ -247,12 +272,20 @@ function OrderPage() {
                   </div>
                 </div>
 
-                <button
-                  className='mt-6 w-full font-semibold bg-primary text-white py-3 rounded-md text-lg hover:bg-hover-primary'
-                  onClick={() => navigate('/thankyou')}
-                >
-                  Xác nhận đặt hàng
-                </button>
+                <div className='flex justify-between mt-6'>
+                  <button
+                    className='w-1/2 mr-2 font-semibold bg-gray-300 text-gray-700 py-3 rounded-md text-lg hover:bg-gray-400'
+                    onClick={() => navigate('/cart')}
+                  >
+                    Trở về giỏ hàng
+                  </button>
+                  <button
+                    className='w-1/2 ml-2 font-semibold bg-primary text-white py-3 rounded-md text-lg hover:bg-hover-primary'
+                    onClick={handleSubmit}
+                  >
+                    Xác nhận đặt hàng
+                  </button>
+                </div>
               </div>
             </div>
           </div>

@@ -1,23 +1,26 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom'; // Correct import statement
 import {
   AccountCircle,
-  // CreditCard,
   LocationOn,
   Lock,
   Notifications,
   Security,
   ShoppingCart,
-} from '@mui/icons-material'; // Import icons từ Material UI
+} from '@mui/icons-material'; // Import icons from Material UI
 import Avatar from '@assets/user.png';
-import UserProfileForm from '@components/ProfilePage/UserProfileForm'; // Đường dẫn component của bạn
-import PasswordResetForm from '@components/ProfilePage/PasswordResetForm'; // Đường dẫn component của bạn
-// import AddressSection from './AddressSection'; // Đường dẫn component của bạn
+import UserProfileForm from '@components/ProfilePage/UserProfileForm'; // Correct component path
+import PasswordResetForm from '@components/ProfilePage/PasswordResetForm'; // Correct component path
+import AddressSection from '@components/ProfilePage/AddressSection'; // Correct component path
+import OrderHistory from '@components/ProfilePage/OrderHistory'; // Correct component path
 import { getLoggedInUser } from '@redux/thunk/userThunk';
 import { useDispatch, useSelector } from 'react-redux';
-import AddressSection from '@components/ProfilePage/AddressSection';
 
 function ProfilePage() {
-  const [selectedTab, setSelectedTab] = useState('profile'); // Mặc định là "profile"
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const initialTab = queryParams.get('tab') || 'profile';
+  const [selectedTab, setSelectedTab] = useState(initialTab);
 
   const dispatch = useDispatch();
   const user = useSelector(state => state.users.user);
@@ -29,41 +32,31 @@ function ProfilePage() {
     }
   }, [dispatch, accessToken]);
 
+  useEffect(() => {
+    setSelectedTab(initialTab);
+  }, [initialTab]);
+
   const tabs = [
     { id: 'profile', label: 'Hồ Sơ', icon: <AccountCircle /> },
     { id: 'address', label: 'Địa Chỉ', icon: <LocationOn /> },
     { id: 'change-password', label: 'Đổi Mật Khẩu', icon: <Lock /> },
     { id: 'orders', label: 'Đơn Mua', icon: <ShoppingCart /> },
-    {
-      id: 'notification-settings',
-      label: 'Cài Đặt Thông Báo',
-      icon: <Notifications />,
-    },
-    {
-      id: 'privacy-settings',
-      label: 'Những Thiết Lập Riêng Tư',
-      icon: <Security />,
-    },
+    { id: 'notification-settings', label: 'Cài Đặt Thông Báo', icon: <Notifications /> },
+    { id: 'privacy-settings', label: 'Những Thiết Lập Riêng Tư', icon: <Security /> },
   ];
 
   const renderContent = () => {
     switch (selectedTab) {
       case 'profile':
         return <UserProfileForm />;
-      // case 'bank':
-      //   return <BankComponent />;
       case 'address':
         return <AddressSection />;
       case 'change-password':
         return <PasswordResetForm />;
-      // case 'notification-settings':
-      //   return <NotificationSettingsComponent />;
-      // case 'privacy-settings':
-      //   return <PrivacySettingsComponent />;
-      // case 'orders':
-      //   return <OrdersComponent />;
-      // default:
-      //   return <ProfileComponent />;
+      case 'orders':
+        return <OrderHistory />;
+      default:
+        return <UserProfileForm />;
     }
   };
 
@@ -78,10 +71,7 @@ function ProfilePage() {
                 user && user?.avatarImagePath
                   ? user?.avatarImagePath.startsWith('http')
                     ? user?.avatarImagePath
-                    : `http://localhost:5000/${user?.avatarImagePath.replace(
-                        /\\/g,
-                        '/'
-                      )}`
+                    : `http://localhost:5000/${user?.avatarImagePath.replace(/\\/g, '/')}`
                   : Avatar
               }
               alt='User avatar'
@@ -100,9 +90,7 @@ function ProfilePage() {
               <li key={tab.id}>
                 <button
                   className={`flex items-center gap-2 w-full text-left py-2 px-4 rounded-lg transition-colors ${
-                    selectedTab === tab.id
-                      ? 'bg-primary text-white'
-                      : 'hover:bg-gray-100'
+                    selectedTab === tab.id ? 'bg-primary text-white' : 'hover:bg-gray-100'
                   }`}
                   onClick={() => setSelectedTab(tab.id)}
                 >
@@ -113,7 +101,7 @@ function ProfilePage() {
           </ul>
         </div>
 
-        {/* Nội dung thay đổi */}
+        {/* Content */}
         <div className='w-full lg:w-3/4 bg-white p-6 rounded-lg shadow-md'>
           {renderContent()}
         </div>

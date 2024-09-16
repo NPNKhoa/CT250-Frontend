@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import DeleteForeverSharpIcon from '@mui/icons-material/DeleteForeverSharp';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -14,6 +14,8 @@ function Cart() {
   const { cart } = useSelector(state => state.cart);
   const cartItems = cart?.cartItems || [];
   const accessToken = localStorage.getItem('accessToken');
+
+  const [selectedItems, setSelectedItems] = useState([]);
 
   useEffect(() => {
     dispatch(getCartByUser(accessToken));
@@ -37,29 +39,47 @@ function Cart() {
     );
   };
 
-  const calculateTotal = () => {
-    return cartItems.reduce(
-      (total, item) => total + item.itemPrice * item.quantity,
-      0
+  const handleCheckboxChange = id => {
+    setSelectedItems(prevSelectedItems =>
+      prevSelectedItems.includes(id)
+        ? prevSelectedItems.filter(itemId => itemId !== id)
+        : [...prevSelectedItems, id]
     );
+  };
+
+  const calculateTotal = () => {
+    return cartItems
+      .filter(item => selectedItems.includes(item._id))
+      .reduce((total, item) => total + item.itemPrice * item.quantity, 0);
+  };
+
+  const handleOrderNow = () => {
+    localStorage.setItem('selectedProductIds', JSON.stringify(selectedItems));
+    setTimeout(() => navigate('/order'), 1000);
   };
 
   return (
     <div className=''>
-      <h2 className='text-2xl font-bold text-white  mb-4 bg-primary sm:rounded-t-lg '>
+      <h2 className='text-2xl font-bold text-white mb-4 bg-primary sm:rounded-t-lg'>
         Giỏ hàng
       </h2>
       <div className='w-full px-5'>
         <div>
           {cartItems.map(item => (
-            <div key={item} className='flex items-center mb-4'>
+            <div key={item._id} className='flex items-center mb-4'>
+              <input
+                type='checkbox'
+                checked={selectedItems.includes(item._id)}
+                onChange={() => handleCheckboxChange(item._id)}
+                className='form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out mr-4'
+              />
               <img
                 src={item.product.productImagePath?.[0] || ''}
                 alt={item.product.productName}
                 className='w-20 mr-2'
               />
               <div className='flex-1'>
-                <div className='flex  items-center gap-3'>
+                <div className='flex items-center gap-3'>
                   <p className='text-sm font-medium'>
                     {item.product.productName}
                   </p>
@@ -80,7 +100,7 @@ function Cart() {
                     >
                       -
                     </button>
-                    <span className='mx-2 '>{item.quantity}</span>
+                    <span className='mx-2'>{item.quantity}</span>
                     <button
                       onClick={() =>
                         handleQuantityChange(item._id, item.quantity + 1)
@@ -104,7 +124,6 @@ function Cart() {
       </div>
       <div className='flex justify-between items-center px-5'>
         <p className='font-bold'>Tổng tiền: </p>
-
         <p className='font-bold text-primary'>
           {calculateTotal().toLocaleString('vi-VN', {
             style: 'currency',
@@ -114,7 +133,8 @@ function Cart() {
       </div>
       <button
         className='bg-primary hover:bg-hover-primary w-full text-white font-bold mt-2 py-2 px-4 rounded'
-        onClick={() => navigate('/order')}
+        onClick={handleOrderNow}
+        disabled={selectedItems.length === 0}
       >
         Đặt hàng ngay
       </button>
