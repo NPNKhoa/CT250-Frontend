@@ -24,9 +24,12 @@ function OrderPage() {
   const [selectedAddress, setSelectedAddress] = useState({});
   const [deliveryFee, setDeliveryFee] = useState(0);
 
-  const selectedProductIds = JSON.parse(localStorage.getItem('selectedProductIds')) || [];
+  const selectedProductIds =
+    JSON.parse(localStorage.getItem('selectedProductIds')) || [];
 
-  const filteredCartItems = cartItems.filter(item => selectedProductIds.includes(item._id));
+  const filteredCartItems = cartItems.filter(item =>
+    selectedProductIds.includes(item._id)
+  );
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
@@ -83,11 +86,18 @@ function OrderPage() {
   };
 
   const handleSubmit = async () => {
+    const { fullname, phone, address, email } = formData;
+
+    // Kiểm tra nếu các trường cần thiết (trừ 'notes') không được điền
+    if (!fullname || !phone || !address || !email) {
+      alert('Vui lòng nhập đầy đủ thông tin.');
+      return;
+    }
     const order = {
       orderDetail: selectedProductIds,
       shippingAddress: selectedAddress._id,
-      shippingMethod: "66e3b81baf451884b122e3d2",
-      paymentMethod: "66e0a282b22a38dc6d06e84c",
+      shippingMethod: '66e3b81baf451884b122e3d2',
+      paymentMethod: '66e0a282b22a38dc6d06e84c',
       shippingFee: deliveryFee,
       totalPrice: calculateTotal() + deliveryFee,
     };
@@ -140,6 +150,7 @@ function OrderPage() {
                   onChange={handleChange}
                   placeholder='Họ và tên'
                   className='w-full mt-4 p-3 border border-gray-300 rounded-md'
+                  readOnly
                 />
                 <input
                   type='text'
@@ -148,6 +159,7 @@ function OrderPage() {
                   onChange={handleChange}
                   placeholder='Số điện thoại'
                   className='w-full mt-4 p-3 border border-gray-300 rounded-md'
+                  readOnly
                 />
                 <input
                   type='text'
@@ -156,6 +168,7 @@ function OrderPage() {
                   onChange={handleChange}
                   placeholder='Địa chỉ'
                   className='w-full mt-4 p-3 border border-gray-300 rounded-md'
+                  readOnly
                 />
                 <input
                   type='email'
@@ -164,6 +177,7 @@ function OrderPage() {
                   onChange={handleChange}
                   placeholder='Email'
                   className='w-full mt-4 p-3 border border-gray-300 rounded-md'
+                  readOnly
                 />
                 <textarea
                   name='notes'
