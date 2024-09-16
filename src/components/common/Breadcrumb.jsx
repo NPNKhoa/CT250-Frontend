@@ -10,7 +10,7 @@ const BreadcrumbsComponent = ({ breadcrumbs }) => {
       >
         <Breadcrumbs
           aria-label='breadcrumb'
-          className='text-xs sm:text-sm md:text-base lg:text-lg'
+          className='flex flex-wrap text-xs sm:text-sm md:text-base lg:text-lg'
         >
           {breadcrumbs.map((breadcrumb, index) => {
             if (index === breadcrumbs.length - 1) {

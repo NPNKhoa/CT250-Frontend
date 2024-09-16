@@ -18,6 +18,7 @@ import brandService from '@services/brand.service';
 
 import { useDispatch } from 'react-redux';
 import { addToCart } from '@redux/thunk/cartThunk';
+import ViewedProducts from '@components/ViewedProducts';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -183,13 +184,15 @@ const ProductDetail = () => {
         {/* product top */}
         <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
           <div>
-            <div className='flex flex-col items-center  p-2'>
+            <div className='flex flex-col items-center p-2'>
               <img
                 src={currentImage}
                 alt={products.productName}
                 className='w-96 h-96 object-contain'
               />
-              <div className='flex space-x-4 mt-4'>
+              {/* Thêm container cho hình ảnh nhỏ có thể cuộn ngang khi màn hình nhỏ */}
+              <div className='flex space-x-4 mt-4 overflow-x-auto'>
+                {/* Đặt chiều rộng cố định cho các hình ảnh để chúng không co lại quá nhiều */}
                 {images.slice(0, 5).map((image, index) => (
                   <img
                     key={index}
@@ -204,10 +207,17 @@ const ProductDetail = () => {
               </div>
             </div>
           </div>
-          <div>
-            <h1 className='text-3xl font-bold mb-2'>{products.productName}</h1>
-            <p className='text-gray-600  mb-2'>Mã: VNB019090</p>
-            <p className=' mb-2'>
+          <div className=''>
+            {/* Tên sản phẩm và mã sản phẩm */}
+            <h1 className='text-xl sm:text-2xl lg:text-3xl font-bold mb-2'>
+              {products.productName}
+            </h1>
+            <p className='text-gray-600 mb-2 text-sm sm:text-base'>
+              Mã: VNB019090
+            </p>
+
+            {/* Thương hiệu và tình trạng */}
+            <p className='mb-2 text-sm sm:text-base'>
               Thương hiệu:{' '}
               <span className='text-primary'>
                 {products.productBrand?.brandName}
@@ -217,8 +227,10 @@ const ProductDetail = () => {
                 {products.countInStock > 0 ? 'Còn hàng' : 'Hết hàng'}
               </span>
             </p>
-            <div className='flex items-center gap-3  mb-8'>
-              <p className='text-2xl font-bold text-primary'>
+
+            {/* Giá sản phẩm */}
+            <div className='flex flex-row items-center gap-2 sm:gap-3 mb-8'>
+              <p className='text-xl sm:text-2xl font-bold text-primary'>
                 {products.price &&
                   (products.price * 0.8)
                     .toLocaleString('vi-VN', {
@@ -227,7 +239,7 @@ const ProductDetail = () => {
                     })
                     .replace('₫', 'đ')}
               </p>
-              <p className='line-through text-gray-400'>
+              <p className='line-through text-gray-400 text-sm sm:text-base'>
                 Giá niêm yết:{' '}
                 {products.price &&
                   products.price
@@ -239,87 +251,91 @@ const ProductDetail = () => {
               </p>
             </div>
 
+            {/* Ưu đãi */}
             <div className='bg-gray-100 p-4 rounded-md border border-primary relative'>
-              <div className='absolute -top-5 border px-3 py-1 rounded-lg bg-gray-100  border-primary'>
-                <h2 className='text-xl font-bold text-primary flex items-center gap-3'>
+              <div className='absolute -top-5 border px-3 py-1 rounded-lg bg-gray-100 border-primary'>
+                <h2 className='text-lg sm:text-xl font-bold text-primary flex items-center gap-3'>
                   <CardGiftcardIcon /> Ưu đãi
                 </h2>
               </div>
 
+              {/* Danh sách ưu đãi */}
               <ul className='list-disc space-y-2 mt-4'>
                 {giftsData.map(benefit => (
-                  <li key={benefit.id} className='list-none gap-5'>
+                  <li
+                    key={benefit.id}
+                    className='list-none flex items-center gap-2'
+                  >
                     <CheckIcon className='text-primary font-bold' />
                     {benefit.content}
                   </li>
                 ))}
               </ul>
 
-              <h2 className='text-xl font-bold mt-4'>
+              {/* Ưu đãi thêm */}
+              <h2 className='text-lg sm:text-xl font-bold mt-4'>
                 Ưu đãi thêm khi mua sản phẩm tại{' '}
                 <span className='text-primary'>VNB Premium</span>
               </h2>
 
               <ul className='list-disc space-y-2'>
                 {benefitsData.map(benefit => (
-                  <li key={benefit.id} className='list-none gap-5'>
-                    <CheckBoxIcon className='text-green-500 ' />
+                  <li
+                    key={benefit.id}
+                    className='list-none flex items-center gap-2'
+                  >
+                    <CheckBoxIcon className='text-green-500' />
                     {benefit.content}
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className='flex  items-center mt-5'>
+            {/* Nút tăng/giảm số lượng */}
+            <div className='flex items-center mt-5'>
               <button
-                className='bg-primary hover:bg-hover-primary text-white font-bold py-2 px-4 rounded-full'
+                className='bg-primary hover:bg-hover-primary text-white font-bold py-2 px-3 rounded-full'
                 onClick={decrement}
               >
                 -
               </button>
-              {/* <input
-                type='number'
-                className='w-20 text-center px-4 py-2 border mx-1 border-primary rounded-lg'
-                value={quantity}
-                readOnly
-                onChange={handleInputChange}
-              /> */}
-              <span
-                className='w-20 text-center px-4 py-2 border mx-1 border-primary rounded-lg'
-                value={quantity}
-              >
+              <span className='w-16 sm:w-20 text-center px-2 sm:px-4 py-2 border mx-1 border-primary rounded-lg'>
                 {quantity}
               </span>
               <button
-                className='bg-primary hover:bg-hover-primary text-white font-bold py-2 px-4 rounded-full'
+                className='bg-primary hover:bg-hover-primary text-white font-bold py-2 px-3 rounded-full'
                 onClick={increment}
               >
                 +
               </button>
             </div>
 
-            <div className='flex mt-4'>
-              <button className='bg-primary hover:bg-hover-primary text-white font-bold p-4 rounded-lg w-full'>
+            {/* Nút mua ngay và thêm vào giỏ hàng */}
+            <div className='flex flex-col sm:flex-row mt-4 gap-2'>
+              <button className='bg-primary hover:bg-hover-primary text-white font-bold py-3 rounded-lg w-full'>
                 MUA NGAY
               </button>
               <button
                 onClick={handleAddToCart}
-                className='bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg w-full ml-2'
+                className='bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg w-full'
               >
                 THÊM VÀO GIỎ HÀNG
               </button>
             </div>
-            <button className=' bg-yellow-500 hover:bg-yellow-600 text-white font-bold p-4 rounded-lg mt-4 flex flex-col items-center'>
+
+            {/* Nút thanh toán bằng ví VNPAY */}
+            <button className='bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-4 rounded-lg mt-4 flex flex-col items-center'>
               THANH TOÁN BẰNG VÍ VNPAY
-              <img src={Vnpay} alt='' className='w-24 ' />
+              <img src={Vnpay} alt='' className='w-16 sm:w-24' />
             </button>
           </div>
         </div>
 
         {/* product bottom */}
-        <div className='flex'>
-          <div className='container w-3/4 mt-5 px-4'>
-            <div className='grid grid-cols-2 font-semibold text-2xl py-2 border-b-2'>
+        <div className='flex flex-col lg:flex-row'>
+          <div className='container w-full lg:w-3/4 mt-5 px-4'>
+            {/* Tabs for description and specifications */}
+            <div className='grid grid-cols-2 font-semibold text-lg sm:text-2xl lg:text-2xl py-2 border-b-2'>
               <button
                 className={`button ${
                   activeTab === 'description'
@@ -341,56 +357,62 @@ const ProductDetail = () => {
                 Thông số kỹ thuật
               </button>
             </div>
-            {/* Hiển thị nội dung dựa trên activeTab */}{' '}
+
             {activeTab === 'description' ? (
-              <div className='p-10 space-y-4 text-gray-800  flex justify-center items-center'>
+              <div className='p-2 sm:p-4 lg:p-10 space-y-4 text-gray-800 flex justify-center items-center'>
                 <div
                   className='product-description'
                   dangerouslySetInnerHTML={{ __html: products.description }}
                 />
               </div>
-            ) : (
-              <table className='table-auto w-full mt-3'>
+            ) : products.technicalSpecification ? (
+              <table className='table-auto w-full mt-3 text-sm sm:text-base'>
                 <tbody>
                   {productData.map((item, index) => (
-                    <tr key={index} className='border border-gray-300 '>
-                      <td className='w-2/5 p-3 border border-gray-300 font-bold'>
+                    <tr key={index} className='border border-gray-300'>
+                      <td className='w-2/5 p-2 sm:p-3 text-sm sm:text-base border border-gray-300 font-bold'>
                         {item.specificationName.specificationName}
                       </td>
-                      <td className='px-4 py-2 border border-gray-300'>
+                      <td className='px-3 py-2 sm:px-4 sm:py-2 border border-gray-300'>
                         {item.specificationDesc}
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+            ) : (
+              <p className='text-gray-700'>Thông số kỹ thuật không có sẵn.</p>
             )}
           </div>
-          <div className='w-1/4 pt-3'>
+
+          <div className='w-full sm:w-1/4 pt-3 hidden lg:block'>
             <div className='w-full max-w-xs p-4 bg-white rounded-lg shadow'>
-              <h2 className='text-lg font-bold flex justify-center items-center'>
+              <h2 className='text-base sm:text-lg font-bold text-center'>
                 DANH MỤC SẢN PHẨM
               </h2>
               <h3 className='m-2'>
                 {productTypes.map((type, index) => (
                   <div key={index}>
                     <div className='flex justify-between items-center my-4'>
-                      <Link to={'/'}>{type.productTypeName}</Link>
+                      <Link to={'/'} className='text-sm sm:text-base'>
+                        {type.productTypeName}
+                      </Link>
                       <button
                         onClick={() => toggleMenu(index)}
-                        className='text-lg'
+                        className='text-lg sm:text-xl'
                       >
                         {openTypeIndices.includes(index) ? '-' : '+'}
                       </button>
                     </div>
-                    <ul>
+                    <ul className='pl-4'>
                       {openTypeIndices.includes(index) &&
                         brands.map((brand, idx) => (
-                          <li key={idx} className='m-4'>
+                          <li key={idx} className='m-2'>
                             <Link
                               to={`/products?productType=${encodeURIComponent(
                                 type.productTypeName
                               )}&brand=${encodeURIComponent(brand.brandName)}`}
+                              className='text-sm sm:text-base'
                             >
                               {`${type.productTypeName} ${brand.brandName}`}
                             </Link>
@@ -403,7 +425,15 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
-        <RatingSection />
+
+        <div className='flex flex-col lg:flex-row'>
+          <div className='container w-full lg:w-3/4 mt-5 px-4'>
+            <RatingSection />
+          </div>
+          <div className='w-full sm:w-1/4 pt-3 '>
+            <ViewedProducts />
+          </div>
+        </div>
       </div>
       <Alert message={notification.message} type={notification.type} />
     </>

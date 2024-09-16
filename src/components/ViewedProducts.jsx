@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const products = [
   {
     id: 1,
@@ -5,6 +7,7 @@ const products = [
       'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-honor-pro-new-chinh-hang_1709061799.webp',
     name: 'Vợt Tennis Babolat Pure Drive Junior 26 Gen 4 Chính Hãng',
     price: '2.699.000 ₫',
+    link: '#',
   },
   {
     id: 2,
@@ -12,6 +15,7 @@ const products = [
       'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-honor-pro-new-chinh-hang_1709061799.webp',
     name: 'Vợt Pickleball Joola Ben Johns Perseus 3 14mm Chính Hãng',
     price: '6.990.000 ₫',
+    link: '#',
   },
   {
     id: 3,
@@ -19,6 +23,7 @@ const products = [
       'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-honor-pro-new-chinh-hang_1709061799.webp',
     name: 'Vợt Tennis Babolat Pure Drive Junior 26 Gen 4 Chính Hãng',
     price: '2.699.000 ₫',
+    link: '#',
   },
   {
     id: 4,
@@ -26,6 +31,7 @@ const products = [
       'https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-apacs-honor-pro-new-chinh-hang_1709061799.webp',
     name: 'Vợt Pickleball Joola Ben Johns Perseus 3 14mm Chính Hãng',
     price: '6.990.000 ₫',
+    link: '#',
   },
 ];
 
@@ -35,9 +41,10 @@ function ViewedProducts() {
       <h2 className='text-2xl font-bold mb-4'>Sản phẩm đã xem</h2>
       <div className='flex flex-col gap-4'>
         {products.map(product => (
-          <div
+          <Link
             key={product.id}
-            className='bg-white shadow-md rounded-lg overflow-hidden flex gap-4'
+            to={product.link}
+            className='bg-white shadow-md rounded-lg overflow-hidden flex items-center gap-4 no-underline'
           >
             <img
               src={product.image}
@@ -45,10 +52,12 @@ function ViewedProducts() {
               className='w-24 h-24 object-cover'
             />
             <div className='p-4'>
-              <h3 className='text-lg font-medium'>{product.name}</h3>
-              <p className='text-gray-500'>{product.price}</p>
+              <h3 className='sm:text-base text-sm font-medium'>
+                {product.name}
+              </h3>
+              <p className='text-primary font-semibold'>{product.price}</p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
