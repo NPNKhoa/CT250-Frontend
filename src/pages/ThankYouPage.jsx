@@ -20,7 +20,7 @@ const ThankYouPage = () => {
 
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-6'>
           <Link
-            to='/order-history'
+            to='/profile?tab=orders'
             className='bg-primary hover:bg-hover-primary text-white py-3 px-5 rounded-lg shadow-md transition duration-300 ease-in-out'
           >
             Xem lại đơn hàng

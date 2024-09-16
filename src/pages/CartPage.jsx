@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
 import DeleteForeverSharpIcon from '@mui/icons-material/DeleteForeverSharp';
@@ -17,6 +17,8 @@ const CartPage = () => {
   const cartItems = cart?.cartItems || [];
   const accessToken = localStorage.getItem('accessToken');
   const navigate = useNavigate();
+
+  const [selectedItems, setSelectedItems] = useState([]);
 
   useEffect(() => {
     dispatch(getCartByUser(accessToken));
@@ -45,14 +47,22 @@ const CartPage = () => {
     );
   };
 
-  const calculateTotal = () => {
-    return cartItems.reduce(
-      (total, item) => total + item.itemPrice * item.quantity,
-      0
+  const handleCheckboxChange = id => {
+    setSelectedItems(prevSelectedItems =>
+      prevSelectedItems.includes(id)
+        ? prevSelectedItems.filter(itemId => itemId !== id)
+        : [...prevSelectedItems, id]
     );
   };
 
+  const calculateTotal = () => {
+    return cartItems
+      .filter(item => selectedItems.includes(item._id))
+      .reduce((total, item) => total + item.itemPrice * item.quantity, 0);
+  };
+
   const handleOrderNow = () => {
+    localStorage.setItem('selectedProductIds', JSON.stringify(selectedItems));
     setTimeout(() => navigate('/order'), 1000);
   };
 
@@ -74,6 +84,7 @@ const CartPage = () => {
               <table className='w-full bg-white rounded-lg shadow text-sm sm:text-base'>
                 <thead className='bg-primary'>
                   <tr className='border-b text-white'>
+                    <th className='text-left py-2 px-4'>Chọn</th>
                     <th className='text-left py-2 px-4'>Sản phẩm</th>
                     <th className='text-center py-2 px-4'>Số lượng</th>
                     <th className='text-right py-2 px-4'>Đơn giá</th>
@@ -83,6 +94,14 @@ const CartPage = () => {
                 <tbody>
                   {cartItems.map(item => (
                     <tr key={item._id} className='border-b'>
+                      <td className='text-center py-2 px-4'>
+                        <input
+                          type='checkbox'
+                          checked={selectedItems.includes(item._id)}
+                          onChange={() => handleCheckboxChange(item._id)}
+                          className='form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out'
+                        />
+                      </td>
                       <td className='flex items-center py-2 px-4'>
                         <img
                           src={item.product.productImagePath?.[0] || ''}
@@ -91,7 +110,7 @@ const CartPage = () => {
                         />
                         <div>
                           <Link to={`/products/detail/${item.product._id}`}>
-                            <p className='font-medium'>
+                            <p className='font-medium text-gray-900 hover:text-blue-600 transition duration-150'>
                               {item.product.productName}
                             </p>
                           </Link>
@@ -102,7 +121,7 @@ const CartPage = () => {
                           onClick={() =>
                             handleQuantityChange(item._id, item.quantity - 1)
                           }
-                          className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1 px-2 rounded-l-full'
+                          className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1 px-2 rounded-l-full transition duration-150'
                         >
                           <span>-</span>
                         </button>
@@ -111,7 +130,7 @@ const CartPage = () => {
                           onClick={() =>
                             handleQuantityChange(item._id, item.quantity + 1)
                           }
-                          className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1 px-2 rounded-r-full'
+                          className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1 px-2 rounded-r-full transition duration-150'
                         >
                           <span>+</span>
                         </button>
@@ -125,7 +144,7 @@ const CartPage = () => {
                       <td className='text-center py-2 px-4'>
                         <button
                           onClick={() => handleRemove(item._id)}
-                          className='text-primary hover:text-hover-primary'
+                          className='text-primary hover:text-hover-primary transition duration-150'
                         >
                           <DeleteForeverSharpIcon />
                         </button>
@@ -145,6 +164,12 @@ const CartPage = () => {
                 >
                   {/* Product Image */}
                   <div className='flex items-center mb-4'>
+                    <input
+                      type='checkbox'
+                      checked={selectedItems.includes(item._id)}
+                      onChange={() => handleCheckboxChange(item._id)}
+                      className='form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out mr-4'
+                    />
                     <img
                       src={item.product.productImagePath?.[0] || ''}
                       alt={item.product.productName}
@@ -152,7 +177,7 @@ const CartPage = () => {
                     />
                     <div className='ml-4'>
                       <Link to={`/products/detail/${item.product._id}`}>
-                        <p className='font-medium text-base'>
+                        <p className='font-medium text-base text-gray-900 hover:text-blue-600 transition duration-150'>
                           {item.product.productName}
                         </p>
                       </Link>
@@ -166,7 +191,7 @@ const CartPage = () => {
                         onClick={() =>
                           handleQuantityChange(item._id, item.quantity - 1)
                         }
-                        className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1 px-2 rounded-l-full'
+                        className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1 px-2 rounded-l-full transition duration-150'
                       >
                         <span>-</span>
                       </button>
@@ -175,7 +200,7 @@ const CartPage = () => {
                         onClick={() =>
                           handleQuantityChange(item._id, item.quantity + 1)
                         }
-                        className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1 px-2 rounded-r-full'
+                        className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1 px-2 rounded-r-full transition duration-150'
                       >
                         <span>+</span>
                       </button>
@@ -188,7 +213,7 @@ const CartPage = () => {
                     </p>
                     <button
                       onClick={() => handleRemove(item._id)}
-                      className='text-primary hover:text-hover-primary'
+                      className='text-primary hover:text-hover-primary transition duration-150'
                     >
                       <DeleteForeverSharpIcon />
                     </button>
@@ -210,7 +235,8 @@ const CartPage = () => {
               </div>
               <button
                 onClick={handleOrderNow}
-                className='bg-primary hover:bg-hover-primary text-white font-semibold py-2 px-4 sm:py-3 sm:px-6 rounded'
+                className='bg-primary hover:bg-hover-primary text-white font-semibold py-2 px-4 sm:py-3 sm:px-6 rounded transition duration-150'
+                disabled={selectedItems.length === 0}
               >
                 Đặt hàng ngay
               </button>
