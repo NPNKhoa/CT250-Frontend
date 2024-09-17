@@ -24,7 +24,7 @@ function OrderPage() {
   });
   const [selectedAddress, setSelectedAddress] = useState({});
   const [deliveryFee, setDeliveryFee] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const selectedProductIds =
     JSON.parse(localStorage.getItem('selectedProductIds')) || [];
@@ -57,8 +57,6 @@ function OrderPage() {
   useEffect(() => {
     const fetchDeliveryFee = async address => {
       try {
-        setLoading(true);
-
         const response = await orderService.getDeliveryFee({
           province: address.province
             .replace('Tỉnh ', '')
@@ -70,9 +68,6 @@ function OrderPage() {
         setDeliveryFee(response);
       } catch (error) {
         console.log(error);
-        setLoading(false);
-      } finally {
-        setLoading(false);
       }
     };
     fetchDeliveryFee(selectedAddress);
@@ -310,14 +305,14 @@ function OrderPage() {
                   </button>
                   <button
                     className={`w-1/2 ml-2 font-semibold bg-primary text-white py-3 rounded-md text-lg ${
-                      loading
+                      isLoading
                         ? 'cursor-not-allowed opacity-50'
                         : 'hover:bg-hover-primary'
                     }`}
                     onClick={handleSubmit}
-                    disabled={loading}
+                    disabled={isLoading}
                   >
-                    {loading ? (
+                    {isLoading ? (
                       <CircularProgress size={24} color='inherit' />
                     ) : (
                       'Xác nhận đặt hàng'
