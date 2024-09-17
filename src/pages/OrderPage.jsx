@@ -5,6 +5,7 @@ import { getUserAddressThunk } from '../redux/thunk/addressThunk';
 import orderService from '@services/order.service';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
 import { getCartByUser } from '@redux/thunk/cartThunk';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function OrderPage() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ function OrderPage() {
   });
   const [selectedAddress, setSelectedAddress] = useState({});
   const [deliveryFee, setDeliveryFee] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const selectedProductIds =
     JSON.parse(localStorage.getItem('selectedProductIds')) || [];
@@ -102,6 +104,7 @@ function OrderPage() {
       totalPrice: calculateTotal() + deliveryFee,
     };
     try {
+      setIsLoading(true);
       const response = await orderService.createOrder(order);
       if (response) {
         navigate('/thankyou');
@@ -109,6 +112,8 @@ function OrderPage() {
       dispatch(getCartByUser(localStorage.getItem('accessToken')));
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -297,7 +302,11 @@ function OrderPage() {
                     className='w-1/2 ml-2 font-semibold bg-primary text-white py-3 rounded-md text-lg hover:bg-hover-primary'
                     onClick={handleSubmit}
                   >
-                    Xác nhận đặt hàng
+                    {isLoading ? (
+                      <CircularProgress size={24} color='inherit' />
+                    ) : (
+                      'Xác nhận đặt hàng'
+                    )}
                   </button>
                 </div>
               </div>
