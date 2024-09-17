@@ -5,6 +5,7 @@ import { getUserAddressThunk } from '../redux/thunk/addressThunk';
 import orderService from '@services/order.service';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
 import { getCartByUser } from '@redux/thunk/cartThunk';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function OrderPage() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ function OrderPage() {
   });
   const [selectedAddress, setSelectedAddress] = useState({});
   const [deliveryFee, setDeliveryFee] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const selectedProductIds =
     JSON.parse(localStorage.getItem('selectedProductIds')) || [];
@@ -54,14 +56,24 @@ function OrderPage() {
 
   useEffect(() => {
     const fetchDeliveryFee = async address => {
-      const response = await orderService.getDeliveryFee({
-        province: address.province
-          .replace('Tỉnh ', '')
-          .replace('Thành phố ', ''),
-        district: address.district,
-        ward: address.commune,
-      });
-      setDeliveryFee(response);
+      try {
+        setLoading(true);
+
+        const response = await orderService.getDeliveryFee({
+          province: address.province
+            .replace('Tỉnh ', '')
+            .replace('Thành phố ', ''),
+          district: address.district,
+          ward: address.commune,
+        });
+
+        setDeliveryFee(response);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchDeliveryFee(selectedAddress);
   }, [selectedAddress]);
@@ -294,10 +306,19 @@ function OrderPage() {
                     Trở về giỏ hàng
                   </button>
                   <button
-                    className='w-1/2 ml-2 font-semibold bg-primary text-white py-3 rounded-md text-lg hover:bg-hover-primary'
+                    className={`w-1/2 ml-2 font-semibold bg-primary text-white py-3 rounded-md text-lg ${
+                      loading
+                        ? 'cursor-not-allowed opacity-50'
+                        : 'hover:bg-hover-primary'
+                    }`}
                     onClick={handleSubmit}
+                    disabled={loading}
                   >
-                    Xác nhận đặt hàng
+                    {loading ? (
+                      <CircularProgress size={24} color='inherit' />
+                    ) : (
+                      'Xác nhận đặt hàng'
+                    )}
                   </button>
                 </div>
               </div>
