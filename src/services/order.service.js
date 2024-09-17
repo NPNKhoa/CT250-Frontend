@@ -95,17 +95,11 @@ class OrderService {
         {
           from_district_id: 1572, // Quận Ninh Kiều
           from_ward_code: '550113', // Phường Xuân Khánh
-          service_id: 53321, // Hàng nhẹ
+          service_id: 53320, // Hàng nhẹ
           service_type_id: 2, // Giao hàng thương mại
-          to_district_id: districtId,
-          to_ward_code: wardCode,
-          height: 10, // Chiều cao (cm)
-          length: 70, // Chiều dài (cm)
-          width: 15, // Chiều rộng (cm)
+          to_district_id: +districtId,
+          to_ward_code: wardCode.toString(),
           weight: 85, // Trọng lượng (gram)
-          insurance_value: 0, // Giá trị lô hàng
-          cod_failed_amount: 2000, // Số tiền thu hộ nếu giao hàng thất bại (VND)
-          coupon: null, // Mã giảm giá
         },
         {
           headers: {
