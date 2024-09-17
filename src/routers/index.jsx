@@ -1,3 +1,4 @@
+import PrivateRoute from './PrivateRoute';
 import HomePage from '@pages/HomePage';
 import LoginPage from '@pages/LoginPage';
 import SignUpPage from '@pages/SignUpPage';
@@ -72,7 +73,11 @@ const routes = [
   {
     id: 'cart',
     path: '/cart',
-    element: <CartPage />,
+    element:(
+      <PrivateRoute>
+        <CartPage />
+      </PrivateRoute>
+    ),
   },
 
   {
@@ -84,19 +89,31 @@ const routes = [
   {
     id: 'profile',
     path: '/profile',
-    element: <ProfilePage />,
+    element: (
+      <PrivateRoute>
+        <ProfilePage />
+      </PrivateRoute>
+    ),
   },
 
   {
     id: 'order',
     path: '/order',
-    element: <OrderPage />,
+    element: (
+      <PrivateRoute>
+        <OrderPage />
+      </PrivateRoute>
+    ),
   },
 
   {
     id: 'thankyou',
     path: '/thankyou',
-    element: <ThankYouPage />,
+    element: (
+      <PrivateRoute>
+        <ThankYouPage />
+      </PrivateRoute>
+    ),  
   },
 
   {
