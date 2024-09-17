@@ -39,29 +39,42 @@ class OrderService {
     }
   }
 
-
   async getDestinationCode({ province, district, ward }) {
     try {
-      const provinceRes = await axios.get(`${GHN_API_BASE_URL}/master-data/province`, {
-        headers: this.headers,
-      });
+      const provinceRes = await axios.get(
+        `${GHN_API_BASE_URL}/master-data/province`,
+        {
+          headers: this.headers,
+        }
+      );
 
-      const provinceId = provinceRes.data.data.find(item => item.ProvinceName === province)?.ProvinceID ?? 0;
+      const provinceId =
+        provinceRes.data.data.find(item => item.ProvinceName === province)
+          ?.ProvinceID ?? 0;
 
-      const districtRes = await axios.get(`${GHN_API_BASE_URL}/master-data/district`, {
-        headers: {
-          ...this.headers,
-          province_id: provinceId,
-        },
-      });
+      const districtRes = await axios.get(
+        `${GHN_API_BASE_URL}/master-data/district`,
+        {
+          headers: {
+            ...this.headers,
+            province_id: provinceId,
+          },
+        }
+      );
 
-      const districtId = districtRes.data.data.find(item => item.DistrictName === district)?.DistrictID ?? 0;
+      const districtId =
+        districtRes.data.data.find(item => item.DistrictName === district)
+          ?.DistrictID ?? 0;
 
-      const wardRes = await axios.get(`${GHN_API_BASE_URL}/master-data/ward?district_id=${districtId}`, {
-        headers: this.headers,
-      });
+      const wardRes = await axios.get(
+        `${GHN_API_BASE_URL}/master-data/ward?district_id=${districtId}`,
+        {
+          headers: this.headers,
+        }
+      );
 
-      const wardCode = wardRes.data.data.find(item => item.WardName === ward)?.WardCode ?? 0;
+      const wardCode =
+        wardRes.data.data.find(item => item.WardName === ward)?.WardCode ?? 0;
 
       return { districtId, wardCode };
     } catch (error) {
@@ -71,7 +84,11 @@ class OrderService {
 
   async getDeliveryFee({ province, district, ward }) {
     try {
-      const { districtId, wardCode } = await this.getDestinationCode({ province, district, ward });
+      const { districtId, wardCode } = await this.getDestinationCode({
+        province,
+        district,
+        ward,
+      });
 
       const response = await axios.post(
         `${GHN_API_BASE_URL}/v2/shipping-order/fee`,
@@ -100,6 +117,10 @@ class OrderService {
 
       return response.data.data.total;
     } catch (error) {
+      console.error(
+        'Error fetching delivery fee:',
+        error.response?.data || error.message
+      );
       throw new Error(error.message || 'Error fetching third-party API');
     }
   }
