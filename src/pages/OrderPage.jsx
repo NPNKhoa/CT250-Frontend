@@ -57,6 +57,7 @@ function OrderPage() {
   useEffect(() => {
     const fetchDeliveryFee = async address => {
       try {
+        setIsLoading(true);
         const response = await orderService.getDeliveryFee({
           province: address.province
             .replace('Tỉnh ', '')
@@ -68,6 +69,9 @@ function OrderPage() {
         setDeliveryFee(response);
       } catch (error) {
         console.log(error);
+        setIsLoading(false);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchDeliveryFee(selectedAddress);
