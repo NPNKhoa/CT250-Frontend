@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import CheckIcon from '@mui/icons-material/Check';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
@@ -16,7 +16,7 @@ import brandService from '@services/brand.service';
 
 // import cartService from '@services/cart.service';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '@redux/thunk/cartThunk';
 import ViewedProducts from '@components/ViewedProducts';
 
@@ -25,7 +25,7 @@ const ProductDetail = () => {
   const [products, setProducts] = useState({});
   const [productTypes, setProductTypes] = useState([]);
   const [brands, setBrands] = useState([]);
-
+  const navigate = useNavigate();
   const [notification, setNotification] = useState({ message: '', type: '' });
 
   useEffect(() => {
@@ -143,16 +143,15 @@ const ProductDetail = () => {
     }
   };
 
-  // const handleInputChange = event => {
-  //   const newValue = parseInt(event.target.value);
-  //   if (!isNaN(newValue) && newValue >= 0 && newValue <= Infinity) {
-  //     setQuantity(newValue);
-  //   }
-  // };
-
   const dispatch = useDispatch();
+  const user = useSelector(state => state.auth.authUser);
 
   const handleAddToCart = () => {
+    if (!user) {
+      alert('Bạn cần phải đăng nhập để thêm sản phẩm vào giỏ hàng!');
+      navigate('/login'); // Chuyển hướng tới trang đăng nhập
+      return;
+    }
     dispatch(
       addToCart({
         accessToken: localStorage.getItem('accessToken'),

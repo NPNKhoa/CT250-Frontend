@@ -31,12 +31,16 @@ function Cart() {
   };
 
   const handleQuantityChange = (id, delta) => {
-    dispatch(
-      updateQuantity({
-        accessToken: accessToken,
-        data: { productId: id, quantity: delta },
-      })
-    );
+    if (delta <= 0) {
+      handleRemove(id); // Xóa sản phẩm nếu số lượng bằng 0
+    } else {
+      dispatch(
+        updateQuantity({
+          accessToken: accessToken,
+          data: { productId: id, quantity: delta },
+        })
+      );
+    }
   };
 
   const handleCheckboxChange = id => {
@@ -74,14 +78,14 @@ function Cart() {
                 className='form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out mr-4'
               />
               <img
-                src={item.product.productImagePath?.[0] || ''}
-                alt={item.product.productName}
+                src={item.product?.productImagePath?.[0] || ''}
+                alt={item.product?.productName}
                 className='w-20 mr-2'
               />
               <div className='flex-1'>
                 <div className='flex items-center gap-3'>
                   <p className='text-sm font-medium'>
-                    {item.product.productName}
+                    {item.product?.productName}
                   </p>
                   <button
                     onClick={() => handleRemove(item._id)}

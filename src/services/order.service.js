@@ -111,6 +111,10 @@ class OrderService {
 
       return response.data.data.total;
     } catch (error) {
+      console.error(
+        'Error fetching delivery fee:',
+        error.response?.data || error.message
+      );
       throw new Error(error.message || 'Error fetching third-party API');
     }
   }

@@ -114,6 +114,7 @@ function OrderPage() {
       totalPrice: calculateTotal() + deliveryFee,
     };
     try {
+      setIsLoading(true);
       const response = await orderService.createOrder(order);
       if (response) {
         navigate('/thankyou');
@@ -121,6 +122,8 @@ function OrderPage() {
       dispatch(getCartByUser(localStorage.getItem('accessToken')));
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
