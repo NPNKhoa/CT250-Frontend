@@ -10,6 +10,8 @@ import { setSelectedProduct } from '@redux/slices/cartSlice';
 import AddressFormDialog from '@components/ProfilePage/AddressFormDialog';
 import cartService from '@services/cart.service';
 import { toast } from 'react-toastify';
+import shippingMethodService from '@services/shippingMethod.service';
+import paymentMethodService from '@services/paymentMethod.service';
 
 function OrderPage() {
   const navigate = useNavigate();
@@ -32,7 +34,27 @@ function OrderPage() {
 
   const [productItems, setProductItems] = useState([]);
 
-  console.log('selectedProductIds', selectedProductIds);
+  const [shippingMethods, setShippingMethods] = useState([]);
+  const [paymentMethods, setPaymentMethods] = useState([]);
+  const [selectedShippingMethod, setSelectedShippingMethod] = useState('');
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const shipping = await shippingMethodService.getAll();
+        setShippingMethods(shipping.data);
+        console.log(shipping.data);
+        const payment = await paymentMethodService.getAll();
+        setPaymentMethods(payment.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   useEffect(() => {
     const fetchCartDetail = async () => {
       const product = [];
@@ -40,7 +62,6 @@ function OrderPage() {
         try {
           const data = await cartService.getCartDetail(id);
           product.push(data.data);
-          // console.log('data', data.data);
         } catch (error) {
           console.error(error);
         }
@@ -73,31 +94,40 @@ function OrderPage() {
   }, [user, addresses]);
 
   useEffect(() => {
-    const fetchDeliveryFee = async address => {
-      try {
-        setIsLoading(true);
-        const response = await orderService.getDeliveryFee({
-          province: address.province
-            .replace('Tỉnh ', '')
-            .replace('Thành phố ', ''),
-          district: address.district,
-          ward: address.commune,
-        });
-
-        setDeliveryFee(response);
-      } catch (error) {
-        console.log(error);
-        setIsLoading(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchDeliveryFee(selectedAddress);
   }, [selectedAddress]);
+
+  const fetchDeliveryFee = async address => {
+    try {
+      setIsLoading(true);
+      const response = await orderService.getDeliveryFee({
+        province: address.province
+          .replace('Tỉnh ', '')
+          .replace('Thành phố ', ''),
+        district: address.district,
+        ward: address.commune,
+      });
+      setDeliveryFee(response);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleChange = e => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleChangePayment = e => {
+    const { value } = e.target;
+    setSelectedPaymentMethod(value);
+  };
+
+  const handleChangeShipping = e => {
+    const { value } = e.target;
+    setSelectedShippingMethod(value);
   };
 
   const handleAddressSelect = index => {
@@ -125,8 +155,8 @@ function OrderPage() {
     const order = {
       orderDetail: selectedProductIds,
       shippingAddress: selectedAddress._id,
-      shippingMethod: '66e3b81baf451884b122e3d2',
-      paymentMethod: '66e0a282b22a38dc6d06e84c',
+      shippingMethod: selectedShippingMethod,
+      paymentMethod: selectedPaymentMethod,
       shippingFee: deliveryFee,
       totalPrice: calculateTotal() + deliveryFee,
     };
@@ -241,27 +271,55 @@ function OrderPage() {
                 Phương thức thanh toán
               </h3>
               <div className='flex flex-col space-y-2 mb-4'>
-                <label className='flex items-center space-x-2'>
-                  <input
-                    type='radio'
-                    name='payment'
-                    value='cod'
-                    defaultChecked
-                    className='form-radio h-4 w-4 text-blue-600 transition duration-150 ease-in-out'
-                  />
-                  <span className='text-gray-700'>
-                    Thanh toán khi nhận hàng (COD)
-                  </span>
-                </label>
-                <label className='flex items-center space-x-2'>
-                  <input
-                    type='radio'
-                    name='payment'
-                    value='bank'
-                    className='form-radio h-4 w-4 text-blue-600 transition duration-150 ease-in-out'
-                  />
-                  <span className='text-gray-700'>Thanh toán qua ví VNPay</span>
-                </label>
+                {paymentMethods && paymentMethods.length > 0 ? (
+                  paymentMethods.map(method => (
+                    <label
+                      key={method._id}
+                      className='flex items-center space-x-2'
+                    >
+                      <input
+                        type='radio'
+                        name='payment'
+                        value={method._id}
+                        onChange={handleChangePayment}
+                        className='form-radio h-4 w-4 text-blue-600 transition duration-150 ease-in-out'
+                      />
+                      <span className='text-gray-700'>
+                        {method.paymentMethodName}
+                      </span>
+                    </label>
+                  ))
+                ) : (
+                  <p className='text-gray-700'>No payment methods available.</p>
+                )}
+              </div>
+              <h3 className='text-lg font-semibold text-gray-900 mb-4'>
+                Phương thức vận chuyển
+              </h3>
+              <div className='flex flex-col space-y-2 mb-4'>
+                {shippingMethods && shippingMethods.length > 0 ? (
+                  shippingMethods.map(method => (
+                    <label
+                      key={method._id}
+                      className='flex items-center space-x-2'
+                    >
+                      <input
+                        type='radio'
+                        name='shipping'
+                        value={method._id}
+                        onChange={handleChangeShipping}
+                        className='form-radio h-4 w-4 text-blue-600 transition duration-150 ease-in-out'
+                      />
+                      <span className='text-gray-700'>
+                        {method.shippingMethod}
+                      </span>
+                    </label>
+                  ))
+                ) : (
+                  <p className='text-gray-700'>
+                    No shipping methods available.
+                  </p>
+                )}
               </div>
               <div className='border-t'>
                 <h2 className='text-lg font-semibold text-gray-900 mt-4'>
@@ -311,22 +369,24 @@ function OrderPage() {
                   <div className='flex justify-between mt-2'>
                     <span className='text-gray-500'>Phí vận chuyển:</span>
                     <span className='text-gray-900'>
-                      {deliveryFee.toLocaleString('vi-VN', {
+                      {selectedShippingMethod ? 
+                      deliveryFee.toLocaleString('vi-VN', {
                         style: 'currency',
                         currency: 'VND',
-                      })}
+                      }) 
+                      : 0 }
                     </span>
                   </div>
                   <div className='flex justify-between mt-4 text-lg font-medium'>
                     <span>Tổng cộng:</span>
                     <span className='text-gray-900'>
-                      {(calculateTotal() + deliveryFee).toLocaleString(
-                        'vi-VN',
-                        {
-                          style: 'currency',
-                          currency: 'VND',
-                        }
-                      )}
+                      {(
+                        calculateTotal() +
+                        (selectedShippingMethod ? deliveryFee : 0)
+                      ).toLocaleString('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND',
+                      })}
                     </span>
                   </div>
                 </div>
