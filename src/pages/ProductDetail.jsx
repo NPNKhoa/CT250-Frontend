@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import CheckIcon from '@mui/icons-material/Check';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
@@ -8,7 +8,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 import Vnpay from '@assets/vnpay.png';
 import RatingSection from '@components/RatingSection';
-import Alert from '@components/Alert';
+// import Alert from '@components/Alert';
 
 import productService from '@services/product.service';
 import productTypeService from '@services/productType.service';
@@ -19,14 +19,15 @@ import brandService from '@services/brand.service';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '@redux/thunk/cartThunk';
 import ViewedProducts from '@components/ViewedProducts';
+import { toast } from 'react-toastify';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [products, setProducts] = useState({});
   const [productTypes, setProductTypes] = useState([]);
   const [brands, setBrands] = useState([]);
-  const navigate = useNavigate();
-  const [notification, setNotification] = useState({ message: '', type: '' });
+  // const navigate = useNavigate();
+  // const [notification, setNotification] = useState({ message: '', type: '' });
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -148,8 +149,8 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     if (!user) {
-      alert('Bạn cần phải đăng nhập để thêm sản phẩm vào giỏ hàng!');
-      navigate('/login'); // Chuyển hướng tới trang đăng nhập
+      toast.error('Bạn cần phải đăng nhập để thêm sản phẩm vào giỏ hàng!');
+      // navigate('/login');
       return;
     }
     dispatch(
@@ -161,7 +162,8 @@ const ProductDetail = () => {
         },
       })
     );
-    setNotification({ message: 'Đã thêm vào giỏ hàng!', type: 'success' });
+    toast.success('Đã thêm vào giỏ hàng!');
+    // setNotification({ message: 'Đã thêm vào giỏ hàng!', type: 'success' });
   };
 
   const [openTypeIndices, setOpenTypeIndices] = useState([]);
@@ -323,7 +325,7 @@ const ProductDetail = () => {
             </div>
 
             {/* Nút thanh toán bằng ví VNPAY */}
-            <button className='bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-4 rounded-lg mt-4 flex flex-col items-center'>
+            <button className='bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-4 px-2 rounded-lg mt-4 flex flex-col items-center'>
               THANH TOÁN BẰNG VÍ VNPAY
               <img src={Vnpay} alt='' className='w-16 sm:w-24' />
             </button>
@@ -434,7 +436,7 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
-      <Alert message={notification.message} type={notification.type} />
+      {/* <Alert message={notification.message} type={notification.type} /> */}
     </>
   );
 };

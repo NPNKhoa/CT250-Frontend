@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Autocomplete, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -15,6 +15,7 @@ import {
 } from '@redux/thunk/addressThunk';
 import openApiService from '@services/open-api.service';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 
 const AddressFormDialog = ({ open, onClose, addressData = {} }) => {
   const dispatch = useDispatch();
@@ -106,6 +107,11 @@ const AddressFormDialog = ({ open, onClose, addressData = {} }) => {
       isDefault: isDefault,
     };
 
+    if (!fullName || !phoneNumber || !province || !district || !commune) {
+      toast.error('Vui lòng nhập đầy đủ thông tin.');
+      return;
+    }
+
     try {
       if (addressData && addressData._id) {
         await dispatch(
@@ -115,6 +121,7 @@ const AddressFormDialog = ({ open, onClose, addressData = {} }) => {
             accessToken: localStorage.getItem('accessToken'),
           })
         );
+        toast.success('Đổi địa chỉ thành công');
       } else {
         await dispatch(
           createAddressThunk({
@@ -122,10 +129,12 @@ const AddressFormDialog = ({ open, onClose, addressData = {} }) => {
             accessToken: localStorage.getItem('accessToken'),
           })
         );
+        toast.success('Tạo địa chỉ thành công');
       }
       dispatch(getUserAddressThunk(localStorage.getItem('accessToken')));
       onClose();
     } catch (error) {
+      toast.error('Thao tác thất bại!');
       console.error('Error creating/updating address:', error);
     }
   };

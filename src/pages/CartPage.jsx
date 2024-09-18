@@ -116,7 +116,7 @@ const CartPage = () => {
                     <th className='text-left py-2 px-4'>Chọn</th>
                     <th className='text-left py-2 px-4'>Sản phẩm</th>
                     <th className='text-center py-2 px-4'>Số lượng</th>
-                    <th className='text-right py-2 px-4'>Đơn giá</th>
+                    <th className='text-right py-2 px-4'>Tổng giá</th>
                     <th className='text-center py-2 px-4'></th>
                   </tr>
                 </thead>
@@ -139,7 +139,7 @@ const CartPage = () => {
                         />
                         <div>
                           <Link to={`/products/detail/${item.product._id}`}>
-                            <p className='font-medium text-gray-900 hover:text-blue-600 transition duration-150'>
+                            <p className='font-medium text-gray-900 hover:text-primary transition duration-150'>
                               {item.product.productName}
                             </p>
                           </Link>
@@ -165,10 +165,17 @@ const CartPage = () => {
                         </button>
                       </td>
                       <td className='text-right py-2 px-4 text-primary font-semibold'>
-                        {item.itemPrice.toLocaleString('vi-VN', {
+                        {/* {item.itemPrice.toLocaleString('vi-VN', {
                           style: 'currency',
                           currency: 'VND',
-                        })}
+                        })} */}
+                        {(item.itemPrice * item.quantity).toLocaleString(
+                          'vi-VN',
+                          {
+                            style: 'currency',
+                            currency: 'VND',
+                          }
+                        )}
                       </td>
                       <td className='text-center py-2 px-4'>
                         <button
