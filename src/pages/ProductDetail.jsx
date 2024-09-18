@@ -212,7 +212,7 @@ const ProductDetail = () => {
                 className='w-96 h-96 object-contain'
               />
               {/* Thêm container cho hình ảnh nhỏ có thể cuộn ngang khi màn hình nhỏ */}
-              <div className='flex space-x-4 mt-4 overflow-x-auto'>
+              <div className='flex space-x-4 mt-4 overflow-x-auto no-scrollbar'>
                 {/* Đặt chiều rộng cố định cho các hình ảnh để chúng không co lại quá nhiều */}
                 {images.slice(0, 5).map((image, index) => (
                   <img

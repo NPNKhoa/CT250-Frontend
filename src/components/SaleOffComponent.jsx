@@ -87,7 +87,7 @@ function SaleOffComponent() {
         </div>
       </div>
 
-      <div className='lg:grid lg:grid-cols-5 gap-6 overflow-x-auto lg:overflow-x-visible whitespace-nowrap lg:whitespace-normal'>
+      <div className='lg:grid lg:grid-cols-5 gap-6 overflow-x-auto lg:overflow-x-visible no-scrollbar whitespace-nowrap lg:whitespace-normal'>
         {products.map((product, index) => (
           <div
             key={index}
