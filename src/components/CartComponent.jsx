@@ -6,6 +6,7 @@ import {
   updateQuantity,
   deleteItem,
 } from '@redux/thunk/cartThunk';
+import { setSelectedProduct } from '@redux/slices/cartSlice';
 import { useNavigate } from 'react-router-dom';
 
 function Cart() {
@@ -69,7 +70,7 @@ function Cart() {
   };
 
   const handleOrderNow = () => {
-    localStorage.setItem('selectedProductIds', JSON.stringify(selectedItems));
+    dispatch(setSelectedProduct(selectedItems));
     setTimeout(() => navigate('/order'), 1000);
   };
 
@@ -78,18 +79,6 @@ function Cart() {
       <h2 className='text-2xl font-bold text-white mb-4 bg-primary sm:rounded-t-lg '>
         Giỏ hàng
       </h2>
-      <div className='flex items-center justify-between mb-4 px-5'>
-        <div className=''></div>
-        <label className='flex items-center'>
-          <input
-            type='checkbox'
-            checked={allItemsSelected}
-            onChange={handleSelectAll}
-            className='form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out'
-          />
-          <span className='ml-2 text-sm text-gray-700'>Chọn tất cả</span>
-        </label>
-      </div>
       <div className='w-full px-5'>
         <div>
           {cartItems.map(item => (
@@ -148,6 +137,19 @@ function Cart() {
             </div>
           ))}
         </div>
+      </div>
+      <div className='flex items-center px-5 mb-4'>
+        <label className='flex items-center space-x-2'>
+          <input
+            type='checkbox'
+            checked={allItemsSelected}
+            onChange={handleSelectAll}
+            className='form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out'
+          />
+          <span className='text-sm font-semibold'>
+            Chọn tất cả ({cartItems.length})
+          </span>
+        </label>
       </div>
       <div className='flex justify-between items-center px-5'>
         <p className='font-bold'>Tổng tiền: </p>

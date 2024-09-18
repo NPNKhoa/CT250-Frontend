@@ -7,12 +7,17 @@ const initialState = {
   totalPrice: 0,
   error: '',
   loading: false,
+  selectedProduct: null,
 };
 
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedProduct: (state, action) => {
+      state.selectedProduct = action.payload;
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(getCartByUser.pending, state => {
@@ -90,4 +95,5 @@ const cartSlice = createSlice({
   },
 });
 
+export const { setSelectedProduct } = cartSlice.actions;
 export default cartSlice.reducer;
