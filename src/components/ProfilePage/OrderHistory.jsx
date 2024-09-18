@@ -40,7 +40,7 @@ function OrderHistory() {
     switch (status) {
       case 'Đã giao hàng':
         return 'text-green-600';
-      case 'Đang đóng gói':
+      case 'Chờ xử lý':
         return 'text-yellow-600';
       case 'Đã hủy':
         return 'text-red-600';
