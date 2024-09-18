@@ -27,9 +27,15 @@ class OrderService {
     }
   }
 
-  async getOrderByUser() {
+  async getOrderByUser(page, limit) {
+    const params = new URLSearchParams();
+
+    if (page) params.append('page', page);
+    if (limit) params.append('limit', limit);
+
     try {
       const response = await this.api.get('/get-order-by-user', {
+        params: params,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
