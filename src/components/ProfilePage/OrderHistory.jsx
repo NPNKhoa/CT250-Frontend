@@ -107,12 +107,13 @@ function OrderHistory() {
 
       {selectedOrder && (
         <div className='fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center'>
-          <div className='bg-white rounded-lg p-6 w-1/2 max-h-[90vh] overflow-y-auto shadow-2xl'>
+          <div className=' relative bg-white rounded-lg p-6 w-1/2 max-h-[90vh] overflow-y-auto shadow-2xl'>
             <h3 className='text-2xl font-semibold mb-6 text-center text-gray-800'>
               Chi tiết đơn hàng
             </h3>
             <p>
-              <strong>Mã đơn hàng:</strong> #{orders.findIndex(order => order._id === selectedOrder._id) + 1}
+              <strong>Mã đơn hàng:</strong> #
+              {orders.findIndex(order => order._id === selectedOrder._id) + 1}
             </p>
             <p>
               <strong>Ngày đặt:</strong>{' '}
@@ -186,7 +187,7 @@ function OrderHistory() {
             <div className='flex justify-end mt-6'>
               <button
                 onClick={handleCloseModal}
-                className='px-6 py-3 bg-orange-500 text-white rounded hover:bg-orange-600 transition ease-in-out duration-300'
+                className='aso px-6 py-3 bg-orange-500 text-white rounded hover:bg-orange-600 transition ease-in-out duration-300'
               >
                 Đóng
               </button>
