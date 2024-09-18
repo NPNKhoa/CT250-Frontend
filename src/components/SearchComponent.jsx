@@ -119,10 +119,10 @@ export default function SearchPopover() {
     <div className='flex justify-center'>
       <form
         action='#'
-        className='relative w-[90%] sm:w-full max-w-md mb-2 sm:mb-0'
+        className='relative w-[90%] sm:w-[50vw] max-w-md mb-2 sm:mb-0'
         onSubmit={handleSubmit}
       >
-        <div className='relative'>
+        <div className='relative flex items-center'>
           <input
             ref={inputRef}
             type='text'
@@ -133,23 +133,18 @@ export default function SearchPopover() {
             onChange={handleChange}
             required
           />
-          <button
-            type='button'
-            onClick={handleVoiceSearch}
-            className='absolute top-1/2 transform -translate-y-1/2 left-2 p-2'
-          >
-            {isListening ? (
-              <KeyboardVoiceIcon className='text-primary' />
-            ) : (
-              <MicNoneIcon className='text-primary' />
-            )}
-          </button>
-          <button
-            type='submit'
-            className='absolute top-1/2 transform -translate-y-1/2 right-2 p-2'
-          >
-            <SearchSharpIcon className='text-primary' />
-          </button>
+          <div className='absolute inset-y-0 right-0 flex items-center pr-2 space-x-2'>
+            <button type='button' onClick={handleVoiceSearch} className='py-2'>
+              {isListening ? (
+                <KeyboardVoiceIcon className='text-primary' />
+              ) : (
+                <MicNoneIcon className='text-primary' />
+              )}
+            </button>
+            <button type='submit' className='py-2'>
+              <SearchSharpIcon className='text-primary' />
+            </button>
+          </div>
         </div>
       </form>
 
