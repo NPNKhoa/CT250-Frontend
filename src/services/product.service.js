@@ -26,7 +26,28 @@ class productService {
     if (sortBy) params.append('sortBy', sortBy);
     if (isDesc !== undefined) params.append('isDesc', String(isDesc));
 
-    return (await this.api.get('/', { params })).data;
+    try {
+      const response = await this.api.get('/', { params });
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        // Server responded with a status other than 2xx
+        console.error('Error response:', error.response);
+        throw new Error(
+          `Request failed with status code ${error.response.status}: ${
+            error.response.data?.error || 'Unknown error'
+          }`
+        );
+      } else if (error.request) {
+        // Request was made but no response was received
+        console.error('Error request:', error.request);
+        throw new Error('No response received from server.');
+      } else {
+        // Other errors (e.g., network issue)
+        console.error('Error message:', error.message);
+        throw new Error(`Request failed: ${error.message}`);
+      }
+    }
   }
 
   async getById(id) {
