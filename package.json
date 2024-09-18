@@ -28,6 +28,7 @@
     "react-router-dom": "^6.26.0",
     "react-scroll-to-top": "^3.0.0",
     "react-social-login-buttons": "^4.1.0",
+    "react-toastify": "^10.0.5",
     "reactjs-social-login": "^2.6.3",
     "redux": "^5.0.1",
     "uuid": "^10.0.0"

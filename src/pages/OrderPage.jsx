@@ -7,6 +7,7 @@ import BreadcrumbsComponent from '@components/common/Breadcrumb';
 import { getCartByUser } from '@redux/thunk/cartThunk';
 import CircularProgress from '@mui/material/CircularProgress';
 import { setSelectedProduct } from '@redux/slices/cartSlice';
+import AddressFormDialog from '@components/ProfilePage/AddressFormDialog';
 
 function OrderPage() {
   const navigate = useNavigate();
@@ -139,6 +140,17 @@ function OrderPage() {
     { label: 'Giỏ hàng', href: '/cart' },
     { label: 'Đặt hàng' },
   ];
+  const [open, setOpen] = useState(false);
+  const [editAddress, setEditAddress] = useState(null);
+  const handleClickOpen = (index = null) => {
+    if (index !== null) {
+      setEditAddress(addresses[index]);
+    } else setEditAddress({});
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <>
@@ -331,7 +343,22 @@ function OrderPage() {
         {isModalOpen && (
           <div className='fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center'>
             <div className='bg-white rounded-lg p-6 w-1/2 max-h-1/2 overflow-y-auto'>
-              <h3 className='text-xl font-semibold mb-4'>Chọn địa chỉ</h3>
+              <div className='flex justify-between mb-3 item-center'>
+                <h3 className='text-xl font-semibold '>Chọn địa chỉ</h3>
+
+                <button
+                  className='bg-primary p-2 rounded-lg text-bold text-white'
+                  onClick={() => handleClickOpen()}
+                >
+                  Thêm địa chỉ
+                </button>
+
+                <AddressFormDialog
+                  open={open}
+                  onClose={handleClose}
+                  addressData={editAddress}
+                />
+              </div>
               <ul className='space-y-2'>
                 {addresses.map((address, index) => (
                   <li

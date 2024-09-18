@@ -6,6 +6,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import './App.css';
 import ScrollToTop from './helpers/ScrollToTop';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const DefaultLayout = lazy(() => import('@layouts/DefaultLayout'));
 
@@ -13,6 +15,15 @@ const App = () => {
   return (
     <Suspense fallback={<LoadingPage />}>
       <BrowserRouter>
+        <ToastContainer
+          position='top-right'
+          autoClose={1000} // Áp dụng thời gian autoClose cho tất cả các thông báo
+          hideProgressBar={false}
+          closeOnClick={true}
+          pauseOnHover={true}
+          draggable={true}
+          theme='light'
+        />
         <ScrollToTop />
         <Routes>
           {routes.map(({ id, path, element }) => (
