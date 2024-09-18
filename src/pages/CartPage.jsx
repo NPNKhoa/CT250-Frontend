@@ -11,6 +11,7 @@ import {
   deleteItem,
 } from '@redux/thunk/cartThunk';
 import { setSelectedProduct } from '@redux/slices/cartSlice';
+import { toast } from 'react-toastify';
 
 const CartPage = () => {
   const dispatch = useDispatch();
@@ -84,6 +85,10 @@ const CartPage = () => {
   };
 
   const handleOrderNow = () => {
+    if (selectedItems.length === 0) {
+      toast.error('Vui lòng chọn ít nhất một sản phẩm để đặt hàng!');
+      return;
+    }
     dispatch(setSelectedProduct(selectedItems));
     setTimeout(() => navigate('/order'), 1000);
   };
@@ -274,7 +279,6 @@ const CartPage = () => {
               <button
                 onClick={handleOrderNow}
                 className='bg-primary hover:bg-hover-primary text-white font-semibold py-2 px-4 sm:py-3 sm:px-6 rounded transition duration-150'
-                disabled={selectedItems.length === 0}
               >
                 Đặt hàng ngay
               </button>
