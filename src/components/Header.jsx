@@ -31,8 +31,8 @@ const useModalState = (initialState = false) => {
 const Header = () => {
   const [isModalAccount, handleMouseEnterAccount, handleMouseLeaveAccount] =
     useModalState();
-  const [isModalContact, handleMouseEnterContact, handleMouseLeaveContact] =
-    useModalState();
+  // const [isModalContact, handleMouseEnterContact, handleMouseLeaveContact] =
+  //   useModalState();
   const [isModalCart, handleMouseEnterCart, handleMouseLeaveCart] =
     useModalState();
   const [isSearchVisible, setIsSearchVisible] = useState(false);
@@ -125,10 +125,11 @@ const Header = () => {
 
           <div className='flex justify-center gap-6'>
             <div className='flex justify-center gap-6 relative'>
-              <div
+              <Link
+                to='/checkorder'
                 className='flex flex-col items-center justify-center text-center space-x-2 cursor-pointer'
-                onMouseEnter={handleMouseEnterContact}
-                onMouseLeave={handleMouseLeaveContact}
+                // onMouseEnter={handleMouseEnterContact}
+                // onMouseLeave={handleMouseLeaveContact}
               >
                 <span className='border border-gray-300 p-1 flex justify-center items-center rounded-full bg-white w-10 h-10'>
                   <PersonSearchRoundedIcon className='text-primary' />
@@ -136,29 +137,8 @@ const Header = () => {
                 <h3 className='text-sm font-semibold mt-1 hidden sm:inline'>
                   Tra cứu
                 </h3>
-              </div>
-              {isModalContact && (
-                <div
-                  className='absolute top-12 mt-2 left-0 w-40 bg-white rounded-lg shadow-lg z-50'
-                  onMouseEnter={handleMouseEnterContact}
-                  onMouseLeave={handleMouseLeaveContact}
-                >
-                  <div className='flex flex-col space-y-2 rounded-lg'>
-                    <Link
-                      to='/checkorder'
-                      className='hover:bg-primary hover:text-white rounded-t-lg p-2 text-center'
-                    >
-                      Kiểm tra đơn hàng
-                    </Link>
-                    <Link
-                      to='/checkwarranty'
-                      className='hover:bg-primary hover:text-white rounded-b-lg p-2 text-center'
-                    >
-                      Kiểm tra bảo hành
-                    </Link>
-                  </div>
-                </div>
-              )}
+              </Link>
+
               <div
                 className='flex flex-col items-center justify-center text-center space-x-2 cursor-pointer'
                 onMouseEnter={handleMouseEnterAccount}
@@ -232,8 +212,7 @@ const Header = () => {
             </div>
 
             <div className='flex flex-col items-center justify-center text-center space-x-2 relative cursor-pointer'>
-              <Link
-                to='/cart'
+              <div
                 onMouseEnter={handleMouseEnterCart}
                 onMouseLeave={handleMouseLeaveCart}
               >
@@ -246,7 +225,7 @@ const Header = () => {
                 <span className='absolute -top-1 right-0 sm:right-4 bg-primary rounded-full text-white p-1 w-4 h-4 text-xs flex items-center justify-center'>
                   {cartItems.length}
                 </span>
-              </Link>
+              </div>
               {isModalCart && (
                 <div
                   className='absolute top-12 right-0 w-80 sm:w-96 bg-white rounded-lg shadow-lg z-50 sm:right-0 sm:left-auto sm:mx-0 mx-2'

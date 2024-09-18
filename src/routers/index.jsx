@@ -4,7 +4,6 @@ import LoginPage from '@pages/LoginPage';
 import SignUpPage from '@pages/SignUpPage';
 import AboutUsPage from '@pages/AboutUsPage';
 import CheckOrder from '@pages/CheckOrder';
-import CheckWarranty from '@pages/CheckWarranty';
 import ContactPage from '@pages/ContactPage';
 import ProductDetail from '@pages/ProductDetail';
 import Products from '@pages/Products';
@@ -47,12 +46,6 @@ const routes = [
   },
 
   {
-    id: 'checkwarranty',
-    path: '/checkwarranty',
-    element: <CheckWarranty />,
-  },
-
-  {
     id: 'contact',
     path: '/contact',
     element: <ContactPage />,
@@ -73,7 +66,7 @@ const routes = [
   {
     id: 'cart',
     path: '/cart',
-    element:(
+    element: (
       <PrivateRoute>
         <CartPage />
       </PrivateRoute>
@@ -113,7 +106,7 @@ const routes = [
       <PrivateRoute>
         <ThankYouPage />
       </PrivateRoute>
-    ),  
+    ),
   },
 
   {
