@@ -7,7 +7,7 @@ import productService from '@services/product.service';
 import FeatureBoxes from '@components/FeatureBoxes';
 import SaleBannerComponent from '@components/SaleBannerComponent';
 import ProductList from '@components/ProductList';
-import SaleOffComponent from '@components/SaleOffComponent';
+// import SaleOffComponent from '@components/SaleOffComponent';
 
 const HomePage = () => {
   const [products, setProducts] = useState({});
@@ -128,12 +128,12 @@ const HomePage = () => {
       {/* feature */}
       <FeatureBoxes />
 
-      {/* products sale*/}
+      {/* products sale
       <section className='py-4'>
         <div className='container mx-auto px-4'>
           <SaleOffComponent />
         </div>
-      </section>
+      </section> */}
 
       <section className='py-4'>
         <div className='container mx-auto px-4'>

@@ -8,6 +8,7 @@ import { getCartByUser } from '@redux/thunk/cartThunk';
 import CircularProgress from '@mui/material/CircularProgress';
 import { setSelectedProduct } from '@redux/slices/cartSlice';
 import AddressFormDialog from '@components/ProfilePage/AddressFormDialog';
+import { toast } from 'react-toastify';
 
 function OrderPage() {
   const navigate = useNavigate();
@@ -102,7 +103,7 @@ function OrderPage() {
 
     // Kiểm tra nếu các trường cần thiết (trừ 'notes') không được điền
     if (!fullname || !phone || !address || !email) {
-      alert('Vui lòng nhập đầy đủ thông tin.');
+      toast.error('Vui lòng nhập đầy đủ thông tin.');
       return;
     }
     const order = {
@@ -118,6 +119,7 @@ function OrderPage() {
       const response = await orderService.createOrder(order);
       if (response) {
         dispatch(setSelectedProduct([]));
+        toast.success('Đặt hàng thành công!');
         navigate('/thankyou');
       }
       dispatch(getCartByUser(localStorage.getItem('accessToken')));

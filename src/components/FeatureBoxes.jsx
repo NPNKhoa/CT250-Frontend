@@ -42,7 +42,7 @@ const FeatureBoxes = () => {
             className='bg-white shadow-md rounded-lg p-2 sm:p-5 flex flex-col items-center space-y-2 border border-gray-200 transition-transform transform hover:scale-105'
           >
             <div>{feature.icon}</div>
-            <div className='text-center'>
+            <div className='text-center cursor-default'>
               <h3 className='sm:text-lg text-xs font-semibold text-primary mb-2'>
                 {feature.title}
               </h3>

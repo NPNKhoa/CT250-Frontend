@@ -4,16 +4,17 @@ import loginImg from '@assets/login.png';
 import userIcon from '@assets/user.png';
 import { useDispatch, useSelector } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress';
-import Alert from '@components/Alert';
+// import Alert from '@components/Alert';
 import { loginThunk, loginWithSocialThunk } from '@redux/thunk/authThunk';
 import PasswordInput from '@components/common/PasswordInput';
 import { getLoggedInUser } from '@redux/thunk/userThunk';
 import { LoginSocialFacebook, LoginSocialGoogle } from 'reactjs-social-login';
+import { toast } from 'react-toastify';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState({ email: '', password: '' });
-  const [notification, setNotification] = useState({ message: '', type: '' });
+  // const [notification, setNotification] = useState({ message: '', type: '' });
   const dispatch = useDispatch();
 
   const loading = useSelector(state => state.auth.loading);
@@ -61,15 +62,17 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (authUser) {
-      setNotification({ message: 'Login successful!', type: 'success' });
+      // setNotification({ message: 'Login successful!', type: 'success' });
+      toast.success('Đăng nhập thành công');
       dispatch(getLoggedInUser(localStorage.getItem('accessToken')));
       const timer = setTimeout(() => navigate('/'), 1000);
       return () => clearTimeout(timer);
     } else if (error) {
-      setNotification({
-        message: 'Login failed! Please try again.',
-        type: 'error',
-      });
+      // setNotification({
+      //   message: 'Login failed! Please try again.',
+      //   type: 'error',
+      // });
+      toast.error('Đăng nhập thất bại. Vui lòng thử lại!');
     }
   }, [authUser, error, navigate, dispatch]);
 
@@ -193,9 +196,9 @@ const LoginPage = () => {
           </p>
         </div>
       </div>
-      {notification.message && (
+      {/* {notification.message && (
         <Alert message={notification.message} type={notification.type} />
-      )}
+      )} */}
     </section>
   );
 };
