@@ -4,6 +4,9 @@ import createApiClient from './api.service';
 const GHN_API_BASE_URL = 'https://dev-online-gateway.ghn.vn/shiip/public-api';
 const GHN_TOKEN_API = import.meta.env.VITE_GHN_TOKEN_API;
 const GHN_SHOP_ID = parseInt(import.meta.env.VITE_GHN_SHOP_ID);
+
+const GHTK_TOKEN_API = import.meta.env.VITE_GHTK_TOKEN_API;
+
 const accessToken = localStorage.getItem('accessToken');
 
 class OrderService {
@@ -92,54 +95,83 @@ class OrderService {
     }
   }
 
-  async getDeliveryFee({ province, district, ward }) {
-    try {
-      const { districtId, wardCode } = await this.getDestinationCode({
-        province,
-        district,
-        ward,
-      });
+  async getDeliveryFee({ province, district, ward }, method) {
+    if (method === 'Giao hàng nhanh') {
+      try {
+        const { districtId, wardCode } = await this.getDestinationCode({
+          province,
+          district,
+          ward,
+        });
 
-      const serviceRes = await axios.post(
-        `${GHN_API_BASE_URL}/v2/shipping-order/available-services`,
-        {
-          shop_id: GHN_SHOP_ID,
-          from_district: 1572,
-          to_district: districtId,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            ...this.headers,
+        const serviceRes = await axios.post(
+          `${GHN_API_BASE_URL}/v2/shipping-order/available-services`,
+          {
+            shop_id: GHN_SHOP_ID,
+            from_district: 1572,
+            to_district: districtId,
           },
-        }
-      );
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              ...this.headers,
+            },
+          }
+        );
 
-      const serviceId = serviceRes.data.data[0].service_id;
+        const serviceId = serviceRes.data.data[0].service_id;
 
-      const response = await axios.post(
-        `${GHN_API_BASE_URL}/v2/shipping-order/fee`,
-        {
-          service_id: serviceId,
-          to_district_id: districtId,
-          to_ward_code: wardCode.toString(),
-          weight: 200, // Trọng lượng (gram)
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            ...this.headers,
+        const response = await axios.post(
+          `${GHN_API_BASE_URL}/v2/shipping-order/fee`,
+          {
+            service_id: serviceId,
+            to_district_id: districtId,
+            to_ward_code: wardCode.toString(),
+            weight: 200, // Trọng lượng (gram)
           },
-        }
-      );
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              ...this.headers,
+            },
+          }
+        );
 
-      return response.data.data.total;
-    } catch (error) {
-      console.error(
-        'Error fetching delivery fee:',
-        error.response?.data || error.message
-      );
-      throw new Error(error.message || 'Error fetching third-party API');
+        return response.data.data.total;
+      } catch (error) {
+        console.error(
+          'Error fetching delivery fee:',
+          error.response?.data || error.message
+        );
+        throw new Error(error.message || 'Error fetching third-party API');
+      }
+    } else if (method === 'Giao hàng tiết kiệm') {
+      try {
+        const response = await axios.post(
+          '/ghtk/services/shipment/fee',
+          {
+            pick_province: "Cần Thơ",
+            pick_district: "Quận Ninh Kiều",
+            province: province,
+            district: district,
+            weight: 200,
+            deliver_option: "none"
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Token': GHTK_TOKEN_API,
+            }
+          }
+        );
+        return response.data.fee.fee;
+      } catch (error) {
+        console.error(
+          'Error fetching delivery fee:',
+          error.response?.data || error.message
+        );
+        throw new Error(error.message || 'Error fetching third-party API');
+      }
     }
   }
 }
