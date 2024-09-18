@@ -8,14 +8,13 @@ import { getCartByUser } from '@redux/thunk/cartThunk';
 import CircularProgress from '@mui/material/CircularProgress';
 import { setSelectedProduct } from '@redux/slices/cartSlice';
 import AddressFormDialog from '@components/ProfilePage/AddressFormDialog';
+import cartService from '@services/cart.service';
 
 function OrderPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(state => state.users.user);
   const { addresses } = useSelector(state => state.address);
-  const { cart } = useSelector(state => state.cart);
-  const cartItems = cart?.cartItems || [];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     fullname: '',
@@ -30,9 +29,26 @@ function OrderPage() {
 
   const selectedProductIds = useSelector(state => state.cart.selectedProduct);
 
-  const filteredCartItems = cartItems.filter(item =>
-    selectedProductIds.includes(item._id)
-  );
+  const [productItems, setProductItems] = useState([]);
+
+  console.log('selectedProductIds', selectedProductIds);
+  useEffect(() => {
+    const fetchCartDetail = async () => {
+      const product = [];
+      selectedProductIds.forEach(async id => {
+        try {
+          const data = await cartService.getCartDetail(id);
+          product.push(data.data);
+          // console.log('data', data.data);
+        } catch (error) {
+          console.error(error);
+        }
+      });
+      setProductItems(product);
+    };
+
+    fetchCartDetail();
+  }, [selectedProductIds]);
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
@@ -129,7 +145,7 @@ function OrderPage() {
   };
 
   const calculateTotal = () => {
-    return filteredCartItems.reduce(
+    return productItems.reduce(
       (total, item) => total + item.itemPrice * item.quantity,
       0
     );
@@ -250,7 +266,7 @@ function OrderPage() {
                   Chi tiết đơn hàng
                 </h2>
                 <div className='mt-4'>
-                  {filteredCartItems.map(item => (
+                  {productItems.map(item => (
                     <div
                       key={item.id}
                       className='flex items-center space-x-4 py-2'
@@ -316,9 +332,9 @@ function OrderPage() {
                 <div className='flex justify-between mt-6'>
                   <button
                     className='w-1/2 mr-2 font-semibold bg-gray-300 text-gray-700 py-3 rounded-md text-lg hover:bg-gray-400'
-                    onClick={() => navigate('/cart')}
+                    onClick={() => navigate(-1)}
                   >
-                    Trở về giỏ hàng
+                    Trở về
                   </button>
                   <button
                     className={`w-1/2 ml-2 font-semibold bg-primary text-white py-3 rounded-md text-lg ${

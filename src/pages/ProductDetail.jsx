@@ -13,6 +13,9 @@ import Alert from '@components/Alert';
 import productService from '@services/product.service';
 import productTypeService from '@services/productType.service';
 import brandService from '@services/brand.service';
+import cartService from '@services/cart.service';
+
+import { setSelectedProduct } from '@redux/slices/cartSlice';
 
 // import cartService from '@services/cart.service';
 
@@ -174,6 +177,18 @@ const ProductDetail = () => {
     );
   };
 
+  const handleBuyNow = async () => {
+    const response = await cartService.createCartDetail(
+      localStorage.getItem('accessToken'),
+      {
+        productId: products._id,
+        quantity: quantity,
+      }
+    )
+    dispatch(setSelectedProduct([response.data._id]));
+    navigate('/order');
+  };
+
   return (
     <>
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
@@ -311,7 +326,8 @@ const ProductDetail = () => {
 
             {/* Nút mua ngay và thêm vào giỏ hàng */}
             <div className='flex flex-col sm:flex-row mt-4 gap-2'>
-              <button className='bg-primary hover:bg-hover-primary text-white font-bold py-3 rounded-lg w-full'>
+              <button className='bg-primary hover:bg-hover-primary text-white font-bold py-3 rounded-lg w-full'
+              onClick={handleBuyNow}>
                 MUA NGAY
               </button>
               <button
