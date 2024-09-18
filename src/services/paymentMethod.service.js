@@ -1,7 +1,7 @@
 import createApiClient from './api.service';
 
-class shippingMethodService {
-  constructor(path = '/shipping-method') {
+class paymentMethodService {
+  constructor(path = '/payment-methods') {
     this.api = createApiClient(path);
   }
 
@@ -10,4 +10,4 @@ class shippingMethodService {
   }
 }
 
-export default new shippingMethodService();
+export default new paymentMethodService();
