@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import PasswordInput from '@components/common/PasswordInput';
 import { useDispatch } from 'react-redux';
-import { updatePasswordThunk } from '@redux/thunk/userThunk';
+import { getLoggedInUser, updatePasswordThunk } from '@redux/thunk/userThunk';
+import { toast } from 'react-toastify';
+import { CircularProgress } from '@mui/material';
 
 function PasswordResetForm() {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -9,15 +11,17 @@ function PasswordResetForm() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const dispatch = useDispatch();
   const accessToken = localStorage.getItem('accessToken');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmitPasswordReset = async event => {
     event.preventDefault();
     if (newPassword !== confirmPassword) {
-      alert('Mật khẩu mới không khớp!');
+      toast.error('Mật khẩu mới không khớp');
       return;
     }
 
     try {
+      setIsLoading(true);
       await dispatch(
         updatePasswordThunk({
           updatedData: {
@@ -29,12 +33,17 @@ function PasswordResetForm() {
         })
       ).unwrap();
 
-      alert('Mật khẩu đã được thay đổi thành công.');
+      toast.success('Mật khẩu đã được thay đổi thành công');
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
+      dispatch(getLoggedInUser(accessToken));
     } catch (error) {
-      alert(`Đổi mật khẩu thất bại: ${error.message}`);
+      console.log(error);
+      toast.error('Đổi mật khẩu thất bại');
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -76,7 +85,11 @@ function PasswordResetForm() {
         type='submit'
         className='bg-primary hover:bg-hover-primary w-full text-white font-bold p-3 rounded'
       >
-        Đổi mật khẩu
+        {isLoading ? (
+          <CircularProgress color='inherit' size={20} />
+        ) : (
+          'Đổi mật khẩu'
+        )}
       </button>
     </form>
   );

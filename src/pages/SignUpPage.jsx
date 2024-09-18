@@ -3,8 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import SignUpImg from '@assets/register.png';
 import userIcon from '@assets/user.png';
 import authService from '@services/auth.service';
-import Alert from '@components/Alert';
+// import Alert from '@components/Alert';
 import PasswordInput from '@components/common/PasswordInput';
+import { toast } from 'react-toastify';
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const SignUpPage = () => {
     confirmPassword: '',
     gender: '',
   });
-  const [notification, setNotification] = useState({ message: '', type: '' });
+  // const [notification, setNotification] = useState({ message: '', type: '' });
   // const [imageFile, setImageFile] = useState(null);
 
   const handleChange = useCallback(e => {
@@ -28,21 +29,22 @@ const SignUpPage = () => {
   //   setImageFile(e.target.files[0]);
   // }, []);
 
-  useEffect(() => {
-    if (notification.message) {
-      const timer = setTimeout(
-        () => setNotification({ message: '', type: '' }),
-        2000
-      );
-      return () => clearTimeout(timer);
-    }
-  }, [notification]);
+  // useEffect(() => {
+  //   if (notification.message) {
+  //     const timer = setTimeout(
+  //       () => setNotification({ message: '', type: '' }),
+  //       2000
+  //     );
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [notification]);
 
   const handleSubmit = useCallback(
     async e => {
       e.preventDefault();
       if (credentials.password !== credentials.confirmPassword) {
-        setNotification({ message: 'Passwords do not match!', type: 'error' });
+        // setNotification({ message: 'Passwords do not match!', type: 'error' });
+        toast.error('Mật khẩu không trùng khớp!');
         return;
       }
 
@@ -54,13 +56,17 @@ const SignUpPage = () => {
 
       try {
         await authService.signup(formData);
-        setNotification({ message: 'Signup successful!', type: 'success' });
+        // setNotification({ message: 'Signup successful!', type: 'success' });
+        toast.success('Đăng ký tài khoản thành công!');
         setTimeout(() => navigate('/login'), 2000);
       } catch (error) {
-        setNotification({
-          message: error.response?.data?.error || 'Signup failed!',
-          type: 'error',
-        });
+        console.log(error);
+        toast.error('Đăng ký thành công!');
+
+        // setNotification({
+        //   message: error.response?.data?.error || 'Signup failed!',
+        //   type: 'error',
+        // });
       }
     },
     [credentials, navigate]
@@ -143,9 +149,9 @@ const SignUpPage = () => {
         </div>
       </div>
 
-      {notification.message && (
+      {/* {notification.message && (
         <Alert message={notification.message} type={notification.type} />
-      )}
+      )} */}
     </section>
   );
 };

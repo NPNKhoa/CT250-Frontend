@@ -7,6 +7,7 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import { toast } from 'react-toastify';
 
 function UserProfileForm() {
   const dispatch = useDispatch();
@@ -90,20 +91,22 @@ function UserProfileForm() {
 
   const handleChangeAvatar = async () => {
     if (!avatarFile) {
-      alert('Please select an avatar image.');
+      toast.error('Vui lòng chọn ảnh đại diện');
+
       return;
     }
 
     try {
       await dispatch(changeAvatarThunk({ avatarFile, accessToken }));
-      alert('Avatar updated successfully!');
+
+      toast.success('Đổi ảnh đại diện thành công');
       if (fileInputRef.current) {
         fileInputRef.current.value = ''; // Reset giá trị của input file
       }
       // setAvatarUpdated(true); // Đánh dấu rằng avatar đã được cập nhật
     } catch (error) {
       console.log(error);
-      alert('Failed to update avatar.');
+      toast.error('Đổi ảnh đại diện thất bại');
     }
     dispatch(getLoggedInUser(accessToken));
   };
@@ -122,9 +125,11 @@ function UserProfileForm() {
       await dispatch(
         updateUserInfoThunk({ updatedData, accessToken })
       ).unwrap();
-      alert('Thông tin tài khoản đã được cập nhật.');
+      toast.success('Cập nhật thông tin tài khoản thành công');
     } catch (error) {
-      alert(`Cập nhật thông tin thất bại: ${error.message}`);
+      console.log(error);
+
+      toast.error('Cập nhật thông tin thất bại');
     }
 
     dispatch(getLoggedInUser(accessToken));

@@ -1,6 +1,6 @@
 import Vot from '../assets/SaleBanner/Vot.webp';
-import Giay from '../assets/SaleBanner/giay.webp';
-import Quanao from '../assets/SaleBanner/quanao.webp';
+// import Giay from '../assets/SaleBanner/giay.webp';
+// import Quanao from '../assets/SaleBanner/quanao.webp';
 
 const saleItems = [
   {
@@ -12,17 +12,17 @@ const saleItems = [
     textColor: 'text-white',
   },
   {
-    image: Giay,
-    alt: 'Giày cầu lông',
-    title: 'Giày cầu lông',
+    image: Vot,
+    alt: 'Vợt cầu lông',
+    title: 'Vợt cầu lông',
     discount: 'Giảm giá đến 20%',
     bgColor: 'bg-gray-800',
     textColor: 'text-white',
   },
   {
-    image: Quanao,
-    alt: 'Áo cầu lông',
-    title: 'Áo cầu lông',
+    image: Vot,
+    alt: 'Vợt cầu lông',
+    title: 'Vợt cầu lông',
     discount: 'Giảm giá đến 30%',
     bgColor: 'bg-white',
     textColor: 'text-black',
