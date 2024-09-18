@@ -11,6 +11,7 @@ import CartComponent from '@components/CartComponent';
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
 import Avatar from '@assets/user.png';
+import CartIcon from '@assets/cart-icon.png';
 import {
   AccountCircleSharp as AccountCircleSharpIcon,
   AddShoppingCartSharp as AddShoppingCartSharpIcon,
@@ -212,7 +213,8 @@ const Header = () => {
             </div>
 
             <div className='flex flex-col items-center justify-center text-center space-x-2 relative cursor-pointer'>
-              <div
+              <Link
+                to='/cart'
                 onMouseEnter={handleMouseEnterCart}
                 onMouseLeave={handleMouseLeaveCart}
               >
@@ -225,14 +227,33 @@ const Header = () => {
                 <span className='absolute -top-1 right-0 sm:right-4 bg-primary rounded-full text-white p-1 w-4 h-4 text-xs flex items-center justify-center'>
                   {cartItems.length}
                 </span>
-              </div>
+              </Link>
               {isModalCart && (
                 <div
                   className='absolute top-12 right-0 w-80 sm:w-96 bg-white rounded-lg shadow-lg z-50 sm:right-0 sm:left-auto sm:mx-0 mx-2'
                   onMouseEnter={handleMouseEnterCart}
                   onMouseLeave={handleMouseLeaveCart}
                 >
-                  <CartComponent />
+                  {cartItems.length === 0 ? (
+                    <div className='text-center py-4 flex flex-col items-center justify-center space-y-2'>
+                      <img
+                        src={CartIcon}
+                        alt='Cart is empty'
+                        className='w-40'
+                      />
+                      <p className='text-gray-500 text-lg'>
+                        Giỏ hàng của bạn hiện đang trống
+                      </p>
+                      <Link
+                        to='/products'
+                        className='text-white font-semibold px-4 py-2 rounded-lg bg-primary hover:bg-hover-primary transition duration-200'
+                      >
+                        Mua sắm ngay
+                      </Link>
+                    </div>
+                  ) : (
+                    <CartComponent />
+                  )}
                 </div>
               )}
             </div>
