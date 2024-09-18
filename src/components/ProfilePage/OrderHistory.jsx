@@ -77,37 +77,38 @@ function OrderHistory() {
                 </tr>
               </thead>
               <tbody>
-                {orders.map((order, index) => (
-                  <tr key={order._id} className='hover:bg-gray-50'>
-                    <td className='py-2 px-4 border-b text-center'>
-                      #{index + 1}
-                    </td>
-                    <td className='py-2 px-4 border-b text-center'>
-                      {new Date(order.orderDate).toLocaleDateString('vi-VN')}
-                    </td>
-                    <td className='py-2 px-4 border-b text-center'>
-                      {order.totalPrice.toLocaleString('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND',
-                      })}
-                    </td>
-                    <td
-                      className={`py-2 px-4 border-b text-center ${getStatusClass(
-                        order.orderStatus.orderStatus
-                      )}`}
-                    >
-                      {order.orderStatus.orderStatus}
-                    </td>
-                    <td className='py-2 px-4 border-b text-center'>
-                      <button
-                        onClick={() => handleViewDetails(order)}
-                        className='px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700'
+                {Array.isArray(orders) &&
+                  orders.map((order, index) => (
+                    <tr key={order._id} className='hover:bg-gray-50'>
+                      <td className='py-2 px-4 border-b text-center'>
+                        #{index + 1}
+                      </td>
+                      <td className='py-2 px-4 border-b text-center'>
+                        {new Date(order.orderDate).toLocaleDateString('vi-VN')}
+                      </td>
+                      <td className='py-2 px-4 border-b text-center'>
+                        {order.totalPrice.toLocaleString('vi-VN', {
+                          style: 'currency',
+                          currency: 'VND',
+                        })}
+                      </td>
+                      <td
+                        className={`py-2 px-4 border-b text-center ${getStatusClass(
+                          order.orderStatus.orderStatus
+                        )}`}
                       >
-                        Xem chi tiết
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                        {order.orderStatus.orderStatus}
+                      </td>
+                      <td className='py-2 px-4 border-b text-center'>
+                        <button
+                          onClick={() => handleViewDetails(order)}
+                          className='px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700'
+                        >
+                          Xem chi tiết
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
@@ -145,7 +146,7 @@ function OrderHistory() {
               {new Date(selectedOrder.orderDate).toLocaleDateString('vi-VN')}
             </p>
             <p>
-              <strong>Tổng tiền:</strong>{' '}
+              <strong>Tiền hàng:</strong>{' '}
               {selectedOrder.totalPrice.toLocaleString('vi-VN', {
                 style: 'currency',
                 currency: 'VND',
