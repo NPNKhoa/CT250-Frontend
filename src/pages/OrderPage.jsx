@@ -38,13 +38,13 @@ function OrderPage() {
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [selectedShippingMethod, setSelectedShippingMethod] = useState('');
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
+  const [deliveryMethod, setDeliveryMethod] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const shipping = await shippingMethodService.getAll();
         setShippingMethods(shipping.data);
-        console.log(shipping.data);
         const payment = await paymentMethodService.getAll();
         setPaymentMethods(payment.data);
       } catch (error) {
@@ -93,27 +93,44 @@ function OrderPage() {
     }
   }, [user, addresses]);
 
-  useEffect(() => {
-    fetchDeliveryFee(selectedAddress);
-  }, [selectedAddress]);
+  const [deliveryFees, setDeliveryFees] = useState([]);
 
-  const fetchDeliveryFee = async address => {
+  const fetchDeliveryFees = async address => {
     try {
       setIsLoading(true);
-      const response = await orderService.getDeliveryFee({
-        province: address.province
-          .replace('Tỉnh ', '')
-          .replace('Thành phố ', ''),
-        district: address.district,
-        ward: address.commune,
-      });
-      setDeliveryFee(response);
+      const fees = [];
+      await Promise.all(
+        shippingMethods.map(async (method, index) => {
+          const response = await orderService.getDeliveryFee(
+            {
+              province: address.province
+                .replace('Tỉnh ', '')
+                .replace('Thành phố ', ''),
+              district: address.district,
+              ward: address.commune,
+            },
+            method.shippingMethod
+          );
+          fees[index] = response;
+        })
+      );
+      setDeliveryFees(fees);
     } catch (error) {
       console.error(error);
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (selectedAddress) {
+      fetchDeliveryFees(selectedAddress);
+    }
+  }, [selectedAddress, shippingMethods]);
+
+  useEffect(() => {
+      setDeliveryFee(deliveryFees[deliveryMethod]);
+  }, [deliveryFees, deliveryMethod]);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -126,8 +143,9 @@ function OrderPage() {
   };
 
   const handleChangeShipping = e => {
-    const { value } = e.target;
-    setSelectedShippingMethod(value);
+    const value = JSON.parse(e.target.value);
+    setDeliveryMethod(value.index);
+    setSelectedShippingMethod(value.id);
   };
 
   const handleAddressSelect = index => {
@@ -158,7 +176,6 @@ function OrderPage() {
       shippingMethod: selectedShippingMethod,
       paymentMethod: selectedPaymentMethod,
       shippingFee: deliveryFee,
-      totalPrice: calculateTotal() + deliveryFee,
     };
     try {
       setIsLoading(true);
@@ -298,7 +315,7 @@ function OrderPage() {
               </h3>
               <div className='flex flex-col space-y-2 mb-4'>
                 {shippingMethods && shippingMethods.length > 0 ? (
-                  shippingMethods.map(method => (
+                  shippingMethods.map((method, index) => (
                     <label
                       key={method._id}
                       className='flex items-center space-x-2'
@@ -306,12 +323,24 @@ function OrderPage() {
                       <input
                         type='radio'
                         name='shipping'
-                        value={method._id}
+                        value={JSON.stringify({
+                          id: method._id,
+                          name: method.shippingMethod,
+                          index: index,
+                        })}
                         onChange={handleChangeShipping}
                         className='form-radio h-4 w-4 text-blue-600 transition duration-150 ease-in-out'
                       />
                       <span className='text-gray-700'>
                         {method.shippingMethod}
+                      </span>
+                      <span className='text-gray-500 ml-2'>
+                        {deliveryFees[index]
+                          ? deliveryFees[index].toLocaleString('vi-VN', {
+                              style: 'currency',
+                              currency: 'VND',
+                            })
+                          : 'Đang tính phí'}
                       </span>
                     </label>
                   ))
@@ -369,12 +398,12 @@ function OrderPage() {
                   <div className='flex justify-between mt-2'>
                     <span className='text-gray-500'>Phí vận chuyển:</span>
                     <span className='text-gray-900'>
-                      {selectedShippingMethod ? 
-                      deliveryFee.toLocaleString('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND',
-                      }) 
-                      : 0 }
+                      {selectedShippingMethod
+                        ? deliveryFee.toLocaleString('vi-VN', {
+                            style: 'currency',
+                            currency: 'VND',
+                          })
+                        : 0}
                     </span>
                   </div>
                   <div className='flex justify-between mt-4 text-lg font-medium'>

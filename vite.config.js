@@ -9,6 +9,13 @@ export default defineConfig({
   server: {
     port: 3000,
     host: true,
+    proxy: {
+      '/ghtk': {
+        target: 'https://services.giaohangtietkiem.vn',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/ghtk/, ''),
+      },
+    },
   },
   resolve: {
     alias: {
