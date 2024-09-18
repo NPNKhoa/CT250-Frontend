@@ -6,6 +6,7 @@ import orderService from '@services/order.service';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
 import { getCartByUser } from '@redux/thunk/cartThunk';
 import CircularProgress from '@mui/material/CircularProgress';
+import { setSelectedProduct } from '@redux/slices/cartSlice';
 
 function OrderPage() {
   const navigate = useNavigate();
@@ -115,6 +116,7 @@ function OrderPage() {
       setIsLoading(true);
       const response = await orderService.createOrder(order);
       if (response) {
+        dispatch(setSelectedProduct([]));
         navigate('/thankyou');
       }
       dispatch(getCartByUser(localStorage.getItem('accessToken')));

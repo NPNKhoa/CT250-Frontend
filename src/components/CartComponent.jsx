@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 function Cart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { cart } = useSelector(state => state.cart);
+  const { cart, selectedProduct } = useSelector(state => state.cart);
   const cartItems = cart?.cartItems || [];
   const accessToken = localStorage.getItem('accessToken');
 
@@ -23,6 +23,12 @@ function Cart() {
   useEffect(() => {
     dispatch(getCartByUser(accessToken));
   }, [dispatch, accessToken]);
+
+  useEffect(() => {
+    if (selectedProduct) {
+      setSelectedItems(selectedProduct);
+    }
+  }, [selectedProduct]);
 
   const handleRemove = id => {
     dispatch(
