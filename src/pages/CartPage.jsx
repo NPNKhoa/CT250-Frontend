@@ -19,6 +19,8 @@ const CartPage = () => {
   const navigate = useNavigate();
 
   const [selectedItems, setSelectedItems] = useState([]);
+  const allItemsSelected =
+    cartItems.length > 0 && selectedItems.length === cartItems.length;
 
   useEffect(() => {
     dispatch(getCartByUser(accessToken));
@@ -59,6 +61,15 @@ const CartPage = () => {
     );
   };
 
+  const handleSelectAll = () => {
+    if (allItemsSelected) {
+      setSelectedItems([]);
+    } else {
+      const allIds = cartItems.map(item => item._id);
+      setSelectedItems(allIds);
+    }
+  };
+
   const calculateTotal = () => {
     return cartItems
       .filter(item => selectedItems.includes(item._id))
@@ -74,7 +85,20 @@ const CartPage = () => {
     <>
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
       <div className='container mx-auto px-4 py-5'>
-        <h2 className='text-2xl font-bold mb-4'>Giỏ hàng của bạn</h2>
+        <div className='flex items-center justify-between mb-4'>
+          <h2 className='text-2xl font-bold'>Giỏ hàng của bạn</h2>
+          <label className='flex items-center'>
+            <input
+              type='checkbox'
+              checked={allItemsSelected}
+              onChange={handleSelectAll}
+              className='form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out'
+            />
+            <span className='ml-2 text-xs sm:text-sm text-gray-700'>
+              Chọn tất cả
+            </span>
+          </label>
+        </div>
         {cartItems.length === 0 ? (
           <div className='flex flex-col items-center'>
             <img src={CartIcon} alt='' className='w-32 sm:w-48' />

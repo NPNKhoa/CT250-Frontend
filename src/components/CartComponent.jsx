@@ -16,6 +16,8 @@ function Cart() {
   const accessToken = localStorage.getItem('accessToken');
 
   const [selectedItems, setSelectedItems] = useState([]);
+  const allItemsSelected =
+    cartItems.length > 0 && selectedItems.length === cartItems.length;
 
   useEffect(() => {
     dispatch(getCartByUser(accessToken));
@@ -51,6 +53,15 @@ function Cart() {
     );
   };
 
+  const handleSelectAll = () => {
+    if (allItemsSelected) {
+      setSelectedItems([]); // Bỏ chọn tất cả
+    } else {
+      const allIds = cartItems.map(item => item._id);
+      setSelectedItems(allIds); // Chọn tất cả
+    }
+  };
+
   const calculateTotal = () => {
     return cartItems
       .filter(item => selectedItems.includes(item._id))
@@ -64,9 +75,21 @@ function Cart() {
 
   return (
     <div className=''>
-      <h2 className='text-2xl font-bold text-white mb-4 bg-primary sm:rounded-t-lg'>
+      <h2 className='text-2xl font-bold text-white mb-4 bg-primary sm:rounded-t-lg '>
         Giỏ hàng
       </h2>
+      <div className='flex items-center justify-between mb-4 px-5'>
+        <div className=''></div>
+        <label className='flex items-center'>
+          <input
+            type='checkbox'
+            checked={allItemsSelected}
+            onChange={handleSelectAll}
+            className='form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out'
+          />
+          <span className='ml-2 text-sm text-gray-700'>Chọn tất cả</span>
+        </label>
+      </div>
       <div className='w-full px-5'>
         <div>
           {cartItems.map(item => (
