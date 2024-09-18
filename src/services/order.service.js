@@ -3,6 +3,7 @@ import createApiClient from './api.service';
 
 const GHN_API_BASE_URL = 'https://dev-online-gateway.ghn.vn/shiip/public-api';
 const GHN_TOKEN_API = import.meta.env.VITE_GHN_TOKEN_API;
+const GHN_SHOP_ID = parseInt(import.meta.env.VITE_GHN_SHOP_ID);
 const accessToken = localStorage.getItem('accessToken');
 
 class OrderService {
@@ -90,16 +91,30 @@ class OrderService {
         ward,
       });
 
+      const serviceRes = await axios.post(
+        `${GHN_API_BASE_URL}/v2/shipping-order/available-services`,
+        {
+          shop_id: GHN_SHOP_ID,
+          from_district: 1572,
+          to_district: districtId,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            ...this.headers,
+          },
+        }
+      );
+
+      const serviceId = serviceRes.data.data[0].service_id;
+
       const response = await axios.post(
         `${GHN_API_BASE_URL}/v2/shipping-order/fee`,
         {
-          from_district_id: 1572, // Quận Ninh Kiều
-          from_ward_code: '550113', // Phường Xuân Khánh
-          service_id: 53320, // Hàng nhẹ
-          service_type_id: 2, // Giao hàng thương mại
-          to_district_id: +districtId,
+          service_id: serviceId,
+          to_district_id: districtId,
           to_ward_code: wardCode.toString(),
-          weight: 85, // Trọng lượng (gram)
+          weight: 200, // Trọng lượng (gram)
         },
         {
           headers: {
