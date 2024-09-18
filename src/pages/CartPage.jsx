@@ -14,7 +14,7 @@ import { setSelectedProduct } from '@redux/slices/cartSlice';
 
 const CartPage = () => {
   const dispatch = useDispatch();
-  const { cart } = useSelector(state => state.cart);
+  const { cart, selectedProduct } = useSelector(state => state.cart);
   const cartItems = cart?.cartItems || [];
   const accessToken = localStorage.getItem('accessToken');
   const navigate = useNavigate();
@@ -26,6 +26,12 @@ const CartPage = () => {
   useEffect(() => {
     dispatch(getCartByUser(accessToken));
   }, [dispatch, accessToken]);
+
+  useEffect(() => {
+    if (selectedProduct) {
+      setSelectedItems(selectedProduct);
+    }
+  }, [selectedProduct]);
 
   const breadcrumbs = [
     { label: 'Trang chủ', href: '/' },
@@ -81,8 +87,6 @@ const CartPage = () => {
     dispatch(setSelectedProduct(selectedItems));
     setTimeout(() => navigate('/order'), 1000);
   };
-
-  console.log(selectedItems);
 
   return (
     <>
