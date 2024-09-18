@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import CheckIcon from '@mui/icons-material/Check';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
@@ -29,7 +29,7 @@ const ProductDetail = () => {
   const [products, setProducts] = useState({});
   const [productTypes, setProductTypes] = useState([]);
   const [brands, setBrands] = useState([]);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const [notification, setNotification] = useState({ message: '', type: '' });
 
   useEffect(() => {
@@ -186,8 +186,9 @@ const ProductDetail = () => {
         productId: products._id,
         quantity: quantity,
       }
-    )
+    );
     dispatch(setSelectedProduct([response.data._id]));
+    toast.success('Thanh toán ngay');
     navigate('/order');
   };
 
@@ -328,8 +329,10 @@ const ProductDetail = () => {
 
             {/* Nút mua ngay và thêm vào giỏ hàng */}
             <div className='flex flex-col sm:flex-row mt-4 gap-2'>
-              <button className='bg-primary hover:bg-hover-primary text-white font-bold py-3 rounded-lg w-full'
-              onClick={handleBuyNow}>
+              <button
+                className='bg-primary hover:bg-hover-primary text-white font-bold py-3 rounded-lg w-full'
+                onClick={handleBuyNow}
+              >
                 MUA NGAY
               </button>
               <button
