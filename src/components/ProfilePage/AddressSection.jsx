@@ -66,52 +66,54 @@ function AddressSection() {
         <h2 className='text-xl font-semibold mb-4'>Danh sách địa chỉ</h2>
         {loading && <p>Loading...</p>}
         {addresses.length > 0 ? (
-          addresses.map((address, index) => (
-            <div key={index} className='border-t border-gray-300 py-3'>
-              <div className='flex justify-between'>
-                <div>
-                  <div className='flex items-center'>
-                    <h3 className='text-lg font-semibold'>
-                      {address.fullname}
-                    </h3>
-                    <div className='border-r-2 border-gray-300 h-6 mx-4' />
-                    <p className='text-gray-600'>{address.phone}</p>
+          <div className='overflow-y-auto max-h-96 no-scrollbar'>
+            {addresses.map((address, index) => (
+              <div key={index} className='border-t border-gray-300 py-5'>
+                <div className='flex justify-between'>
+                  <div>
+                    <div className='flex items-center'>
+                      <h3 className='text-lg font-semibold'>
+                        {address.fullname}
+                      </h3>
+                      <div className='border-r-2 border-gray-300 h-6 mx-4' />
+                      <p className='text-gray-600'>{address.phone}</p>
+                    </div>
+                    <p>{address.detail}</p>
+                    <p>
+                      {address.commune}, {address.district}, {address.province}
+                    </p>
+                    {address.isDefault && (
+                      <span className='text-red-500 font-bold '>Mặc định</span>
+                    )}
                   </div>
-                  <p>{address.detail}</p>
-                  <p>
-                    {address.commune}, {address.district}, {address.province}
-                  </p>
-                  {address.isDefault && (
-                    <span className='text-red-500 font-bold '>Mặc định</span>
-                  )}
-                </div>
-                <div className='text-right'>
-                  <button
-                    className='text-blue-500 hover:underline'
-                    onClick={() => handleClickOpen(index)}
-                  >
-                    Cập nhật
-                  </button>
-                  {!address.isDefault && (
-                    <>
-                      <button
-                        className='ml-4 text-red-500 hover:underline'
-                        onClick={() => handleDelete(index)}
-                      >
-                        Xóa
-                      </button>
-                      <button
-                        className='block mt-2 text-gray-600 border border-gray-300 py-1 px-2 rounded'
-                        onClick={() => handleSetDefault(index)}
-                      >
-                        Thiết lập mặc định
-                      </button>
-                    </>
-                  )}
+                  <div className='text-right'>
+                    <button
+                      className='text-blue-500 hover:underline'
+                      onClick={() => handleClickOpen(index)}
+                    >
+                      Cập nhật
+                    </button>
+                    {!address.isDefault && (
+                      <>
+                        <button
+                          className='ml-4 text-red-500 hover:underline'
+                          onClick={() => handleDelete(index)}
+                        >
+                          Xóa
+                        </button>
+                        <button
+                          className='block mt-2 text-gray-600 border border-gray-300 py-1 px-2 rounded'
+                          onClick={() => handleSetDefault(index)}
+                        >
+                          Thiết lập mặc định
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            ))}
+          </div>
         ) : (
           <p>Chưa có địa chỉ nào.</p>
         )}

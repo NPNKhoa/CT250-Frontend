@@ -19,7 +19,7 @@ function Cart() {
         Giỏ hàng
       </h2>
 
-      <div className='w-full px-5 max-h-80 overflow-y-auto'>
+      <div className='w-full px-5 max-h-80 overflow-y-auto no-scrollbar'>
         <div>
           {cartItems.map(item => (
             <div key={item._id} className='flex items-center sm:mb-4 mb-2'>

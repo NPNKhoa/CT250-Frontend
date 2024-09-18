@@ -11,7 +11,6 @@ import AddressFormDialog from '@components/ProfilePage/AddressFormDialog';
 import cartService from '@services/cart.service';
 import { toast } from 'react-toastify';
 
-
 function OrderPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -361,7 +360,7 @@ function OrderPage() {
         </div>
         {isModalOpen && (
           <div className='fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center'>
-            <div className='bg-white rounded-lg p-6 w-1/2 max-h-1/2 overflow-y-auto'>
+            <div className='bg-white rounded-lg p-6 w-1/2 max-h-1/2 overflow-y-auto no-scrollbar'>
               <div className='flex justify-between mb-3 item-center'>
                 <h3 className='text-xl font-semibold '>Chọn địa chỉ</h3>
 

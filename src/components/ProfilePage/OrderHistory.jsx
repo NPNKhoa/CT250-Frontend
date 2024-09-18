@@ -63,7 +63,7 @@ function OrderHistory() {
             </button>
           </div>
         ) : (
-          <div className='overflow-x-auto'>
+          <div className='overflow-x-auto no-scrollbar'>
             <table className='min-w-full bg-white border mx-auto'>
               <thead>
                 <tr>
@@ -179,7 +179,7 @@ function OrderHistory() {
                 Sản phẩm
               </h2>
 
-              <div className='mt-4 max-h-64 overflow-y-auto'>
+              <div className='mt-4 max-h-64 overflow-y-auto no-scrollbar'>
                 {selectedOrder.orderDetail?.map(item => (
                   <div
                     key={item.id}
