@@ -7,6 +7,7 @@ import ProductItem from '@components/ProductItem';
 import Filter from '@components/Filter';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
 import PaginationComponent from '@components/common/PaginationComponent';
+import { CircularProgress } from '@mui/material';
 
 const Products = () => {
   const location = useLocation();
@@ -23,6 +24,7 @@ const Products = () => {
   const [isDesc, setIsDesc] = useState('false');
   const [products, setProducts] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const page = parseInt(query.get('page') || '1', 10);
   const brand = query.get('brand') || '';
@@ -30,6 +32,7 @@ const Products = () => {
   useEffect(() => {
     const fetchProductTypes = async () => {
       try {
+        setLoading(true);
         const updatedQuery = new URLSearchParams(location.search);
 
         if (selectedBrand.length > 0)
@@ -50,10 +53,17 @@ const Products = () => {
           sortBy,
           isDesc
         );
+
+        console.log('hehehehehhehehehehhe' + responseProduct);
+
         setProducts(responseProduct.data);
         setTotalPage(responseProduct.meta.totalPages);
       } catch (error) {
+        setLoading(false);
+        setProducts([]);
         console.error('Error fetching product types:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -112,46 +122,61 @@ const Products = () => {
           />
         </div>
         <div className='w-full lg:w-4/5 ml-2'>
-          <div className='container mx-auto flex justify-between px-5 border bg-gray-50 rounded-lg'>
-            <h1 className='text-sm sm:text-xl font-bold my-4'>
-              {products && products.length > 0
-                ? `${products[0].productTypeDetails?.productTypeName} ${brand}`
-                : 'Loading ...'}
-            </h1>
-            <div className='flex items-center space-x-2'>
-              <span className='font-semibold text-sm sm:text-lg'>Sắp xếp:</span>
-              <select
-                value={sortOption}
-                onChange={handleSortChange}
-                className='border text-xs sm:text-base border-gray-300 py-1 px-3 rounded-md focus:outline-none '
-              >
-                <option value='default'>Mặc định</option>
-                <option value='asc'>Giá tăng dần</option>
-                <option value='desc'>Giá giảm dần</option>
-              </select>
+          {loading ? (
+            <div className='w-full h-full flex justify-center items-center'>
+              <CircularProgress />
             </div>
-          </div>
+          ) : (
+            <>
+              <div className='container mx-auto flex justify-between px-5 border bg-gray-50 rounded-lg'>
+                <h1 className='text-sm sm:text-xl font-bold my-4'>
+                  {products.length !== 0 &&
+                    `${products[0]?.productTypeDetails?.productTypeName} ${brand}`}
+                </h1>
+                <div className='flex items-center space-x-2'>
+                  <span className='font-semibold text-sm sm:text-lg'>
+                    Sắp xếp:
+                  </span>
+                  <select
+                    value={sortOption}
+                    onChange={handleSortChange}
+                    className='border text-xs sm:text-base border-gray-300 py-1 px-3 rounded-md focus:outline-none '
+                  >
+                    <option value='default'>Mặc định</option>
+                    <option value='asc'>Giá tăng dần</option>
+                    <option value='desc'>Giá giảm dần</option>
+                  </select>
+                </div>
+              </div>
 
-          <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1'>
-            {/* Ẩn sản phẩm theo số cột khi kích thước màn hình thay đổi */}
-            {Array.isArray(products) &&
-              products.map((product, index) => (
-                <ProductItem
-                  key={index}
-                  imageUrl={product.productImagePath[0]}
-                  name={product.productName}
-                  price={product.price}
-                  productLink={`products/detail/${product._id}`}
+              <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1'>
+                {/* Ẩn sản phẩm theo số cột khi kích thước màn hình thay đổi */}
+
+                {Array.isArray(products) && products.length > 0 ? (
+                  products.map((product, index) => (
+                    <ProductItem
+                      key={index}
+                      imageUrl={product.productImagePath[0]}
+                      name={product.productName}
+                      price={product.price}
+                      productLink={`products/detail/${product._id}`}
+                    />
+                  ))
+                ) : (
+                  <h2 className='font-semibold text-2xl'>
+                    Không tìm thấy sản phẩm
+                  </h2>
+                )}
+              </div>
+
+              <div className='col-span-4 mt-4 flex justify-center'>
+                <PaginationComponent
+                  path={`${location.pathname}`}
+                  totalPages={totalPage}
                 />
-              ))}
-          </div>
-
-          <div className='col-span-4 mt-4 flex justify-center'>
-            <PaginationComponent
-              path={`${location.pathname}`}
-              totalPages={totalPage}
-            />
-          </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>
