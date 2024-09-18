@@ -26,8 +26,7 @@ function OrderPage() {
   const [deliveryFee, setDeliveryFee] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  const selectedProductIds =
-    JSON.parse(localStorage.getItem('selectedProductIds')) || [];
+  const selectedProductIds = useSelector(state => state.cart.selectedProduct);
 
   const filteredCartItems = cartItems.filter(item =>
     selectedProductIds.includes(item._id)

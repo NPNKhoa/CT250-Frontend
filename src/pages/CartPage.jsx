@@ -10,6 +10,7 @@ import {
   updateQuantity,
   deleteItem,
 } from '@redux/thunk/cartThunk';
+import { setSelectedProduct } from '@redux/slices/cartSlice';
 
 const CartPage = () => {
   const dispatch = useDispatch();
@@ -77,9 +78,11 @@ const CartPage = () => {
   };
 
   const handleOrderNow = () => {
-    localStorage.setItem('selectedProductIds', JSON.stringify(selectedItems));
+    dispatch(setSelectedProduct(selectedItems));
     setTimeout(() => navigate('/order'), 1000);
   };
+
+  console.log(selectedItems);
 
   return (
     <>
@@ -87,17 +90,6 @@ const CartPage = () => {
       <div className='container mx-auto px-4 py-5'>
         <div className='flex items-center justify-between mb-4'>
           <h2 className='text-2xl font-bold'>Giỏ hàng của bạn</h2>
-          <label className='flex items-center'>
-            <input
-              type='checkbox'
-              checked={allItemsSelected}
-              onChange={handleSelectAll}
-              className='form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out'
-            />
-            <span className='ml-2 text-xs sm:text-sm text-gray-700'>
-              Chọn tất cả
-            </span>
-          </label>
         </div>
         {cartItems.length === 0 ? (
           <div className='flex flex-col items-center'>
@@ -248,6 +240,20 @@ const CartPage = () => {
                   </div>
                 </div>
               ))}
+            </div>
+            <div className='container mx-auto p-4'>
+              <label className='flex items-center space-x-2'>
+                <input
+                  type='checkbox'
+                  checked={allItemsSelected}
+                  onChange={handleSelectAll}
+                  className='form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out'
+                />
+                <span className='text-sm font-semibold'>
+                  Chọn tất cả ({cartItems.length})
+                </span>
+              </label>
+              {/* Other cart page content */}
             </div>
 
             {/* Total Price and Order Button */}
