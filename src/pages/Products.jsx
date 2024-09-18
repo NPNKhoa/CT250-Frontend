@@ -128,53 +128,56 @@ const Products = () => {
             </div>
           ) : (
             <>
-              <div className='container mx-auto flex justify-between px-5 border bg-gray-50 rounded-lg'>
-                <h1 className='text-sm sm:text-xl font-bold my-4'>
-                  {products.length !== 0 &&
-                    `${products[0]?.productTypeDetails?.productTypeName} ${brand}`}
-                </h1>
-                <div className='flex items-center space-x-2'>
-                  <span className='font-semibold text-sm sm:text-lg'>
-                    Sắp xếp:
-                  </span>
-                  <select
-                    value={sortOption}
-                    onChange={handleSortChange}
-                    className='border text-xs sm:text-base border-gray-300 py-1 px-3 rounded-md focus:outline-none '
-                  >
-                    <option value='default'>Mặc định</option>
-                    <option value='asc'>Giá tăng dần</option>
-                    <option value='desc'>Giá giảm dần</option>
-                  </select>
-                </div>
-              </div>
+              {Array.isArray(products) && products.length !== 0 ? (
+                <div className='container mx-auto px-5'>
+                  <div className='flex justify-between border bg-gray-50 rounded-lg px-4'>
+                    <h1 className='text-sm sm:text-xl font-bold my-4'>
+                      {`${products[0]?.productTypeDetails?.productTypeName} ${brand}`}
+                    </h1>
+                    <div className='flex items-center space-x-2'>
+                      <span className='font-semibold text-sm sm:text-lg'>
+                        Sắp xếp:
+                      </span>
+                      <select
+                        value={sortOption}
+                        onChange={handleSortChange}
+                        className='border text-xs sm:text-base border-gray-300 py-1 px-3 rounded-md focus:outline-none bg-white text-gray-700 hover:border-[#EA580C] focus:ring-[#EA580C] focus:border-[#EA580C] focus-visible:ring-[#EA580C]'
+                      >
+                        <option value='default'>Mặc định</option>
+                        <option value='asc'>Giá tăng dần</option>
+                        <option value='desc'>Giá giảm dần</option>
+                      </select>
+                    </div>
+                  </div>
 
-              <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1'>
-                {/* Ẩn sản phẩm theo số cột khi kích thước màn hình thay đổi */}
+                  {/* Grid để chứa các product items */}
+                  <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1'>
+                    {products.map((product, index) => (
+                      <ProductItem
+                        key={index}
+                        imageUrl={product.productImagePath[0]}
+                        name={product.productName}
+                        price={product.price}
+                        productLink={`products/detail/${product._id}`}
+                      />
+                    ))}
+                  </div>
 
-                {Array.isArray(products) && products.length > 0 ? (
-                  products.map((product, index) => (
-                    <ProductItem
-                      key={index}
-                      imageUrl={product.productImagePath[0]}
-                      name={product.productName}
-                      price={product.price}
-                      productLink={`products/detail/${product._id}`}
+                  {/* Pagination */}
+                  <div className='col-span-4 mt-4 flex justify-center'>
+                    <PaginationComponent
+                      path={`${location.pathname}`}
+                      totalPages={totalPage}
                     />
-                  ))
-                ) : (
-                  <h2 className='font-semibold text-2xl'>
+                  </div>
+                </div>
+              ) : (
+                <div className='w-full h-full flex justify-center items-center'>
+                  <h2 className='font-semibold text-3xl'>
                     Không tìm thấy sản phẩm
                   </h2>
-                )}
-              </div>
-
-              <div className='col-span-4 mt-4 flex justify-center'>
-                <PaginationComponent
-                  path={`${location.pathname}`}
-                  totalPages={totalPage}
-                />
-              </div>
+                </div>
+              )}
             </>
           )}
         </div>
