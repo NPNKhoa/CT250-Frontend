@@ -30,18 +30,21 @@ class OrderService {
   async getOrderByUser(page, limit) {
     const params = new URLSearchParams();
 
+    // Thêm tham số phân trang vào URLSearchParams
     if (page) params.append('page', page);
     if (limit) params.append('limit', limit);
 
     try {
+      // Gửi yêu cầu đến API với tham số phân trang
       const response = await this.api.get('/get-order-by-user', {
         params: params,
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`, // Đảm bảo accessToken đã được định nghĩa
         },
       });
-      return response.data;
+      return response.data; // Trả về dữ liệu từ phản hồi của API
     } catch (error) {
+      // Xử lý lỗi và ném lỗi với thông điệp thích hợp
       throw new Error(error.message || 'Error fetching order list');
     }
   }

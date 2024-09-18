@@ -77,7 +77,7 @@ const Header = () => {
   return (
     <>
       <div className='bg-white'>
-        <div className='container mx-auto px-4 flex sm:flex-row justify-between items-center py-2 '>
+        <div className='container mx-auto px-4 flex sm:flex-row justify-between items-center py-1 '>
           <div className='flex items-center gap-4'>
             {/* Biểu tượng điều khiển NavBar chỉ hiển thị trên màn hình nhỏ */}
             <div

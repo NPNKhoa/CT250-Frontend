@@ -19,8 +19,7 @@ function OrderHistory() {
     const fetchOrders = async () => {
       try {
         const response = await orderService.getOrderByUser(page, 5);
-        console.log(response);
-        setTotalPage(response.totalPages);
+        setTotalPage(response.meta.totalPages); // Cập nhật tổng số trang
         setOrders(response.data);
       } catch (error) {
         console.error('Error fetching order list:', error);
@@ -64,7 +63,7 @@ function OrderHistory() {
             </button>
           </div>
         ) : (
-          <div className='overflow-x-auto'>
+          <div className='overflow-x-auto no-scrollbar'>
             <table className='min-w-full bg-white border mx-auto'>
               <thead>
                 <tr>
@@ -113,18 +112,25 @@ function OrderHistory() {
             </table>
           </div>
         )}
+        <div className='col-span-4 mt-6 flex justify-center'>
+          <PaginationComponent
+            path={`${location.pathname}`}
+            totalPages={totalPage}
+            currentPage={page} // Thêm tham số trang hiện tại
+          />
+        </div>
       </div>
 
       {selectedOrder && (
         <div className='fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center'>
-          <div className=' bg-white rounded-lg p-6 w-1/2 max-h-[90vh] shadow-2xl'>
+          <div className='bg-white rounded-lg p-6 w-1/2 max-h-[90vh] shadow-2xl'>
             <div className='flex justify-between my-2 item-center'>
-              <h3 className='text-2xl font-semibold  text-center text-gray-800'>
+              <h3 className='text-2xl font-semibold text-center text-gray-800'>
                 Chi tiết đơn hàng
               </h3>
               <button
                 onClick={handleCloseModal}
-                className=' px-4 py-2 bottom-0 bg-orange-500 text-white rounded hover:bg-orange-600 transition ease-in-out duration-300'
+                className='px-4 py-2 bottom-0 bg-orange-500 text-white rounded hover:bg-orange-600 transition ease-in-out duration-300'
               >
                 Đóng
               </button>
@@ -173,8 +179,7 @@ function OrderHistory() {
                 Sản phẩm
               </h2>
 
-              {/* Thêm max-height và overflow-y: auto để cuộn sản phẩm nếu quá nhiều */}
-              <div className='mt-4 max-h-64 overflow-y-auto'>
+              <div className='mt-4 max-h-64 overflow-y-auto no-scrollbar'>
                 {selectedOrder.orderDetail?.map(item => (
                   <div
                     key={item.id}
@@ -204,12 +209,6 @@ function OrderHistory() {
                 ))}
               </div>
             </div>
-          </div>{' '}
-          <div className='col-span-4 mt-4 flex justify-center'>
-            <PaginationComponent
-              path={`${location.pathname}`}
-              totalPages={totalPage}
-            />
           </div>
         </div>
       )}

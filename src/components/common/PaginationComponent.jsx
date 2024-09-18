@@ -12,7 +12,7 @@ const PaginationComponent = ({ path, totalPages }) => {
     <Pagination
       page={currentPage}
       count={totalPages}
-      renderItem={(item) => {
+      renderItem={item => {
         const pageNumber = item.page;
         // Clone query parameters and remove the existing 'page' parameter
         const updatedQuery = new URLSearchParams(query.toString());
@@ -20,13 +20,7 @@ const PaginationComponent = ({ path, totalPages }) => {
         // Generate the URL for each page
         const to = `${path}?${updatedQuery.toString()}`;
 
-        return (
-          <PaginationItem
-            component={Link}
-            to={to}
-            {...item}
-          />
-        );
+        return <PaginationItem component={Link} to={to} {...item} />;
       }}
     />
   );
