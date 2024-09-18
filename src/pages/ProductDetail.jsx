@@ -166,7 +166,6 @@ const ProductDetail = () => {
       })
     );
     toast.success('Đã thêm vào giỏ hàng!');
-    // setNotification({ message: 'Đã thêm vào giỏ hàng!', type: 'success' });
   };
 
   const [openTypeIndices, setOpenTypeIndices] = useState([]);
@@ -180,6 +179,11 @@ const ProductDetail = () => {
   };
 
   const handleBuyNow = async () => {
+    if (!user) {
+      toast.error('Bạn cần phải đăng nhập để mua hàng');
+      // navigate('/login');
+      return;
+    }
     const response = await cartService.createCartDetail(
       localStorage.getItem('accessToken'),
       {
