@@ -62,6 +62,10 @@ const Header = () => {
   }, [dispatch]);
 
   const handleLogout = () => {
+    localStorage.removeItem(
+      `viewedProducts_${localStorage.getItem('loggedInUserId')}`
+    );
+    localStorage.removeItem('loggedInUserId');
     dispatch(logout());
     navigate('/');
   };

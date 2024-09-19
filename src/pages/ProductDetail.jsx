@@ -32,6 +32,8 @@ const ProductDetail = () => {
   const navigate = useNavigate();
   // const [notification, setNotification] = useState({ message: '', type: '' });
 
+  const userId = localStorage.getItem('loggedInUserId');
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -47,7 +49,25 @@ const ProductDetail = () => {
     };
 
     fetchProducts();
-  }, [id]);
+    saveViewedProductForUser(userId, id);
+  }, [id, userId]);
+
+  const saveViewedProductForUser = (userId, productId) => {
+    let viewedProducts = localStorage.getItem(`viewedProducts_${userId}`)
+      ? JSON.parse(localStorage.getItem(`viewedProducts_${userId}`))
+      : [];
+
+    if (!viewedProducts.includes(productId)) {
+      viewedProducts.push(productId);
+    }
+
+    viewedProducts = viewedProducts.slice(-3);
+
+    localStorage.setItem(
+      `viewedProducts_${userId}`,
+      JSON.stringify(viewedProducts)
+    );
+  };
 
   const breadcrumbs = [
     { label: 'Trang chủ', href: '/' },
