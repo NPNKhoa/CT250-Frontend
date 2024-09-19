@@ -38,16 +38,14 @@ class OrderService {
     if (limit) params.append('limit', limit);
 
     try {
-      // Gửi yêu cầu đến API với tham số phân trang
       const response = await this.api.get('/get-order-by-user', {
         params: params,
         headers: {
-          Authorization: `Bearer ${accessToken}`, // Đảm bảo accessToken đã được định nghĩa
+          Authorization: `Bearer ${accessToken}`,
         },
       });
-      return response.data; // Trả về dữ liệu từ phản hồi của API
+      return response.data;
     } catch (error) {
-      // Xử lý lỗi và ném lỗi với thông điệp thích hợp
       throw new Error(error.message || 'Error fetching order list');
     }
   }
@@ -150,18 +148,18 @@ class OrderService {
         const response = await axios.post(
           '/ghtk/services/shipment/fee',
           {
-            pick_province: "Cần Thơ",
-            pick_district: "Quận Ninh Kiều",
+            pick_province: 'Cần Thơ',
+            pick_district: 'Quận Ninh Kiều',
             province: province,
             district: district,
             weight: 200,
-            deliver_option: "none"
+            deliver_option: 'none',
           },
           {
             headers: {
               'Content-Type': 'application/json',
-              'Token': GHTK_TOKEN_API,
-            }
+              Token: GHTK_TOKEN_API,
+            },
           }
         );
         return response.data.fee.fee;
@@ -172,6 +170,15 @@ class OrderService {
         );
         throw new Error(error.message || 'Error fetching third-party API');
       }
+    }
+  }
+
+  async getOrderById(orderId) {
+    try {
+      const response = await this.api.get(`/${orderId}`);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.message || 'Error fetching order');
     }
   }
 }
