@@ -28,8 +28,13 @@ function OrderHistory() {
     fetchOrders();
   }, [page]);
 
-  const handleViewDetails = order => {
-    setSelectedOrder(order);
+  const handleViewDetails = async order => {
+    try {
+      const orderDetails = await orderService.getOrderById(order._id);
+      setSelectedOrder(orderDetails.data);
+    } catch (error) {
+      console.error('Error fetching order details:', error);
+    }
   };
 
   const handleCloseModal = () => {
@@ -78,10 +83,10 @@ function OrderHistory() {
               </thead>
               <tbody>
                 {Array.isArray(orders) &&
-                  orders.map((order, index) => (
+                  orders.map(order => (
                     <tr key={order._id} className='hover:bg-gray-50'>
                       <td className='py-2 px-4 border-b text-center'>
-                        #{index + 1}
+                        #{order._id}
                       </td>
                       <td className='py-2 px-4 border-b text-center'>
                         {new Date(order.orderDate).toLocaleDateString('vi-VN')}
@@ -138,8 +143,7 @@ function OrderHistory() {
             </div>
 
             <p>
-              <strong>Mã đơn hàng:</strong> #
-              {orders.findIndex(order => order._id === selectedOrder._id) + 1}
+              <strong>Mã đơn hàng:</strong> #{selectedOrder._id}
             </p>
             <p>
               <strong>Ngày đặt:</strong>{' '}
