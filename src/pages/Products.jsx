@@ -54,8 +54,6 @@ const Products = () => {
           isDesc
         );
 
-        console.log('hehehehehhehehehehhe' + responseProduct);
-
         setProducts(responseProduct.data);
         setTotalPage(responseProduct.meta.totalPages);
       } catch (error) {

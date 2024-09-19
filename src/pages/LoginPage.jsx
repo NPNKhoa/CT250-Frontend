@@ -64,6 +64,7 @@ const LoginPage = () => {
     if (authUser) {
       // setNotification({ message: 'Login successful!', type: 'success' });
       toast.success('Đăng nhập thành công');
+      localStorage.setItem('loggedInUserId', authUser.userId);
       dispatch(getLoggedInUser(localStorage.getItem('accessToken')));
       const timer = setTimeout(() => navigate('/'), 1000);
       return () => clearTimeout(timer);
