@@ -129,7 +129,7 @@ function OrderPage() {
   }, [selectedAddress, shippingMethods]);
 
   useEffect(() => {
-      setDeliveryFee(deliveryFees[deliveryMethod]);
+    setDeliveryFee(deliveryFees[deliveryMethod]);
   }, [deliveryFees, deliveryMethod]);
 
   const handleChange = e => {
@@ -188,6 +188,7 @@ function OrderPage() {
       dispatch(getCartByUser(localStorage.getItem('accessToken')));
     } catch (error) {
       console.error(error);
+      toast.error('Vui lòng chọn phương thức thanh toán và vận chuyển');
     } finally {
       setIsLoading(false);
     }

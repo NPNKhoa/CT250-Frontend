@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
 import FeedbackService from '@services/feedback.service'; // Đảm bảo đường dẫn chính xác
-import Alert from '@components/Alert'; // Đảm bảo đường dẫn chính xác
+// Đảm bảo đường dẫn chính xác
 import CircularProgress from '@mui/material/CircularProgress';
+import { toast } from 'react-toastify';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -11,7 +12,7 @@ const ContactPage = () => {
     phone: '',
     message: '',
   });
-  const [alert, setAlert] = useState({ message: '', type: '' });
+
   const [loading, setLoading] = useState(false);
 
   const handleChange = e => {
@@ -45,16 +46,11 @@ const ContactPage = () => {
         message: '',
       });
 
-      // Hiển thị thông báo thành công
-      setAlert({
-        message: 'Phản hồi của bạn đã được gửi thành công!',
-        type: 'success',
-      });
+      toast.success('Phản hồi của bạn đã được gửi thành công!');
     } catch (err) {
       // Hiển thị thông báo lỗi
       console.log(err);
-
-      setAlert({ message: 'Có lỗi xảy ra. Vui lòng thử lại!', type: 'error' });
+      toast.error('Có lỗi xảy ra. Vui lòng thử lại!');
     } finally {
       setLoading(false);
     }
@@ -174,7 +170,6 @@ const ContactPage = () => {
         </div>
       </div>
       {/* Hiển thị thông báo */}
-      {alert.message && <Alert message={alert.message} type={alert.type} />}
     </>
   );
 };
