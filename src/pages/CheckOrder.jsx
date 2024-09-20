@@ -80,50 +80,56 @@ const CheckOrder = () => {
         {selectedOrder && (
           <div className='mt-6'>
             <h2 className='text-xl font-semibold mb-4'>Thông tin đơn hàng</h2>
-            <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
-              <div className='bg-white shadow-md rounded-lg p-4'>
-                <h3 className='text-sm font-medium text-gray-700'>
-                  Mã đơn hàng
-                </h3>
-                <p className='text-lg'>{selectedOrder._id}</p>
-              </div>
-              <div className='bg-white shadow-md rounded-lg p-4'>
-                <h3 className='text-sm font-medium text-gray-700'>Ngày đặt</h3>
-                <p className='text-lg'>
-                  {new Date(selectedOrder.orderDate).toLocaleDateString(
-                    'vi-VN'
-                  )}
-                </p>
-              </div>
-              <div className='bg-white shadow-md rounded-lg p-4'>
-                <h3 className='text-sm font-medium text-gray-700'>Tiền hàng</h3>
-                <p className='text-lg'>
-                  {selectedOrder.totalPrice?.toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND',
-                  })}
-                </p>
-              </div>
-              <div className='bg-white shadow-md rounded-lg p-4'>
-                <h3 className='text-sm font-medium text-gray-700'>
-                  Trạng thái
-                </h3>
-                <p className='text-lg'>
-                  {selectedOrder.orderStatus.orderStatus}
-                </p>
-              </div>
-              <div className='bg-white shadow-md rounded-lg p-4'>
-                <button
-                  onClick={() => handleViewDetails(selectedOrder)}
-                  className='bg-primary text-white py-1 px-2 rounded hover:bg-primary-hover transition-colors'
-                >
-                  Xem chi tiết
-                </button>
-              </div>
-            </div>
+            <table className='min-w-full divide-y divide-gray-200'>
+              <thead>
+                <tr>
+                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                    Mã đơn hàng
+                  </th>
+                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                    Ngày đặt
+                  </th>
+                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                    Tiền hàng
+                  </th>
+                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                    Trạng thái
+                  </th>
+                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'></th>
+                </tr>
+              </thead>
+              <tbody className='bg-white divide-y divide-gray-200'>
+                <tr>
+                  <td className='px-6 py-4 whitespace-nowrap'>
+                    {selectedOrder._id}
+                  </td>
+                  <td className='px-6 py-4 whitespace-nowrap'>
+                    {new Date(selectedOrder.orderDate).toLocaleDateString(
+                      'vi-VN'
+                    )}
+                  </td>
+                  <td className='px-6 py-4 whitespace-nowrap'>
+                    {selectedOrder.totalPrice?.toLocaleString('vi-VN', {
+                      style: 'currency',
+                      currency: 'VND',
+                    })}
+                  </td>
+                  <td className='px-6 py-4 whitespace-nowrap'>
+                    {selectedOrder.orderStatus.orderStatus}
+                  </td>
+                  <td className='px-6 py-4 whitespace-nowrap'>
+                    <button
+                      onClick={() => handleViewDetails(selectedOrder)}
+                      className='bg-primary text-white py-1 px-2 rounded hover:bg-primary-hover transition-colors'
+                    >
+                      Xem chi tiết
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         )}
-
         {isModalOpen && orderDetail && (
           <div className='fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center'>
             <div className='bg-white rounded-lg p-6 w-1/2 max-h-[90vh] shadow-2xl'>
