@@ -56,7 +56,7 @@ function ViewedProducts() {
               />
               <div className='p-4'>
                 <h3
-                  className='sm:text-base text-sm font-medium'
+                  className='text-sm font-medium line-clamp-3'
                   style={{
                     display: '-webkit-box',
                     WebkitBoxOrient: 'vertical',
@@ -67,7 +67,7 @@ function ViewedProducts() {
                 >
                   {product?.productName}
                 </h3>
-                <p className='text-primary font-semibold mt-2'>
+                <p className='text-primary text-sm font-semibold mt-2'>
                   {product?.price
                     .toLocaleString('vi-VN', {
                       style: 'currency',

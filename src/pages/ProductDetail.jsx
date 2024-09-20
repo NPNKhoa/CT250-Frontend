@@ -438,7 +438,10 @@ const ProductDetail = () => {
                 {productTypes.map((type, index) => (
                   <div key={index}>
                     <div className='flex justify-between items-center my-4'>
-                      <Link to={'/'} className='text-sm sm:text-base'>
+                      <Link
+                        to={'/'}
+                        className='text-sm sm:text-base hover:text-primary'
+                      >
                         {type.productTypeName}
                       </Link>
                       <button
@@ -456,7 +459,7 @@ const ProductDetail = () => {
                               to={`/products?productType=${encodeURIComponent(
                                 type.productTypeName
                               )}&brand=${encodeURIComponent(brand.brandName)}`}
-                              className='text-sm sm:text-base'
+                              className='text-sm sm:text-base hover:text-primary'
                             >
                               {`${type.productTypeName} ${brand.brandName}`}
                             </Link>
@@ -472,14 +475,13 @@ const ProductDetail = () => {
 
         <div className='flex flex-col lg:flex-row'>
           <div className='container w-full lg:w-3/4 mt-5 px-4'>
-            <RatingSection />
+            <RatingSection productId={id} />
           </div>
           <div className='w-full sm:w-1/4 pt-3 '>
             <ViewedProducts />
           </div>
         </div>
       </div>
-      {/* <Alert message={notification.message} type={notification.type} /> */}
     </>
   );
 };
