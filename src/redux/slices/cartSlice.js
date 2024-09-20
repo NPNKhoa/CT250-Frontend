@@ -1,5 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getCartByUser, addToCart, updateQuantity, deleteItem, deleteAll } from '@redux/thunk/cartThunk';
+import {
+  getCartByUser,
+  addToCart,
+  updateQuantity,
+  deleteItem,
+  deleteAll,
+} from '@redux/thunk/cartThunk';
 
 const initialState = {
   cart: {},
@@ -16,6 +22,9 @@ const cartSlice = createSlice({
   reducers: {
     setSelectedProduct: (state, action) => {
       state.selectedProduct = action.payload;
+    },
+    setCart: (state, action) => {
+      state.cart = action.payload;
     },
   },
   extraReducers: builder => {
@@ -73,7 +82,9 @@ const cartSlice = createSlice({
       })
       .addCase(deleteItem.fulfilled, (state, action) => {
         state.loading = false;
-        state.cart.cartItems = state.cart.cartItems.filter(item => item._id !== action.payload._id);
+        state.cart.cartItems = state.cart.cartItems.filter(
+          item => item._id !== action.payload._id
+        );
       })
       .addCase(deleteItem.rejected, (state, action) => {
         state.loading = false;
@@ -84,7 +95,7 @@ const cartSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(deleteAll.fulfilled, (state) => {
+      .addCase(deleteAll.fulfilled, state => {
         state.loading = false;
         state.cart.cartItems = [];
       })
@@ -95,5 +106,5 @@ const cartSlice = createSlice({
   },
 });
 
-export const { setSelectedProduct } = cartSlice.actions;
+export const { setSelectedProduct, setCart } = cartSlice.actions;
 export default cartSlice.reducer;
