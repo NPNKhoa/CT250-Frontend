@@ -138,7 +138,7 @@ const HomePage = () => {
       <section className='py-4'>
         <div className='container mx-auto px-4'>
           <h2 className='text-3xl font-bold text-center hover:text-primary mb-4'>
-            Sản phẩm nổi bật
+            Sản phẩm mới nhất
           </h2>
           <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[30vw] mx-auto'></span>
           <div className='flex justify-between items-center mb-4'>
