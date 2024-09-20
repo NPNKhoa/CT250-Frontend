@@ -2,6 +2,7 @@ import { useState } from 'react';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
 import orderService from '@services/order.service'; // Import dịch vụ API
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 const CheckOrder = () => {
   const [orderCode, setOrderCode] = useState('');
@@ -189,7 +190,8 @@ const CheckOrder = () => {
 
                 <div className='mt-4 max-h-64 overflow-y-auto no-scrollbar'>
                   {selectedOrder.orderDetail?.map(item => (
-                    <div
+                    <Link
+                      to={`/products/detail/${item.product._id}`}
                       key={item.id}
                       className='flex items-center space-x-4 py-2'
                     >
@@ -215,7 +217,7 @@ const CheckOrder = () => {
                           )}
                         </p>
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               </div>
