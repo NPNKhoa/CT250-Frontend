@@ -63,13 +63,6 @@ function UserProfileForm() {
     }
   }, [user]);
 
-  // useEffect(() => {
-  //   if (avatarUpdated && accessToken) {
-  //     dispatch(getLoggedInUser(accessToken));
-  //     setAvatarUpdated(false);
-  //   }
-  // }, [avatarUpdated, accessToken, dispatch]);
-
   const handleChange = event => {
     const { name, value } = event.target;
     setUserData(prevState => ({ ...prevState, [name]: value }));

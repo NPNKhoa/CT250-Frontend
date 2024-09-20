@@ -68,6 +68,8 @@ const Header = () => {
       `viewedProducts_${localStorage.getItem('loggedInUserId')}`
     );
     localStorage.removeItem('loggedInUserId');
+    localStorage.removeItem('productQuantity');
+    localStorage.removeItem('viewedProducts_null');
     dispatch(setCart(null));
     dispatch(logout());
     navigate('/');
