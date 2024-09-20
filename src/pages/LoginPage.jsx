@@ -10,6 +10,7 @@ import PasswordInput from '@components/common/PasswordInput';
 import { getLoggedInUser } from '@redux/thunk/userThunk';
 import { LoginSocialFacebook, LoginSocialGoogle } from 'reactjs-social-login';
 import { toast } from 'react-toastify';
+import { getCartByUser } from '@redux/thunk/cartThunk';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -65,7 +66,9 @@ const LoginPage = () => {
       // setNotification({ message: 'Login successful!', type: 'success' });
       toast.success('Đăng nhập thành công');
       localStorage.setItem('loggedInUserId', authUser.userId);
-      dispatch(getLoggedInUser(localStorage.getItem('accessToken')));
+      const accessToken = localStorage.getItem('accessToken');
+      dispatch(getCartByUser(accessToken));
+      dispatch(getLoggedInUser(accessToken));
       const timer = setTimeout(() => navigate('/'), 1000);
       return () => clearTimeout(timer);
     } else if (error) {

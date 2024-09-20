@@ -20,6 +20,7 @@ import {
   PersonSearchRounded as PersonSearchRoundedIcon,
   PhoneCallbackSharp as PhoneCallbackSharpIcon,
 } from '@mui/icons-material';
+import { setCart } from '@redux/slices/cartSlice';
 
 // Custom hook for handling modal states
 const useModalState = (initialState = false) => {
@@ -42,7 +43,7 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart);
-  const cartItems = cart.cart?.cartItems || [];
+  const cartItems = cart?.cart?.cartItems || [];
   const user = useSelector(state => state.auth.authUser);
   const userExist = useSelector(state => state.users.user);
 
@@ -67,6 +68,7 @@ const Header = () => {
       `viewedProducts_${localStorage.getItem('loggedInUserId')}`
     );
     localStorage.removeItem('loggedInUserId');
+    dispatch(setCart(null));
     dispatch(logout());
     navigate('/');
   };
@@ -189,7 +191,7 @@ const Header = () => {
                           Thông tin tài khoản
                         </Link>
                         <button
-                          onClick={handleLogout}
+                          onClick={() => handleLogout()}
                           className='hover:bg-primary hover:text-white rounded-b-lg p-2 text-center'
                         >
                           Đăng xuất
