@@ -50,7 +50,9 @@ export default function SearchPopover() {
     recognition.onend = () => {
       setIsListening(false);
       if (queryRef.current) {
-        navigate(`/search?productName=${encodeURIComponent(queryRef.current)}`);
+        navigate(
+          `/search?searchString=${encodeURIComponent(queryRef.current)}`
+        );
         setQuery(''); // Xóa giá trị của input sau khi tìm kiếm
       }
     };
@@ -71,9 +73,9 @@ export default function SearchPopover() {
     }
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
@@ -84,24 +86,24 @@ export default function SearchPopover() {
     event.preventDefault();
     setQuery(inputRef.current.value.trim()); // Lấy giá trị tìm kiếm
     if (query) {
-      navigate(`/search?productName=${encodeURIComponent(query)}`); // Chuyển hướng đến trang search với query
+      navigate(`/search?searchString=${encodeURIComponent(query)}`); // Chuyển hướng đến trang search với query
       setQuery(''); // Xóa giá trị tìm kiếm sau khi điều hướng
     }
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? 'search-popover' : undefined;
+  // const id = open ? 'search-popover' : undefined;
 
-  const categories = [
-    { label: 'Vợt cầu lông', href: '/products/vot-cau-long' },
-    { label: 'Cước cầu lông', href: '/products/cuoc-cau-long' },
-    { label: 'Vợt tenis', href: '/products/vot-tenis' },
-    { label: 'Minh Tu deptrai', href: '/profile/minh-tu' },
-  ];
+  // const categories = [
+  //   { label: 'Vợt cầu lông', href: '/products/vot-cau-long' },
+  //   { label: 'Cước cầu lông', href: '/products/cuoc-cau-long' },
+  //   { label: 'Vợt tenis', href: '/products/vot-tenis' },
+  //   { label: 'Minh Tu deptrai', href: '/profile/minh-tu' },
+  // ];
 
-  const products = [
-    // Các sản phẩm như bạn đã cung cấp
-  ];
+  // const products = [
+  //   // Các sản phẩm như bạn đã cung cấp
+  // ];
 
   useEffect(() => {
     if (open && inputRef.current) {

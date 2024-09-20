@@ -10,7 +10,7 @@ import PaginationComponent from '@components/common/PaginationComponent';
 const SearchPage = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const query = searchParams.get('productName');
+  const query = searchParams.get('searchString');
   const page = parseInt(searchParams.get('page') || '', 10);
 
   const [products, setProducts] = useState([]);
