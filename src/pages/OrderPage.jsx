@@ -400,7 +400,7 @@ function OrderPage() {
                     <span className='text-gray-500'>Phí vận chuyển:</span>
                     <span className='text-gray-900'>
                       {selectedShippingMethod
-                        ? deliveryFee.toLocaleString('vi-VN', {
+                        ? deliveryFee?.toLocaleString('vi-VN', {
                             style: 'currency',
                             currency: 'VND',
                           })
