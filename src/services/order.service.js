@@ -30,12 +30,14 @@ class OrderService {
     }
   }
 
-  async getOrderByUser(page, limit) {
+  async getOrderByUser(page, limit, orderStatus, isLatest) {
     const params = new URLSearchParams();
 
     // Thêm tham số phân trang vào URLSearchParams
     if (page) params.append('page', page);
     if (limit) params.append('limit', limit);
+    if (orderStatus) params.append('orderStatus', orderStatus);
+    if (isLatest) params.append('isLatest', isLatest);
 
     try {
       const response = await this.api.get('/get-order-by-user', {
