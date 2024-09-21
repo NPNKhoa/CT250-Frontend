@@ -12,8 +12,8 @@ class productService {
 
     const params = new URLSearchParams();
 
-    if (query.get('productName'))
-      params.append('productName', query.get('productName'));
+    if (query.get('searchString'))
+      params.append('searchString', query.get('searchString'));
     if (query.get('productType'))
       params.append('productType', query.get('productType'));
     if (query.get('brand')) params.append('brand', query.get('brand'));
