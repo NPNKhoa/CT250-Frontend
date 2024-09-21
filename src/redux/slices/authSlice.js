@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { loginThunk, loginWithSocialThunk } from '@redux/thunk/authThunk';
+import { loginThunk, loginWithSocialThunk, logoutThunk } from '@redux/thunk/authThunk';
 
 const initialState = {
   authUser: null,
@@ -11,11 +11,6 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logout: state => {
-      state.authUser = null; // Đăng xuất
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-    },
     setCredentials: (state, action) => {
       state.authUser = action.payload;
     },
@@ -46,10 +41,24 @@ const authSlice = createSlice({
       .addCase(loginWithSocialThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      .addCase(logoutThunk.pending, state => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(logoutThunk.fulfilled, state => {
+        state.loading = false;
+        state.authUser = null;
+      })
+      .addCase(logoutThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
+
   },
 });
 
-export const { logout, setCredentials } = authSlice.actions;
+export const { setCredentials } = authSlice.actions;
 
 export default authSlice.reducer;
