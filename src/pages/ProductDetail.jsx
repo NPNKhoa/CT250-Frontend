@@ -239,7 +239,7 @@ const ProductDetail = () => {
               </p>
             </div>
 
-            {giftsData.length > 0 || benefitsData.length > 0 && (
+            {(giftsData?.length > 0 || benefitsData?.length > 0) && (
               <div className='bg-gray-100 p-4 rounded-md border border-primary relative'>
                 <div className='absolute -top-5 border px-3 py-1 rounded-lg bg-gray-100 border-primary'>
                   <h2 className='text-lg sm:text-xl font-bold text-primary flex items-center gap-3'>
@@ -248,63 +248,68 @@ const ProductDetail = () => {
                 </div>
 
                 {/* Danh sách ưu đãi */}
-                <h3 className='text-lg sm:text-xl font-bold mt-4'>
-                  Quà tặng kèm:
-                </h3>
-                <ul className='list-disc space-y-2 mt-2'>
-                  {giftsData &&
-                    giftsData.map((gift, index) => (
-                      <li
-                        key={index}
-                        className='list-none flex items-center gap-2'
-                      >
-                        <CheckIcon className='text-primary font-bold' />
-                        <Link
-                          className='hover:text-primary'
-                          to={`/products/detail/${gift._id}`}
-                        >
-                          {gift.productName}
-                        </Link>
-                        <p className='italic text-red-600'>
-                          (trị giá:{' '}
-                          {gift.price
-                            .toLocaleString('vi-VN', {
-                              style: 'currency',
-                              currency: 'VND',
-                            })
-                            .replace('₫', 'đ')}
-                          )
-                        </p>
-                      </li>
-                    ))}
-                </ul>
-
+                {giftsData?.length > 0 && (
+                  <>
+                    <h3 className='text-lg sm:text-xl font-bold mt-4'>
+                      Quà tặng kèm:
+                    </h3>
+                    <ul className='list-disc space-y-2 mt-2'>
+                      {giftsData.map((gift, index) => (
+                          <li
+                            key={index}
+                            className='list-none flex items-center gap-2'
+                          >
+                            <CheckIcon className='text-primary font-bold' />
+                            <Link
+                              className='hover:text-primary'
+                              to={`/products/detail/${gift._id}`}
+                            >
+                              {gift.productName}
+                            </Link>
+                            <p className='italic text-red-600'>
+                              (trị giá:{' '}
+                              {gift.price
+                                .toLocaleString('vi-VN', {
+                                  style: 'currency',
+                                  currency: 'VND',
+                                })
+                                .replace('₫', 'đ')}
+                              )
+                            </p>
+                          </li>
+                        ))}
+                    </ul>
+                  </>
+                )}
                 {/* Ưu đãi thêm */}
-                <h3 className='text-lg sm:text-xl font-bold mt-4'>
-                  Dịch vụ kèm theo:
-                </h3>
-                <ul className='list-disc space-y-2 mt-2'>
-                  {benefitsData &&
-                    benefitsData.map((benefit, index) => (
-                      <li
-                        key={index}
-                        className='list-none flex items-center gap-2'
-                      >
-                        <CheckBoxIcon className='text-green-500' />
-                        {benefit.serviceName}
-                        <p className='italic text-red-600'>
-                          (trị giá:{' '}
-                          {benefit.servicePrice
-                            .toLocaleString('vi-VN', {
-                              style: 'currency',
-                              currency: 'VND',
-                            })
-                            .replace('₫', 'đ')}
-                          )
-                        </p>
-                      </li>
-                    ))}
-                </ul>
+                {benefitsData?.length > 0 && (
+                  <>
+                    <h3 className='text-lg sm:text-xl font-bold mt-4'>
+                      Dịch vụ kèm theo:
+                    </h3>
+                    <ul className='list-disc space-y-2 mt-2'>
+                      {benefitsData.map((benefit, index) => (
+                          <li
+                            key={index}
+                            className='list-none flex items-center gap-2'
+                          >
+                            <CheckBoxIcon className='text-green-500' />
+                            {benefit.serviceName}
+                            <p className='italic text-red-600'>
+                              (trị giá:{' '}
+                              {benefit.servicePrice
+                                .toLocaleString('vi-VN', {
+                                  style: 'currency',
+                                  currency: 'VND',
+                                })
+                                .replace('₫', 'đ')}
+                              )
+                            </p>
+                          </li>
+                        ))}
+                    </ul>
+                  </>
+                )}
               </div>
             )}
 
