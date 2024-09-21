@@ -1,11 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
-import FeedbackService from '@services/feedback.service'; // Đảm bảo đường dẫn chính xác
-// Đảm bảo đường dẫn chính xác
+import FeedbackService from '@services/feedback.service';
 import CircularProgress from '@mui/material/CircularProgress';
 import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { getLoggedInUser } from '@redux/thunk/userThunk';
 
 const ContactPage = () => {
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.users.user);
+  const accessToken = localStorage.getItem('accessToken');
+
+  useEffect(() => {
+    if (accessToken) {
+      dispatch(getLoggedInUser(accessToken));
+    }
+  }, [dispatch, accessToken]);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -14,6 +25,17 @@ const ContactPage = () => {
   });
 
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.fullname || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        message: '',
+      });
+    }
+  }, [user]);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -25,10 +47,7 @@ const ContactPage = () => {
     const { name, email, phone, message } = formData;
     setLoading(true);
 
-    const accessToken = localStorage.getItem('accessToken');
-
     try {
-      // Gọi API để gửi phản hồi
       await FeedbackService.createFeedback(
         {
           senderName: name,
@@ -48,7 +67,6 @@ const ContactPage = () => {
 
       toast.success('Phản hồi của bạn đã được gửi thành công!');
     } catch (err) {
-      // Hiển thị thông báo lỗi
       console.log(err);
       toast.error('Có lỗi xảy ra. Vui lòng thử lại!');
     } finally {
@@ -65,7 +83,6 @@ const ContactPage = () => {
     <>
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
       <div className='container mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8'>
-        {/* Form */}
         <div className='w-full lg:w-1/2'>
           <h1 className='text-2xl font-bold mb-4'>Liên hệ với chúng tôi</h1>
           <form
@@ -150,7 +167,6 @@ const ContactPage = () => {
           </form>
         </div>
 
-        {/* Bản đồ */}
         <div className='w-full lg:w-1/2'>
           <h2 className='text-xl font-semibold mb-4'>
             Cửa hàng của chúng tôi tại:
@@ -169,7 +185,6 @@ const ContactPage = () => {
           </div>
         </div>
       </div>
-      {/* Hiển thị thông báo */}
     </>
   );
 };

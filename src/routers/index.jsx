@@ -66,11 +66,7 @@ const routes = [
   {
     id: 'cart',
     path: '/cart',
-    element: (
-      <PrivateRoute>
-        <CartPage />
-      </PrivateRoute>
-    ),
+    element: <CartPage />
   },
 
   {
@@ -110,7 +106,7 @@ const routes = [
   },
 
   {
-    id: 'order-history',
+    id: 'test',
     path: '/test',
     element: <TestPage />,
   },

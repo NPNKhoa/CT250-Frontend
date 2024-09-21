@@ -4,7 +4,6 @@ import loginImg from '@assets/login.png';
 import userIcon from '@assets/user.png';
 import { useDispatch, useSelector } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress';
-// import Alert from '@components/Alert';
 import { loginThunk, loginWithSocialThunk } from '@redux/thunk/authThunk';
 import PasswordInput from '@components/common/PasswordInput';
 import { getLoggedInUser } from '@redux/thunk/userThunk';
@@ -15,7 +14,6 @@ import { getCartByUser } from '@redux/thunk/cartThunk';
 const LoginPage = () => {
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState({ email: '', password: '' });
-  // const [notification, setNotification] = useState({ message: '', type: '' });
   const dispatch = useDispatch();
 
   const loading = useSelector(state => state.auth.loading);
@@ -38,10 +36,7 @@ const LoginPage = () => {
       };
     }
     dispatch(loginWithSocialThunk(user));
-    if (user.email) {
-      const timer = setTimeout(() => navigate('/'), 1000);
-      return () => clearTimeout(timer);
-    }
+    navigate(-1);
   };
 
   const handleError = error => {
@@ -63,19 +58,13 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (authUser) {
-      // setNotification({ message: 'Login successful!', type: 'success' });
       toast.success('Đăng nhập thành công');
       localStorage.setItem('loggedInUserId', authUser.userId);
       const accessToken = localStorage.getItem('accessToken');
       dispatch(getCartByUser(accessToken));
       dispatch(getLoggedInUser(accessToken));
-      const timer = setTimeout(() => navigate('/'), 1000);
-      return () => clearTimeout(timer);
+      navigate(-1);
     } else if (error) {
-      // setNotification({
-      //   message: 'Login failed! Please try again.',
-      //   type: 'error',
-      // });
       toast.error('Đăng nhập thất bại. Vui lòng thử lại!');
     }
   }, [authUser, error, navigate, dispatch]);
@@ -200,9 +189,6 @@ const LoginPage = () => {
           </p>
         </div>
       </div>
-      {/* {notification.message && (
-        <Alert message={notification.message} type={notification.type} />
-      )} */}
     </section>
   );
 };
