@@ -35,21 +35,27 @@ export const loginWithSocialThunk = createAsyncThunk(
   }
 );
 
-// export const logoutThunk = createAsyncThunk(
-//   'auth/logout',
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const response = await authService.logout();
+export const logoutThunk = createAsyncThunk(
+  'auth/logout',
+  async (credentials, { rejectWithValue }) => {
+    try {
+      console.log(credentials);
+      const response = await authService.logout(credentials);
 
-//       if (response.status === 204) {
-//         localStorage.removeItem('token');
-//         localStorage.removeItem('refreshToken');
-//         return response;
-//       } else {
-//         throw new Error('Logout failed!');
-//       }
-//     } catch (error) {
-//       return rejectWithValue(error.response?.data?.error || 'Logout failed!');
-//     }
-//   }
-// );
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem(
+        `viewedProducts_${localStorage.getItem('loggedInUserId')}`
+      );
+      localStorage.removeItem('loggedInUserId');
+      localStorage.removeItem('productQuantity');
+      localStorage.removeItem('viewedProducts_null');
+
+      window.location.reload();
+
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.error || 'Logout failed!');
+    }
+  }
+);

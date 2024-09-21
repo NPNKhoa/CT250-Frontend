@@ -9,19 +9,14 @@ class authService {
     return (await this.api.post('/login', data)).data;
   }
 
-  async logout() {
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      throw new Error('No token provided! Access denied!');
-    }
+  async logout(accessToken) {
     return (
       await this.api.post(
         '/logout',
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         }
       )

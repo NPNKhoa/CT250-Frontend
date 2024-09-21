@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout, setCredentials } from '@redux/slices/authSlice';
+import { setCredentials } from '@redux/slices/authSlice';
+import { logoutThunk } from '@redux/thunk/authThunk';
 import { getCartByUser } from '@redux/thunk/cartThunk';
 import { getLoggedInUser } from '@redux/thunk/userThunk';
 import NavBar from '@components/NavBar';
@@ -20,7 +21,6 @@ import {
   PersonSearchRounded as PersonSearchRoundedIcon,
   PhoneCallbackSharp as PhoneCallbackSharpIcon,
 } from '@mui/icons-material';
-import { setCart } from '@redux/slices/cartSlice';
 
 // Custom hook for handling modal states
 const useModalState = (initialState = false) => {
@@ -64,15 +64,7 @@ const Header = () => {
   }, [dispatch]);
 
   const handleLogout = () => {
-    localStorage.removeItem(
-      `viewedProducts_${localStorage.getItem('loggedInUserId')}`
-    );
-    localStorage.removeItem('loggedInUserId');
-    localStorage.removeItem('productQuantity');
-    localStorage.removeItem('viewedProducts_null');
-    dispatch(setCart(null));
-    dispatch(logout());
-    navigate('/');
+    dispatch(logoutThunk(localStorage.getItem('accessToken')));
   };
 
   const toggleSearch = () => {
