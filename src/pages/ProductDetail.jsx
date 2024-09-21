@@ -11,13 +11,9 @@ import RatingSection from '@components/RatingSection';
 // import Alert from '@components/Alert';
 
 import productService from '@services/product.service';
-import productTypeService from '@services/productType.service';
-import brandService from '@services/brand.service';
 import cartService from '@services/cart.service';
 
 import { setSelectedProduct } from '@redux/slices/cartSlice';
-
-// import cartService from '@services/cart.service';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '@redux/thunk/cartThunk';
@@ -27,10 +23,8 @@ import { toast } from 'react-toastify';
 const ProductDetail = () => {
   const { id } = useParams();
   const [products, setProducts] = useState({});
-  const [productTypes, setProductTypes] = useState([]);
-  const [brands, setBrands] = useState([]);
+  const [promotion, setPromotion] = useState([]);
   const navigate = useNavigate();
-  // const [notification, setNotification] = useState({ message: '', type: '' });
 
   const userId = localStorage.getItem('loggedInUserId');
 
@@ -39,10 +33,7 @@ const ProductDetail = () => {
       try {
         const productResponse = await productService.getById(id);
         setProducts(productResponse.data);
-        const productTypeResponse = await productTypeService.getAll();
-        setProductTypes(productTypeResponse.data);
-        const brandResponse = await brandService.getAll();
-        setBrands(brandResponse.data);
+        setPromotion(productResponse.data.promotion);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -101,52 +92,8 @@ const ProductDetail = () => {
     setCurrentImage(image);
   };
 
-  const giftsData = [
-    {
-      id: 1,
-      content: 'Tặng 2 Quấn cán vợt Cầu Lông: VNB 001, VS002 hoặc Joto 001',
-    },
-    {
-      id: 2,
-      content: 'Sản phẩm cam kết chính hãng',
-    },
-    {
-      id: 3,
-      content: 'Một số sản phẩm sẽ được tặng bao đơn hoặc bao nhung bảo vệ vợt',
-    },
-    {
-      id: 4,
-      content: 'Thanh toán sau khi kiểm tra và nhận hàng (Giao khung vợt)',
-    },
-    {
-      id: 5,
-      content:
-        'Bảo hành chính hãng theo nhà sản xuất (Trừ hàng nội địa, xách tay)',
-    },
-  ];
-
-  const benefitsData = [
-    {
-      id: 1,
-      content: 'Sơn logo mặt vợt miễn phí',
-    },
-    {
-      id: 2,
-      content: 'Bảo hành lưới đan trong 72 giờ',
-    },
-    {
-      id: 3,
-      content: 'Thay gen vợt miễn phí trọn đời',
-    },
-    {
-      id: 4,
-      content: 'Tích lũy điểm thành viên Premium',
-    },
-    {
-      id: 5,
-      content: 'Voucher giảm giá cho lần mua hàng tiếp theo',
-    },
-  ];
+  const giftsData = promotion?.productIds || [];
+  const benefitsData = promotion?.serviceIds || [];
 
   const productData = products.technicalSpecification || [];
 
@@ -292,45 +239,69 @@ const ProductDetail = () => {
               </p>
             </div>
 
-            {/* Ưu đãi */}
-            <div className='bg-gray-100 p-4 rounded-md border border-primary relative'>
-              <div className='absolute -top-5 border px-3 py-1 rounded-lg bg-gray-100 border-primary'>
-                <h2 className='text-lg sm:text-xl font-bold text-primary flex items-center gap-3'>
-                  <CardGiftcardIcon /> Ưu đãi
-                </h2>
+            {giftsData.length > 0 && benefitsData.length > 0 && (
+              <div className='bg-gray-100 p-4 rounded-md border border-primary relative'>
+                <div className='absolute -top-5 border px-3 py-1 rounded-lg bg-gray-100 border-primary'>
+                  <h2 className='text-lg sm:text-xl font-bold text-primary flex items-center gap-3'>
+                    <CardGiftcardIcon /> Ưu đãi
+                  </h2>
+                </div>
+
+                {/* Danh sách ưu đãi */}
+                <h3 className='text-lg sm:text-xl font-bold mt-4'>
+                  Quà tặng kèm:
+                </h3>
+                <ul className='list-disc space-y-2 mt-2'>
+                  {giftsData &&
+                    giftsData.map((gift, index) => (
+                      <li
+                        key={index}
+                        className='list-none flex items-center gap-2'
+                      >
+                        <CheckIcon className='text-primary font-bold' />
+                        <Link className='hover:text-primary' to={`/products/detail/${gift._id}`}>{gift.productName}</Link>
+                        <p className='italic text-red-600'>
+                          (trị giá:{' '}
+                          {gift.price
+                            .toLocaleString('vi-VN', {
+                              style: 'currency',
+                              currency: 'VND',
+                            })
+                            .replace('₫', 'đ')}
+                          )
+                        </p>
+                      </li>
+                    ))}
+                </ul>
+
+                {/* Ưu đãi thêm */}
+                <h3 className='text-lg sm:text-xl font-bold mt-4'>
+                  Dịch vụ kèm theo:
+                </h3>
+                <ul className='list-disc space-y-2 mt-2'>
+                  {benefitsData &&
+                    benefitsData.map((benefit, index) => (
+                      <li
+                        key={index}
+                        className='list-none flex items-center gap-2'
+                      >
+                        <CheckBoxIcon className='text-green-500' />
+                        {benefit.serviceName}
+                        <p className='italic text-red-600'>
+                          (trị giá:{' '}
+                          {benefit.servicePrice
+                            .toLocaleString('vi-VN', {
+                              style: 'currency',
+                              currency: 'VND',
+                            })
+                            .replace('₫', 'đ')}
+                          )
+                        </p>
+                      </li>
+                    ))}
+                </ul>
               </div>
-
-              {/* Danh sách ưu đãi */}
-              <ul className='list-disc space-y-2 mt-4'>
-                {giftsData.map(benefit => (
-                  <li
-                    key={benefit.id}
-                    className='list-none flex items-center gap-2'
-                  >
-                    <CheckIcon className='text-primary font-bold' />
-                    {benefit.content}
-                  </li>
-                ))}
-              </ul>
-
-              {/* Ưu đãi thêm */}
-              <h2 className='text-lg sm:text-xl font-bold mt-4'>
-                Ưu đãi thêm khi mua sản phẩm tại{' '}
-                <span className='text-primary'>VNB Premium</span>
-              </h2>
-
-              <ul className='list-disc space-y-2'>
-                {benefitsData.map(benefit => (
-                  <li
-                    key={benefit.id}
-                    className='list-none flex items-center gap-2'
-                  >
-                    <CheckBoxIcon className='text-green-500' />
-                    {benefit.content}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            )}
 
             {/* Nút tăng/giảm số lượng */}
             <div className='flex items-center mt-5'>
@@ -429,7 +400,7 @@ const ProductDetail = () => {
             )}
           </div>
 
-          <div className='w-full sm:w-1/4 pt-3 hidden lg:block'>
+          {/* <div className='w-full sm:w-1/4 pt-3 hidden lg:block'>
             <div className='w-full max-w-xs p-4 bg-white rounded-lg shadow'>
               <h2 className='text-base sm:text-lg font-bold text-center'>
                 DANH MỤC SẢN PHẨM
@@ -470,7 +441,7 @@ const ProductDetail = () => {
                 ))}
               </h3>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className='flex flex-col lg:flex-row'>
