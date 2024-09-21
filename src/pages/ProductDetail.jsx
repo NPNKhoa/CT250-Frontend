@@ -239,7 +239,7 @@ const ProductDetail = () => {
               </p>
             </div>
 
-            {giftsData.length > 0 && benefitsData.length > 0 && (
+            {giftsData.length > 0 || benefitsData.length > 0 && (
               <div className='bg-gray-100 p-4 rounded-md border border-primary relative'>
                 <div className='absolute -top-5 border px-3 py-1 rounded-lg bg-gray-100 border-primary'>
                   <h2 className='text-lg sm:text-xl font-bold text-primary flex items-center gap-3'>
@@ -259,7 +259,12 @@ const ProductDetail = () => {
                         className='list-none flex items-center gap-2'
                       >
                         <CheckIcon className='text-primary font-bold' />
-                        <Link className='hover:text-primary' to={`/products/detail/${gift._id}`}>{gift.productName}</Link>
+                        <Link
+                          className='hover:text-primary'
+                          to={`/products/detail/${gift._id}`}
+                        >
+                          {gift.productName}
+                        </Link>
                         <p className='italic text-red-600'>
                           (trị giá:{' '}
                           {gift.price
