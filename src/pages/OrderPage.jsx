@@ -13,6 +13,8 @@ import { toast } from 'react-toastify';
 import shippingMethodService from '@services/shippingMethod.service';
 import paymentMethodService from '@services/paymentMethod.service';
 
+import { ToVietnamCurrencyFormat } from '../helpers/ConvertCurrency';
+
 function OrderPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -337,10 +339,7 @@ function OrderPage() {
                       </span>
                       <span className='text-gray-500 ml-2'>
                         {deliveryFees[index]
-                          ? deliveryFees[index].toLocaleString('vi-VN', {
-                              style: 'currency',
-                              currency: 'VND',
-                            })
+                          ? ToVietnamCurrencyFormat(deliveryFees[index])
                           : 'Đang tính phí'}
                       </span>
                     </label>
@@ -374,12 +373,8 @@ function OrderPage() {
                           Số lượng: {item.quantity}
                         </p>
                         <p>
-                          {(item.itemPrice * item.quantity).toLocaleString(
-                            'vi-VN',
-                            {
-                              style: 'currency',
-                              currency: 'VND',
-                            }
+                          {ToVietnamCurrencyFormat(
+                            item.itemPrice * item.quantity
                           )}
                         </p>
                       </div>
@@ -390,33 +385,24 @@ function OrderPage() {
                   <div className='flex justify-between'>
                     <span className='text-gray-500'>Tổng tiền hàng:</span>
                     <span className='text-gray-900'>
-                      {calculateTotal().toLocaleString('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND',
-                      })}
+                      {ToVietnamCurrencyFormat(calculateTotal())}
                     </span>
                   </div>
                   <div className='flex justify-between mt-2'>
                     <span className='text-gray-500'>Phí vận chuyển:</span>
                     <span className='text-gray-900'>
                       {selectedShippingMethod
-                        ? deliveryFee?.toLocaleString('vi-VN', {
-                            style: 'currency',
-                            currency: 'VND',
-                          })
+                        ? ToVietnamCurrencyFormat(deliveryFee)
                         : 0}
                     </span>
                   </div>
                   <div className='flex justify-between mt-4 text-lg font-medium'>
                     <span>Tổng cộng:</span>
                     <span className='text-gray-900'>
-                      {(
+                      {ToVietnamCurrencyFormat(
                         calculateTotal() +
-                        (selectedShippingMethod ? deliveryFee : 0)
-                      ).toLocaleString('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND',
-                      })}
+                          (selectedShippingMethod ? deliveryFee : 0)
+                      )}
                     </span>
                   </div>
                 </div>

@@ -20,6 +20,8 @@ import { addToCart } from '@redux/thunk/cartThunk';
 import ViewedProducts from '@components/ViewedProducts';
 import { toast } from 'react-toastify';
 
+import { ToVietnamCurrencyFormat } from '../helpers/ConvertCurrency';
+
 const ProductDetail = () => {
   const { id } = useParams();
   const [products, setProducts] = useState({});
@@ -220,22 +222,11 @@ const ProductDetail = () => {
             <div className='flex flex-row items-center gap-2 sm:gap-3 mb-8'>
               <p className='text-xl sm:text-2xl font-bold text-primary'>
                 {products.price &&
-                  (products.price * 0.8)
-                    .toLocaleString('vi-VN', {
-                      style: 'currency',
-                      currency: 'VND',
-                    })
-                    .replace('₫', 'đ')}
+                  ToVietnamCurrencyFormat(products.price * 0.8)}
               </p>
               <p className='line-through text-gray-400 text-sm sm:text-base'>
                 Giá niêm yết:{' '}
-                {products.price &&
-                  products.price
-                    .toLocaleString('vi-VN', {
-                      style: 'currency',
-                      currency: 'VND',
-                    })
-                    .replace('₫', 'đ')}
+                {products.price && ToVietnamCurrencyFormat(products.price)}
               </p>
             </div>
 
@@ -255,29 +246,22 @@ const ProductDetail = () => {
                     </h3>
                     <ul className='list-disc space-y-2 mt-2'>
                       {giftsData.map((gift, index) => (
-                          <li
-                            key={index}
-                            className='list-none flex items-center gap-2'
+                        <li
+                          key={index}
+                          className='list-none flex items-center gap-2'
+                        >
+                          <CheckIcon className='text-primary font-bold' />
+                          <Link
+                            className='hover:text-primary'
+                            to={`/products/detail/${gift._id}`}
                           >
-                            <CheckIcon className='text-primary font-bold' />
-                            <Link
-                              className='hover:text-primary'
-                              to={`/products/detail/${gift._id}`}
-                            >
-                              {gift.productName}
-                            </Link>
-                            <p className='italic text-red-600'>
-                              (trị giá:{' '}
-                              {gift.price
-                                .toLocaleString('vi-VN', {
-                                  style: 'currency',
-                                  currency: 'VND',
-                                })
-                                .replace('₫', 'đ')}
-                              )
-                            </p>
-                          </li>
-                        ))}
+                            {gift.productName}
+                          </Link>
+                          <p className='italic text-red-600'>
+                            (trị giá: {ToVietnamCurrencyFormat(gift.price)})
+                          </p>
+                        </li>
+                      ))}
                     </ul>
                   </>
                 )}
@@ -289,24 +273,18 @@ const ProductDetail = () => {
                     </h3>
                     <ul className='list-disc space-y-2 mt-2'>
                       {benefitsData.map((benefit, index) => (
-                          <li
-                            key={index}
-                            className='list-none flex items-center gap-2'
-                          >
-                            <CheckBoxIcon className='text-green-500' />
-                            {benefit.serviceName}
-                            <p className='italic text-red-600'>
-                              (trị giá:{' '}
-                              {benefit.servicePrice
-                                .toLocaleString('vi-VN', {
-                                  style: 'currency',
-                                  currency: 'VND',
-                                })
-                                .replace('₫', 'đ')}
-                              )
-                            </p>
-                          </li>
-                        ))}
+                        <li
+                          key={index}
+                          className='list-none flex items-center gap-2'
+                        >
+                          <CheckBoxIcon className='text-green-500' />
+                          {benefit.serviceName}
+                          <p className='italic text-red-600'>
+                            (trị giá:{' '}
+                            {ToVietnamCurrencyFormat(benefit.servicePrice)})
+                          </p>
+                        </li>
+                      ))}
                     </ul>
                   </>
                 )}

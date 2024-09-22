@@ -4,6 +4,8 @@ import orderService from '@services/order.service'; // Import dịch vụ API
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
+import { ToVietnamCurrencyFormat } from '../helpers/ConvertCurrency';
+
 const CheckOrder = () => {
   const [orderCode, setOrderCode] = useState('');
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -110,10 +112,7 @@ const CheckOrder = () => {
                     )}
                   </td>
                   <td className='px-6 py-4 whitespace-nowrap'>
-                    {selectedOrder.totalPrice?.toLocaleString('vi-VN', {
-                      style: 'currency',
-                      currency: 'VND',
-                    })}
+                    {ToVietnamCurrencyFormat(selectedOrder.totalPrice)}
                   </td>
                   <td className='px-6 py-4 whitespace-nowrap'>
                     {selectedOrder.orderStatus.orderStatus}
@@ -155,10 +154,7 @@ const CheckOrder = () => {
               </p>
               <p>
                 <strong>Tiền hàng:</strong>{' '}
-                {selectedOrder.totalPrice.toLocaleString('vi-VN', {
-                  style: 'currency',
-                  currency: 'VND',
-                })}
+                {ToVietnamCurrencyFormat(selectedOrder.totalPrice)}
               </p>
               <p>
                 <strong>Trạng thái:</strong>{' '}
@@ -168,10 +164,7 @@ const CheckOrder = () => {
               <div className='border-t border-gray-200 my-2 pt-4'>
                 <p>
                   <strong>Phí vận chuyển:</strong>{' '}
-                  {selectedOrder.shippingFee.toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND',
-                  })}
+                  {ToVietnamCurrencyFormat(selectedOrder.shippingFee)}
                 </p>
                 <p>
                   <strong>Phương thức vận chuyển:</strong>{' '}
@@ -208,12 +201,8 @@ const CheckOrder = () => {
                           Số lượng: {item.quantity}
                         </p>
                         <p>
-                          {(item.itemPrice * item.quantity).toLocaleString(
-                            'vi-VN',
-                            {
-                              style: 'currency',
-                              currency: 'VND',
-                            }
+                          {ToVietnamCurrencyFormat(
+                            item.itemPrice * item.quantity
                           )}
                         </p>
                       </div>
