@@ -1,17 +1,9 @@
+import { ToVietnamCurrencyFormat } from 'helpers/ConvertCurrency';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-const formatPriceToVND = price => {
-  return price
-    .toLocaleString('vi-VN', {
-      style: 'currency',
-      currency: 'VND',
-    })
-    .replace('₫', 'đ');
-};
-
 const ProductItem = ({ imageUrl, name, price, productLink }) => {
-  const formattedPrice = formatPriceToVND(price);
+  const formattedPrice = ToVietnamCurrencyFormat(price);
 
   return (
     <div className='bg-white rounded-lg shadow-md overflow-hidden'>

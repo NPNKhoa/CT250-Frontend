@@ -1,6 +1,7 @@
 import productService from '@services/product.service';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ToVietnamCurrencyFormat } from '../helpers/ConvertCurrency';
 
 function ViewedProducts() {
   const [products, setProducts] = useState([]);
@@ -68,12 +69,7 @@ function ViewedProducts() {
                   {product?.productName}
                 </h3>
                 <p className='text-primary text-sm font-semibold mt-2'>
-                  {product?.price
-                    .toLocaleString('vi-VN', {
-                      style: 'currency',
-                      currency: 'VND',
-                    })
-                    .replace('₫', 'đ')}
+                  {ToVietnamCurrencyFormat(product?.price)}
                 </p>
               </div>
             </Link>

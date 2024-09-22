@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getCartByUser } from '@redux/thunk/cartThunk';
 import { Link } from 'react-router-dom';
 
+import { ToVietnamCurrencyFormat } from '../helpers/ConvertCurrency';
+
 function Cart() {
   const dispatch = useDispatch();
   const { cart } = useSelector(state => state.cart);
@@ -37,10 +39,7 @@ function Cart() {
               </div>
               <div className='flex justify-between items-center mt-2'>
                 <div className='text-right text-xs sm:text-sm font-bold text-primary'>
-                  {(item.itemPrice * item.quantity).toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND',
-                  })}
+                  {ToVietnamCurrencyFormat(item.itemPrice * item.quantity)}
                 </div>
               </div>
             </div>

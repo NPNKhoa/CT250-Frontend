@@ -13,6 +13,8 @@ import {
 import { setSelectedProduct } from '@redux/slices/cartSlice';
 import { toast } from 'react-toastify';
 
+import { ToVietnamCurrencyFormat } from '../helpers/ConvertCurrency';
+
 const CartPage = () => {
   const dispatch = useDispatch();
   const { cart, selectedProduct } = useSelector(state => state.cart);
@@ -169,12 +171,8 @@ const CartPage = () => {
                           style: 'currency',
                           currency: 'VND',
                         })} */}
-                        {(item.itemPrice * item.quantity).toLocaleString(
-                          'vi-VN',
-                          {
-                            style: 'currency',
-                            currency: 'VND',
-                          }
+                        {ToVietnamCurrencyFormat(
+                          item.itemPrice * item.quantity
                         )}
                       </td>
                       <td className='text-center py-2 px-4'>
@@ -242,10 +240,7 @@ const CartPage = () => {
                       </button>
                     </div>
                     <p className='text-primary font-semibold'>
-                      {item.itemPrice.toLocaleString('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND',
-                      })}
+                      {ToVietnamCurrencyFormat(item.itemPrice)}
                     </p>
                     <button
                       onClick={() => handleRemove(item._id)}
@@ -277,10 +272,7 @@ const CartPage = () => {
               <div className='text-lg sm:text-xl font-semibold mb-4'>
                 Tổng cộng:{' '}
                 <span className='text-primary'>
-                  {calculateTotal().toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND',
-                  })}
+                  {ToVietnamCurrencyFormat(calculateTotal())}
                 </span>
               </div>
               <button

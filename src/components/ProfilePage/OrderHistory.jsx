@@ -5,6 +5,8 @@ import PaginationComponent from '@components/common/PaginationComponent';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import orderStatusService from '@services/orderStatus.service';
 
+import { ToVietnamCurrencyFormat } from '../../helpers/ConvertCurrency';
+
 function OrderHistory() {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
@@ -160,10 +162,7 @@ function OrderHistory() {
                         {new Date(order.orderDate).toLocaleDateString('vi-VN')}
                       </td>
                       <td className='py-2 px-4 border-b text-center'>
-                        {order.totalPrice.toLocaleString('vi-VN', {
-                          style: 'currency',
-                          currency: 'VND',
-                        })}
+                        {ToVietnamCurrencyFormat(order.totalPrice)}
                       </td>
                       <td
                         className={`py-2 px-4 border-b text-center ${getStatusClass(
@@ -219,10 +218,7 @@ function OrderHistory() {
             </p>
             <p>
               <strong>Tiền hàng:</strong>{' '}
-              {selectedOrder.totalPrice.toLocaleString('vi-VN', {
-                style: 'currency',
-                currency: 'VND',
-              })}
+              {ToVietnamCurrencyFormat(selectedOrder.totalPrice)}
             </p>
             <p>
               <strong>Trạng thái:</strong>{' '}
@@ -232,10 +228,7 @@ function OrderHistory() {
             <div className='border-t border-gray-200 my-2 pt-4'>
               <p>
                 <strong>Phí vận chuyển:</strong>{' '}
-                {selectedOrder.shippingFee.toLocaleString('vi-VN', {
-                  style: 'currency',
-                  currency: 'VND',
-                })}
+                {ToVietnamCurrencyFormat(selectedOrder.shippingFee)}
               </p>
               <p>
                 <strong>Phương thức vận chuyển:</strong>{' '}
@@ -270,12 +263,8 @@ function OrderHistory() {
                       </h3>
                       <p className='text-gray-500'>Số lượng: {item.quantity}</p>
                       <p>
-                        {(item.itemPrice * item.quantity).toLocaleString(
-                          'vi-VN',
-                          {
-                            style: 'currency',
-                            currency: 'VND',
-                          }
+                        {ToVietnamCurrencyFormat(
+                          item.itemPrice * item.quantity
                         )}
                       </p>
                     </div>
