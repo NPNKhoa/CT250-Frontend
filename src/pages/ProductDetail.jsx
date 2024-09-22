@@ -325,12 +325,6 @@ const ProductDetail = () => {
                 THÊM VÀO GIỎ HÀNG
               </button>
             </div>
-
-            {/* Nút thanh toán bằng ví VNPAY */}
-            <button className='bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-4 px-2 rounded-lg mt-4 flex flex-col items-center'>
-              THANH TOÁN BẰNG VÍ VNPAY
-              <img src={Vnpay} alt='' className='w-16 sm:w-24' />
-            </button>
           </div>
         </div>
 
