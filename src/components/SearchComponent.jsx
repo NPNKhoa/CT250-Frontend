@@ -128,7 +128,7 @@ export default function SearchPopover() {
           <input
             ref={inputRef}
             type='text'
-            className='border border-gray-400 sm:bg-gray-200 w-full rounded-lg p-2 pl-10 pr-16'
+            className='border border-gray-400 sm:bg-gray-200 w-full rounded-lg p-2 pr-16'
             placeholder='Tìm sản phẩm...'
             value={query}
             onClick={handleClick}
