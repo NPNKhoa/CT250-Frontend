@@ -255,29 +255,29 @@ const ProductDetail = () => {
                     </h3>
                     <ul className='list-disc space-y-2 mt-2'>
                       {giftsData.map((gift, index) => (
-                          <li
-                            key={index}
-                            className='list-none flex items-center gap-2'
+                        <li
+                          key={index}
+                          className='list-none flex items-center gap-2'
+                        >
+                          <CheckIcon className='text-primary font-bold' />
+                          <Link
+                            className='hover:text-primary'
+                            to={`/products/detail/${gift._id}`}
                           >
-                            <CheckIcon className='text-primary font-bold' />
-                            <Link
-                              className='hover:text-primary'
-                              to={`/products/detail/${gift._id}`}
-                            >
-                              {gift.productName}
-                            </Link>
-                            <p className='italic text-red-600'>
-                              (trị giá:{' '}
-                              {gift.price
-                                .toLocaleString('vi-VN', {
-                                  style: 'currency',
-                                  currency: 'VND',
-                                })
-                                .replace('₫', 'đ')}
-                              )
-                            </p>
-                          </li>
-                        ))}
+                            {gift.productName}
+                          </Link>
+                          <p className='italic text-red-600'>
+                            (trị giá:{' '}
+                            {gift.price
+                              .toLocaleString('vi-VN', {
+                                style: 'currency',
+                                currency: 'VND',
+                              })
+                              .replace('₫', 'đ')}
+                            )
+                          </p>
+                        </li>
+                      ))}
                     </ul>
                   </>
                 )}
@@ -289,24 +289,24 @@ const ProductDetail = () => {
                     </h3>
                     <ul className='list-disc space-y-2 mt-2'>
                       {benefitsData.map((benefit, index) => (
-                          <li
-                            key={index}
-                            className='list-none flex items-center gap-2'
-                          >
-                            <CheckBoxIcon className='text-green-500' />
-                            {benefit.serviceName}
-                            <p className='italic text-red-600'>
-                              (trị giá:{' '}
-                              {benefit.servicePrice
-                                .toLocaleString('vi-VN', {
-                                  style: 'currency',
-                                  currency: 'VND',
-                                })
-                                .replace('₫', 'đ')}
-                              )
-                            </p>
-                          </li>
-                        ))}
+                        <li
+                          key={index}
+                          className='list-none flex items-center gap-2'
+                        >
+                          <CheckBoxIcon className='text-green-500' />
+                          {benefit.serviceName}
+                          <p className='italic text-red-600'>
+                            (trị giá:{' '}
+                            {benefit.servicePrice
+                              .toLocaleString('vi-VN', {
+                                style: 'currency',
+                                currency: 'VND',
+                              })
+                              .replace('₫', 'đ')}
+                            )
+                          </p>
+                        </li>
+                      ))}
                     </ul>
                   </>
                 )}
@@ -347,12 +347,6 @@ const ProductDetail = () => {
                 THÊM VÀO GIỎ HÀNG
               </button>
             </div>
-
-            {/* Nút thanh toán bằng ví VNPAY */}
-            <button className='bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-4 px-2 rounded-lg mt-4 flex flex-col items-center'>
-              THANH TOÁN BẰNG VÍ VNPAY
-              <img src={Vnpay} alt='' className='w-16 sm:w-24' />
-            </button>
           </div>
         </div>
 

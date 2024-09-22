@@ -140,7 +140,7 @@ function RatingSection({ productId }) {
           name='product-rating'
           value={rating}
           onChange={handleRatingChange}
-          precision={0.5}
+          precision={1}
           size='large'
           className='mb-4'
         />
