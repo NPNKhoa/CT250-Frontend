@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import orderService from '@services/order.service';
 import PaginationComponent from '@components/common/PaginationComponent';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import orderStatusService from '@services/orderStatus.service';
 
 function OrderHistory() {
   const navigate = useNavigate();
@@ -15,10 +17,38 @@ function OrderHistory() {
   const page = parseInt(query.get('page') || '1', 10);
   const [totalPage, setTotalPage] = useState(0);
 
+  const [orderStatus, setOrderStatus] = useState('');
+  const [selectedOrderStatus, setSelectedOrderStatus] = useState('');
+
+  const [isLatestOrder, setIsLatestOrder] = useState('latest');
+
+  const handleChangeFilter = e => {
+    setSelectedOrderStatus(e.target.value);
+  };
+
+  const handleChangeOrdering = e => {
+    setIsLatestOrder(e.target.value);
+  };
+
+  const fetchOrderStatus = async () => {
+    const res = await orderStatusService.getAllOrderStatus();
+
+    setOrderStatus(res.data);
+  };
+
+  useEffect(() => {
+    fetchOrderStatus();
+  }, []);
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await orderService.getOrderByUser(page, 5);
+        const response = await orderService.getOrderByUser(
+          page,
+          5,
+          selectedOrderStatus,
+          isLatestOrder
+        );
         setTotalPage(response.meta.totalPages); // Cập nhật tổng số trang
         setOrders(response.data);
       } catch (error) {
@@ -26,7 +56,7 @@ function OrderHistory() {
       }
     };
     fetchOrders();
-  }, [page]);
+  }, [page, selectedOrderStatus, isLatestOrder]);
 
   const handleViewDetails = async order => {
     try {
@@ -57,6 +87,44 @@ function OrderHistory() {
   return (
     <>
       <div className='container mx-auto py-8 px-4'>
+        <div className='flex justify-between items-center mb-4'>
+          <div className='flex items-center'>
+            <h3 className='inline-block'>Lọc đơn hàng:</h3>
+            <FormControl sx={{ m: 1, minWidth: 120 }} size='small'>
+              <InputLabel>Trạng thái</InputLabel>
+              <Select
+                value={selectedOrderStatus}
+                label='Trạng thái'
+                onChange={handleChangeFilter}
+              >
+                <MenuItem value=''>
+                  <em>Tất cả</em>
+                </MenuItem>
+                {Array.isArray(orderStatus) &&
+                  orderStatus.map(({ _id, orderStatus }) => (
+                    <MenuItem key={_id} value={_id}>
+                      {orderStatus}
+                    </MenuItem>
+                  ))}
+              </Select>
+            </FormControl>
+          </div>
+
+          <div className='flex items-center'>
+            <h3 className='inline-block'>Sắp xếp:</h3>
+            <FormControl sx={{ m: 1, minWidth: 120 }} size='small'>
+              <InputLabel>Ngày đặt</InputLabel>
+              <Select
+                value={isLatestOrder}
+                label='Ngày đặt'
+                onChange={handleChangeOrdering}
+              >
+                <MenuItem value='latest'>Mới nhất</MenuItem>
+                <MenuItem value='oldest'>Cũ nhất</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+        </div>
         {orders.length === 0 ? (
           <div className='text-center'>
             <p className='text-lg'>Bạn chưa có đơn hàng nào.</p>
