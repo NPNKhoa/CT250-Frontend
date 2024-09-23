@@ -153,6 +153,12 @@ const CheckOrder = () => {
                 {new Date(selectedOrder.orderDate).toLocaleDateString('vi-VN')}
               </p>
               <p>
+                <strong>Địa chỉ:</strong> {selectedOrder.shippingAddress.detail}
+                , {selectedOrder.shippingAddress.commune},{' '}
+                {selectedOrder.shippingAddress.district},{' '}
+                {selectedOrder.shippingAddress.province}
+              </p>
+              <p>
                 <strong>Tiền hàng:</strong>{' '}
                 {ToVietnamCurrencyFormat(selectedOrder.totalPrice)}
               </p>
