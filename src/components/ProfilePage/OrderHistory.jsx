@@ -195,7 +195,7 @@ function OrderHistory() {
       </div>
 
       {selectedOrder && (
-        <div className='fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center'>
+        <div className='fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50'>
           <div className='bg-white rounded-lg p-6 w-1/2 max-h-[90vh] shadow-2xl'>
             <div className='flex justify-between my-2 item-center'>
               <h3 className='text-2xl font-semibold text-center text-gray-800'>
@@ -219,6 +219,12 @@ function OrderHistory() {
             <p>
               <strong>Tiền hàng:</strong>{' '}
               {ToVietnamCurrencyFormat(selectedOrder.totalPrice)}
+            </p>
+            <p>
+              <strong>Địa chỉ:</strong> {selectedOrder.shippingAddress.detail},{' '}
+              {selectedOrder.shippingAddress.commune},{' '}
+              {selectedOrder.shippingAddress.district},{' '}
+              {selectedOrder.shippingAddress.province}
             </p>
             <p>
               <strong>Trạng thái:</strong>{' '}
