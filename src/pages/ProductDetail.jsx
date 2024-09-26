@@ -6,7 +6,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
-import Vnpay from '@assets/vnpay.png';
+// import Vnpay from '@assets/vnpay.png';
 import RatingSection from '@components/RatingSection';
 // import Alert from '@components/Alert';
 
@@ -21,6 +21,7 @@ import ViewedProducts from '@components/ViewedProducts';
 import { toast } from 'react-toastify';
 
 import { ToVietnamCurrencyFormat } from '../helpers/ConvertCurrency';
+import CountdownTimer from '@components/CountdownTimer';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -137,15 +138,15 @@ const ProductDetail = () => {
     toast.success('Đã thêm vào giỏ hàng!');
   };
 
-  const [openTypeIndices, setOpenTypeIndices] = useState([]);
+  // const [openTypeIndices, setOpenTypeIndices] = useState([]);
 
-  const toggleMenu = index => {
-    setOpenTypeIndices(prevIndices =>
-      prevIndices.includes(index)
-        ? prevIndices.filter(i => i !== index)
-        : [...prevIndices, index]
-    );
-  };
+  // const toggleMenu = index => {
+  //   setOpenTypeIndices(prevIndices =>
+  //     prevIndices.includes(index)
+  //       ? prevIndices.filter(i => i !== index)
+  //       : [...prevIndices, index]
+  //   );
+  // };
 
   const handleBuyNow = async () => {
     if (!user) {
@@ -219,20 +220,30 @@ const ProductDetail = () => {
             </p>
 
             {/* Giá sản phẩm */}
-            <div className='flex flex-row items-center gap-2 sm:gap-3 mb-8'>
+            <div className='flex flex-row items-center gap-1 sm:gap-3 mb-1'>
               <p className='text-xl sm:text-2xl font-bold text-primary'>
                 {products.price &&
-                  ToVietnamCurrencyFormat(products.price * 0.8)}
+                  ToVietnamCurrencyFormat(
+                    products.price *
+                      ((100 - products.discount.discountPercent) / 100)
+                  )}
               </p>
               <p className='line-through text-gray-400 text-sm sm:text-base'>
                 Giá niêm yết:{' '}
                 {products.price && ToVietnamCurrencyFormat(products.price)}
               </p>
+              <p className=' text-white font-bold bg-primary p-1 rounded-xl text-sm sm:text-base'>
+                -{products.discount?.discountPercent}%
+              </p>
             </div>
+            <CountdownTimer
+              targetDate={products.discount?.discountExpiredDate}
+              label='Kết thúc trong:'
+            />
 
             {(giftsData?.length > 0 || benefitsData?.length > 0) && (
-              <div className='bg-gray-100 p-4 rounded-md border border-primary relative'>
-                <div className='absolute -top-5 border px-3 py-1 rounded-lg bg-gray-100 border-primary'>
+              <div className='bg-gray-100 p-4 rounded-md border border-primary relative mt-5'>
+                <div className='absolute -top-4 border px-3 py-1 rounded-lg bg-gray-100 border-primary'>
                   <h2 className='text-lg sm:text-xl font-bold text-primary flex items-center gap-3'>
                     <CardGiftcardIcon /> Ưu đãi
                   </h2>

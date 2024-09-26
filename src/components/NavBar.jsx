@@ -8,7 +8,7 @@ import productTypeService from '@services/productType.service';
 import brandService from '@services/brand.service';
 
 const NavBar = () => {
-  const [showDropdown, setShowDropdown] = useState(true);
+  const [showDropdown, setShowDropdown] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(true);
   const [showNavBar, setShowNavBar] = useState(true); // Thêm state mới
 
@@ -59,7 +59,7 @@ const NavBar = () => {
       } bg-primary transition-all duration-300`}
     >
       <div
-        className={`relative flex flex-col lg:flex-row lg:justify-center items-center gap-4 px-4 ${
+        className={`relative flex flex-col lg:flex-row lg:justify-center items-center gap-4 px-4 py-2 ${
           showMobileMenu ? 'block' : 'hidden'
         } max-w-screen-xl mx-auto`}
       >
@@ -160,7 +160,7 @@ const NavBar = () => {
 
       {showDropdown && (
         <div
-          className='absolute top-9 w-full  lg:w-screen h-[70vh] bg-white shadow-lg z-50  overflow-y-auto no-scrollbar'
+          className='absolute top-12 w-full  lg:w-screen h-[70vh] bg-white shadow-lg z-50  overflow-y-auto no-scrollbar'
           onMouseEnter={() => setShowDropdown(true)}
           onMouseLeave={() => setShowDropdown(false)}
         >

@@ -83,7 +83,14 @@ const CartPage = () => {
   const calculateTotal = () => {
     return cartItems
       .filter(item => selectedItems.includes(item._id))
-      .reduce((total, item) => total + item.itemPrice * item.quantity, 0);
+      .reduce(
+        (total, item) =>
+          total +
+          item.itemPrice *
+            ((100 - item.product.discount?.discountPercent) / 100) *
+            item.quantity,
+        0
+      );
   };
 
   const handleOrderNow = () => {
@@ -172,7 +179,10 @@ const CartPage = () => {
                           currency: 'VND',
                         })} */}
                         {ToVietnamCurrencyFormat(
-                          item.itemPrice * item.quantity
+                          item.itemPrice *
+                            ((100 - item.product.discount?.discountPercent) /
+                              100) *
+                            item.quantity
                         )}
                       </td>
                       <td className='text-center py-2 px-4'>
