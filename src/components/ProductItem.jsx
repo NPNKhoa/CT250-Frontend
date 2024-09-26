@@ -2,7 +2,7 @@ import { ToVietnamCurrencyFormat } from '../helpers/ConvertCurrency';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-const ProductItem = ({ imageUrl, name, price, productLink }) => {
+const ProductItem = ({ imageUrl, name, price, productLink, discount }) => {
   const formattedPrice = ToVietnamCurrencyFormat(price);
 
   return (
@@ -25,9 +25,14 @@ const ProductItem = ({ imageUrl, name, price, productLink }) => {
             {name}
           </h3>
         </Link>
-        <p className='text-primary font-bold text-sm md:text-lg'>
-          {formattedPrice}
-        </p>
+        <div className='flex gap-2 items-center'>
+          <p className='text-primary font-bold text-sm md:text-lg'>
+            {formattedPrice}
+          </p>
+          <p className=' text-white font-bold bg-primary px-2 py-1 rounded-xl text-sm sm:text-base'>
+            -{discount}%
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -38,6 +43,7 @@ ProductItem.propTypes = {
   name: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   productLink: PropTypes.string.isRequired,
+  discount: PropTypes.string,
 };
 
 export default ProductItem;

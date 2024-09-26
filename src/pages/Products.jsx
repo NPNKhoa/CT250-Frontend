@@ -155,8 +155,13 @@ const Products = () => {
                         key={index}
                         imageUrl={product.productImagePath[0]}
                         name={product.productName}
-                        price={product.price}
+                        price={
+                          product.price *
+                          ((100 - product.discountDetails.discountPercent) /
+                            100)
+                        }
                         productLink={`products/detail/${product._id}`}
+                        discount={product.discountDetails.discountPercent}
                       />
                     ))}
                   </div>

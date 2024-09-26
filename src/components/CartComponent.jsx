@@ -31,15 +31,21 @@ function Cart() {
                 className='w-16 mr-2'
               />
               <div className='flex-1 text-left'>
-                <div className='flex gap-3'>
+                <div className='flex flex-col gap-1'>
                   <p className='sm:text-sm text-xs font-medium'>
                     {item.product?.productName}
+                  </p>
+                  <p className='sm:text-sm text-xs font-medium'>
+                    Số lượng: {item.quantity}
                   </p>
                 </div>
               </div>
               <div className='flex justify-between items-center mt-2'>
                 <div className='text-right text-xs sm:text-sm font-bold text-primary'>
-                  {ToVietnamCurrencyFormat(item.itemPrice * item.quantity)}
+                  {ToVietnamCurrencyFormat(
+                    item.itemPrice *
+                      ((100 - item.product.discount?.discountPercent) / 100)
+                  )}
                 </div>
               </div>
             </div>

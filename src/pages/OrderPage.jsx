@@ -198,7 +198,11 @@ function OrderPage() {
 
   const calculateTotal = () => {
     return productItems.reduce(
-      (total, item) => total + item.itemPrice * item.quantity,
+      (total, item) =>
+        total +
+        item.itemPrice *
+          ((100 - item.product.discount?.discountPercent) / 100) *
+          item.quantity,
       0
     );
   };
@@ -374,7 +378,10 @@ function OrderPage() {
                         </p>
                         <p>
                           {ToVietnamCurrencyFormat(
-                            item.itemPrice * item.quantity
+                            item.itemPrice *
+                              ((100 - item.product.discount?.discountPercent) /
+                                100) *
+                              item.quantity
                           )}
                         </p>
                       </div>

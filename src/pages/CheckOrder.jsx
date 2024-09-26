@@ -208,7 +208,7 @@ const CheckOrder = () => {
                         </p>
                         <p>
                           {ToVietnamCurrencyFormat(
-                            item.itemPrice * item.quantity
+                            item.itemPrice * ((100 - 15) / 100) * item.quantity
                           )}
                         </p>
                       </div>

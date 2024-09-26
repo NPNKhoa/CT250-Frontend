@@ -270,7 +270,7 @@ function OrderHistory() {
                       <p className='text-gray-500'>Số lượng: {item.quantity}</p>
                       <p>
                         {ToVietnamCurrencyFormat(
-                          item.itemPrice * item.quantity
+                          item.itemPrice * ((100 - 15) / 100) * item.quantity
                         )}
                       </p>
                     </div>
