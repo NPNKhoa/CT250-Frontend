@@ -153,7 +153,7 @@ function OrderHistory() {
               </thead>
               <tbody>
                 {Array.isArray(orders) &&
-                  orders.reverse().map(order => (
+                  orders.map(order => (
                     <tr key={order._id} className='hover:bg-gray-50'>
                       <td className='py-2 px-4 border-b text-center'>
                         #{order._id}

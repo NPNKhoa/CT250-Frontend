@@ -142,7 +142,6 @@ const HomePage = () => {
           </h2>
           <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[30vw] mx-auto'></span>
           <div className='flex justify-between items-center mb-4'>
-            {/* Flash Sale và Countdown Timer */}
             <div className='flex items-center space-x-4'></div>
             {/* Link "Xem tất cả" */}
             <div>
@@ -163,6 +162,7 @@ const HomePage = () => {
                   name={product.productName}
                   price={product.price}
                   productLink={`products/detail/${product._id}`}
+                  discount={product.discountDetails.discountPercent}
                 />
               ))}
           </div>
