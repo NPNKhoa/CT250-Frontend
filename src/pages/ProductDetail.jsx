@@ -6,7 +6,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
-import Vnpay from '@assets/vnpay.png';
+// import Vnpay from '@assets/vnpay.png';
 import RatingSection from '@components/RatingSection';
 // import Alert from '@components/Alert';
 
@@ -21,6 +21,7 @@ import ViewedProducts from '@components/ViewedProducts';
 import { toast } from 'react-toastify';
 
 import { ToVietnamCurrencyFormat } from '../helpers/ConvertCurrency';
+import CountdownTimer from '@components/CountdownTimer';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -97,7 +98,7 @@ const ProductDetail = () => {
   const giftsData = promotion?.productIds || [];
   const benefitsData = promotion?.serviceIds || [];
 
-  const productData = products.technicalSpecification || [];
+  const productData = products?.technicalSpecification;
 
   const [activeTab, setActiveTab] = useState('description');
   const handleTabChange = tab => {
@@ -137,15 +138,15 @@ const ProductDetail = () => {
     toast.success('Đã thêm vào giỏ hàng!');
   };
 
-  const [openTypeIndices, setOpenTypeIndices] = useState([]);
+  // const [openTypeIndices, setOpenTypeIndices] = useState([]);
 
-  const toggleMenu = index => {
-    setOpenTypeIndices(prevIndices =>
-      prevIndices.includes(index)
-        ? prevIndices.filter(i => i !== index)
-        : [...prevIndices, index]
-    );
-  };
+  // const toggleMenu = index => {
+  //   setOpenTypeIndices(prevIndices =>
+  //     prevIndices.includes(index)
+  //       ? prevIndices.filter(i => i !== index)
+  //       : [...prevIndices, index]
+  //   );
+  // };
 
   const handleBuyNow = async () => {
     if (!user) {
@@ -219,29 +220,52 @@ const ProductDetail = () => {
             </p>
 
             {/* Giá sản phẩm */}
-            <div className='flex flex-row items-center gap-2 sm:gap-3 mb-8'>
+            <div className='flex flex-row items-center gap-1 sm:gap-3 mb-1'>
               <p className='text-xl sm:text-2xl font-bold text-primary'>
                 {products.price &&
-                  ToVietnamCurrencyFormat(products.price * 0.8)}
+                  ToVietnamCurrencyFormat(
+                    products.price *
+                      ((100 - products.discount.discountPercent) / 100)
+                  )}
               </p>
               <p className='line-through text-gray-400 text-sm sm:text-base'>
                 Giá niêm yết:{' '}
                 {products.price && ToVietnamCurrencyFormat(products.price)}
               </p>
+              <p className=' text-white font-bold bg-primary p-1 rounded-xl text-sm sm:text-base'>
+                -{products.discount?.discountPercent}%
+              </p>
             </div>
+            <CountdownTimer
+              targetDate={products.discount?.discountExpiredDate}
+              label='Kết thúc trong:'
+            />
 
             {(giftsData?.length > 0 || benefitsData?.length > 0) && (
-              <div className='bg-gray-100 p-4 rounded-md border border-primary relative'>
-                <div className='absolute -top-5 border px-3 py-1 rounded-lg bg-gray-100 border-primary'>
-                  <h2 className='text-lg sm:text-xl font-bold text-primary flex items-center gap-3'>
-                    <CardGiftcardIcon /> Ưu đãi
+              <div className='bg-gray-100 p-4 rounded-md border border-primary relative mt-10'>
+                <div className='absolute -top-8 border px-3 py-1 rounded-lg bg-gray-100 border-primary'>
+                  <h2 className='text-lg sm:text-xl font-bold text-primary flex flex-col items-left gap-1'>
+                    <div className=''>
+                      <CardGiftcardIcon /> Ưu đãi{' '}
+                    </div>
+                    <span className='text-sm'>
+                      (từ{' '}
+                      {new Date(
+                        products.promotion?.promotionStartDate
+                      ).toLocaleDateString('vi-VN')}{' '}
+                      đến{' '}
+                      {new Date(
+                        products.promotion?.promotionExpiredDate
+                      ).toLocaleDateString('vi-VN')}
+                      )
+                    </span>
                   </h2>
                 </div>
 
                 {/* Danh sách ưu đãi */}
                 {giftsData?.length > 0 && (
                   <>
-                    <h3 className='text-lg sm:text-xl font-bold mt-4'>
+                    <h3 className='text-lg sm:text-xl font-bold mt-6'>
                       Quà tặng kèm:
                     </h3>
                     <ul className='list-disc space-y-2 mt-2'>
@@ -343,16 +367,18 @@ const ProductDetail = () => {
               >
                 Mô tả sản phẩm
               </button>
-              <button
-                className={`button ${
-                  activeTab === 'specifications'
-                    ? ' text-primary'
-                    : ' text-gray-700'
-                }`}
-                onClick={() => handleTabChange('specifications')}
-              >
-                Thông số kỹ thuật
-              </button>
+              {productData != '' && (
+                <button
+                  className={`button ${
+                    activeTab === 'specifications'
+                      ? ' text-primary'
+                      : ' text-gray-700'
+                  }`}
+                  onClick={() => handleTabChange('specifications')}
+                >
+                  Thông số kỹ thuật
+                </button>
+              )}
             </div>
 
             {activeTab === 'description' ? (

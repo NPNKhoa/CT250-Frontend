@@ -1,15 +1,13 @@
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState, useMemo } from 'react';
-
 import productService from '@services/product.service';
-
 import ProductItem from '@components/ProductItem';
 import Filter from '@components/Filter';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
 import PaginationComponent from '@components/common/PaginationComponent';
 import { CircularProgress } from '@mui/material';
 
-const Products = () => {
+const SafeOffPage = () => {
   const location = useLocation();
   const query = useMemo(
     () => new URLSearchParams(location.search),
@@ -19,6 +17,7 @@ const Products = () => {
   const [selectedMinPrice, setSelectedMinPrice] = useState(null);
   const [selectedMaxPrice, setSelectedMaxPrice] = useState(null);
   const [selectedBrand, setSelectedBrand] = useState([]);
+  const [selectedDiscount, setSelectedDiscount] = useState(null); // Thêm biến để lưu trữ phần trăm giảm giá đã chọn
   const sortBy = 'price';
   const [sortOption, setSortOption] = useState(query.get('sortBy'));
   const [isDesc, setIsDesc] = useState('false');
@@ -27,7 +26,6 @@ const Products = () => {
   const [loading, setLoading] = useState(false);
 
   const page = parseInt(query.get('page') || '1', 10);
-  const brand = query.get('brand') || '';
 
   useEffect(() => {
     const fetchProductTypes = async () => {
@@ -41,6 +39,7 @@ const Products = () => {
           updatedQuery.set('minPrice', selectedMinPrice);
         if (selectedMaxPrice !== null)
           updatedQuery.set('maxPrice', selectedMaxPrice);
+        // if (selectedDiscount) updatedQuery.set('discount', selectedDiscount); // Thêm tham số discount
 
         // Cập nhật tham số sắp xếp
         updatedQuery.set('sortBy', sortOption);
@@ -57,9 +56,8 @@ const Products = () => {
         setProducts(responseProduct.data);
         setTotalPage(responseProduct.meta.totalPages);
       } catch (error) {
-        setLoading(false);
-        setProducts([]);
         console.error('Error fetching product types:', error);
+        setProducts([]);
       } finally {
         setLoading(false);
       }
@@ -71,12 +69,13 @@ const Products = () => {
     selectedBrand,
     selectedMinPrice,
     selectedMaxPrice,
+    // selectedDiscount, // Thêm selectedDiscount vào dependency
     sortOption,
     isDesc,
     page,
   ]);
 
-  const handlePriceChange = (minPrice, maxPrice) => {
+  const handleDiscountChange = (minPrice, maxPrice) => {
     setSelectedMinPrice(minPrice);
     setSelectedMaxPrice(maxPrice);
   };
@@ -91,17 +90,14 @@ const Products = () => {
     setIsDesc(value === 'desc' ? 'true' : 'false');
   };
 
-  const PriceOptions = [
-    { label: 'Giá dưới 500.000đ', value: 'under-500k', min: 0, max: 500000 },
-    {
-      label: '500.000đ - 1 triệu',
-      value: '500k-1m',
-      min: 500000,
-      max: 1000000,
-    },
-    { label: '1 - 2 triệu', value: '1m-2m', min: 1000000, max: 2000000 },
-    { label: '2 - 3 triệu', value: '2m-3m', min: 2000000, max: 3000000 },
-    { label: 'Giá trên 3 triệu', value: 'above-3m', min: 3000000, max: null },
+  const handleDiscountPercentageChange = value => {
+    setSelectedDiscount(value);
+  };
+
+  const DiscountOptions = [
+    { label: 'Giảm giá dưới 30%', value: 'under-30', min: 0, max: 30 },
+    { label: 'Giảm giá từ 30% đến 50%', value: '30-50', min: 30, max: 50 },
+    { label: 'Giảm giá trên 50%', value: 'above-50', min: 50, max: null },
   ];
 
   return (
@@ -110,32 +106,23 @@ const Products = () => {
         <BreadcrumbsComponent
           breadcrumbs={[
             { label: 'Trang chủ', href: '/' },
-            {
-              label: `${products[0].productTypeDetails?.productTypeName}`,
-              href: `/products?productType=${products[0].productTypeDetails?.productTypeName}`,
-            },
-            ...(brand
-              ? [
-                  {
-                    label: `${products[0].productTypeDetails?.productTypeName} ${brand}`,
-                  },
-                ]
-              : []),
+            { label: 'Khuyến mãi', href: '/saleoff' },
           ]}
         />
       )}
       <div className='flex p-4'>
         <div className='hidden lg:block w-1/5 m-1'>
           <Filter
-            onPriceChange={handlePriceChange}
+            onDiscountChange={handleDiscountChange}
             onBrandChange={handleBrandChange}
-            priceOptions={PriceOptions} // Truyền PriceOptions vào đây
+            discountOptions={DiscountOptions}
+            onDiscountPercentageChange={handleDiscountPercentageChange} // Thêm callback cho phần trăm giảm giá
           />
         </div>
         <div className='w-full lg:w-4/5 ml-2'>
           {loading ? (
             <div className='w-full h-full flex justify-center items-center'>
-              <div className='w-24 h-24 border-8 border-primary border-dotted rounded-full animate-spin'></div>
+              <CircularProgress />
             </div>
           ) : (
             <>
@@ -143,7 +130,7 @@ const Products = () => {
                 <div className='container mx-auto px-5'>
                   <div className='flex justify-between border bg-gray-50 rounded-lg px-4'>
                     <h1 className='text-sm sm:text-xl font-bold my-4'>
-                      {`${products[0]?.productTypeDetails?.productTypeName} ${brand}`}
+                      Khuyến mãi
                     </h1>
                     <div className='flex items-center space-x-2'>
                       <span className='font-semibold text-sm sm:text-lg'>
@@ -170,11 +157,11 @@ const Products = () => {
                         name={product.productName}
                         price={
                           product.price *
-                          ((100 - product.discountDetails?.discountPercent) /
+                          ((100 - product.discountDetails.discountPercent) /
                             100)
                         }
                         productLink={`products/detail/${product._id}`}
-                        discount={product.discountDetails?.discountPercent}
+                        discount={product.discountDetails.discountPercent}
                       />
                     ))}
                   </div>
@@ -202,4 +189,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default SafeOffPage;

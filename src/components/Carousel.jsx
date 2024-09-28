@@ -1,17 +1,26 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+import Banner_1 from '@assets/SaleBanner/30_1727123673.webp';
+import Banner_2 from '@assets/SaleBanner/thiet-ke-chua-co-ten-12_1727137763.webp';
+import Banner_3 from '@assets/SaleBanner/banner-sale-12_1695182579.webp';
+import Banner_4 from '@assets/SaleBanner/1000z-launch-website-banner_1695177885.webp';
+
 const slides = [
   {
-    url: 'https://cdn.shopvnb.com/img/1920x640/uploads/slider/ynx-eclp-banner_1695178004.webp',
+    image: Banner_1,
     link: '#',
   },
   {
-    url: 'https://cdn.shopvnb.com/img/1920x640/uploads/slider/banner-sale-12_1695182579.webp',
+    image: Banner_2,
     link: '#',
   },
   {
-    url: 'https://cdn.shopvnb.com/img/1920x640/uploads/slider/nanoflare-800_1698800723.webp',
+    image: Banner_3,
+    link: '#',
+  },
+  {
+    image: Banner_4,
     link: '#',
   },
 ];
@@ -50,9 +59,9 @@ const Carousel = () => {
           >
             <Link to={slide.link} rel='noopener noreferrer'>
               <img
-                src={slide.url}
+                src={slide.image}
                 alt={`Slide ${index + 1}`}
-                className='w-full h-full object-cover'
+                className='w-full  object-cover'
               />
             </Link>
           </div>

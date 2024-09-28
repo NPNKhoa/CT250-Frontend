@@ -8,7 +8,7 @@ import productTypeService from '@services/productType.service';
 import brandService from '@services/brand.service';
 
 const NavBar = () => {
-  const [showDropdown, setShowDropdown] = useState(true);
+  const [showDropdown, setShowDropdown] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(true);
   const [showNavBar, setShowNavBar] = useState(true); // Thêm state mới
 
@@ -32,7 +32,7 @@ const NavBar = () => {
   const arr = [
     { value: '', label: 'Trang chủ' },
     { value: 'products', label: 'Sản phẩm' },
-    { value: 'saleoff', label: 'Sale off' },
+    { value: 'saleoff', label: 'Khuyến mãi' },
     { value: 'about', label: 'Giới thiệu' },
     { value: 'contact', label: 'Liên hệ' },
   ];
@@ -59,7 +59,7 @@ const NavBar = () => {
       } bg-primary transition-all duration-300`}
     >
       <div
-        className={`relative flex flex-col lg:flex-row lg:justify-center items-center gap-4 px-4 ${
+        className={`relative flex flex-col lg:flex-row lg:justify-center items-center gap-4 px-4 py-2 ${
           showMobileMenu ? 'block' : 'hidden'
         } max-w-screen-xl mx-auto`}
       >
@@ -116,43 +116,6 @@ const NavBar = () => {
                   </span>
                 )}
               </Link>
-
-              {/* {item.value === '' && showDropdown && (
-                <div className='absolute left-0 lg:left-auto w-full lg:w-screen top-auto py-2 bg-white shadow-lg z-50'>
-                  <div className='max-w-screen-xl mx-auto flex flex-col lg:flex-row flex-wrap justify-start p-4'>
-                    {productCategories.map((category, idx) => (
-                      <div key={idx} className='w-full sm:w-1/2 lg:w-1/4 mb-4'>
-                        <h3 className='text-primary font-semibold mb-2'>
-                          {category.title.toUpperCase()}
-                        </h3>
-                        <ul>
-                          {category.items.map((product, i) => (
-                            <li key={i} className='text-gray-600 mb-1'>
-                              <Link
-                                to={`/products?productType=${encodeURIComponent(
-                                  category.title
-                                )}&brand=${encodeURIComponent(
-                                  category.brand[i]
-                                )}`}
-                                onClick={() => {
-                                  setShowDropdown(true);
-                                }}
-                              >
-                                {product}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                        <Link
-                          to={`/${item.value}`}
-                          className='text-primary mt-2 inline-block'
-                          onClick={handleMenuToggle}
-                        ></Link>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )} */}
             </div>
           ))}
         </div>
@@ -160,7 +123,7 @@ const NavBar = () => {
 
       {showDropdown && (
         <div
-          className='absolute top-9 w-full  lg:w-screen h-[70vh] bg-white shadow-lg z-50  overflow-y-auto no-scrollbar'
+          className='absolute top-12 w-full  lg:w-screen h-[70vh] bg-white shadow-lg z-50  overflow-y-auto no-scrollbar'
           onMouseEnter={() => setShowDropdown(true)}
           onMouseLeave={() => setShowDropdown(false)}
         >

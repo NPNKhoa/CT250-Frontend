@@ -77,7 +77,10 @@ function SaleOffComponent() {
             Flash Sale
           </h2>
 
-          <CountdownTimer hours={24} />
+          <CountdownTimer
+            targetDate='2024-10-25T15:00:00.000+00:00'
+            label='Kết thúc trong:'
+          />
         </div>
 
         <div>

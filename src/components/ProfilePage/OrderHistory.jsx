@@ -221,6 +221,12 @@ function OrderHistory() {
               {ToVietnamCurrencyFormat(selectedOrder.totalPrice)}
             </p>
             <p>
+              <strong>Địa chỉ:</strong> {selectedOrder.shippingAddress.detail},{' '}
+              {selectedOrder.shippingAddress.commune},{' '}
+              {selectedOrder.shippingAddress.district},{' '}
+              {selectedOrder.shippingAddress.province}
+            </p>
+            <p>
               <strong>Trạng thái:</strong>{' '}
               {selectedOrder.orderStatus.orderStatus}
             </p>
@@ -264,7 +270,7 @@ function OrderHistory() {
                       <p className='text-gray-500'>Số lượng: {item.quantity}</p>
                       <p>
                         {ToVietnamCurrencyFormat(
-                          item.itemPrice * item.quantity
+                          item.itemPrice * ((100 - 15) / 100) * item.quantity
                         )}
                       </p>
                     </div>
