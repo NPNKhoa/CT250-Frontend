@@ -422,16 +422,16 @@ function OrderPage() {
                     Trở về
                   </button>
                   <button
-                    className={`w-1/2 ml-2 font-semibold bg-primary text-white py-3 rounded-md text-lg ${
+                    className={`w-1/2 ml-2 font-semibold bg-primary text-white py-3 rounded-md text-lg flex justify-center items-center ${
                       isLoading
-                        ? 'cursor-not-allowed opacity-50'
+                        ? 'cursor-not-allowed'
                         : 'hover:bg-hover-primary'
                     }`}
                     onClick={handleSubmit}
                     disabled={isLoading}
                   >
                     {isLoading ? (
-                      <CircularProgress size={24} color='inherit' />
+                      <div className='w-6 h-6 border-4 border-white border-dotted rounded-full animate-spin'></div>
                     ) : (
                       'Xác nhận đặt hàng'
                     )}

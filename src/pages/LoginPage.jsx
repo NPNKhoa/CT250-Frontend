@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import loginImg from '@assets/login.png';
 import userIcon from '@assets/user.png';
 import { useDispatch, useSelector } from 'react-redux';
-import CircularProgress from '@mui/material/CircularProgress';
 import { loginThunk, loginWithSocialThunk } from '@redux/thunk/authThunk';
 import PasswordInput from '@components/common/PasswordInput';
 import { getLoggedInUser } from '@redux/thunk/userThunk';
@@ -97,11 +96,11 @@ const LoginPage = () => {
         ))}
         <button
           type='submit'
-          className='w-full bg-primary text-white py-3 rounded-lg hover:bg-hover-primary transition duration-300'
+          className='w-full bg-primary text-white py-3 rounded-lg hover:bg-hover-primary transition duration-300 flex justify-center items-center'
           disabled={loading}
         >
           {loading ? (
-            <CircularProgress color='inherit' size={20} />
+            <div className='w-6 h-6 border-4 border-white border-dotted rounded-full animate-spin'></div>
           ) : (
             'Đăng nhập'
           )}

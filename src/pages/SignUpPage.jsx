@@ -28,7 +28,6 @@ const SignUpPage = () => {
   //   setImageFile(e.target.files[0]);
   // }, []);
 
-
   const handleSubmit = useCallback(
     async e => {
       e.preventDefault();
