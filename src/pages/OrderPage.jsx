@@ -5,13 +5,13 @@ import { getUserAddressThunk } from '../redux/thunk/addressThunk';
 import orderService from '@services/order.service';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
 import { getCartByUser } from '@redux/thunk/cartThunk';
-import CircularProgress from '@mui/material/CircularProgress';
 import { setSelectedProduct } from '@redux/slices/cartSlice';
 import AddressFormDialog from '@components/ProfilePage/AddressFormDialog';
 import cartService from '@services/cart.service';
 import { toast } from 'react-toastify';
 import shippingMethodService from '@services/shippingMethod.service';
 import paymentMethodService from '@services/paymentMethod.service';
+import { Gift } from 'lucide-react';
 
 import { ToVietnamCurrencyFormat } from '../helpers/ConvertCurrency';
 
@@ -41,6 +41,61 @@ function OrderPage() {
   const [selectedShippingMethod, setSelectedShippingMethod] = useState('');
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
   const [deliveryMethod, setDeliveryMethod] = useState(0);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [voucherInput, setVoucherInput] = useState('');
+
+  const discountCodes = [
+    {
+      voucherCode: 'CODE10',
+      discountPercentage: 10,
+      voucherName: 'Discount 10%',
+    },
+    { voucherCode: 'SALE20', discountPercentage: 20, voucherName: 'Sale 20%' },
+    {
+      voucherCode: 'DISCOUNT30',
+      discountPercentage: 30,
+      voucherName: 'Discount 30%',
+    },
+    {
+      voucherCode: 'DISCOUNT30',
+      discountPercentage: 30,
+      voucherName: 'Discount 30%',
+    },
+    {
+      voucherCode: 'DISCOUNT30',
+      discountPercentage: 30,
+      voucherName: 'Discount 30%',
+    },
+  ];
+
+  const handleSelectDiscount = code => {
+    alert(
+      `Selected Discount Code: ${code.voucherCode}\nVoucher Name: ${code.voucherName}\nDiscount Percentage: ${code.discountPercentage}%`
+    );
+
+    setModalOpen(false);
+  };
+
+  const handleApplyVoucher = () => {
+    const foundCode = discountCodes.find(
+      code => code.voucherCode === voucherInput.trim()
+    );
+    if (foundCode) {
+      alert(
+        `Mã giảm giá: ${foundCode.voucherName}\nGiảm: ${foundCode.discountPercentage}%`
+      );
+      setModalOpen(false);
+      setVoucherInput('');
+    } else {
+      alert('Mã giảm giá không hợp lệ.');
+    }
+  };
+
+  const handleKeyPress = event => {
+    if (event.key === 'Enter') {
+      handleApplyVoucher();
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -291,10 +346,11 @@ function OrderPage() {
 
             {/* Tóm tắt đơn hàng */}
             <div className='bg-white shadow-lg rounded-lg p-6 lg:col-span-3'>
-              <h3 className='text-lg font-semibold text-gray-900 mb-4'>
+              {/* thanh toan */}
+              <h3 className='text-lg font-semibold text-gray-900 mb-2'>
                 Phương thức thanh toán
               </h3>
-              <div className='flex flex-col space-y-2 mb-4'>
+              <div className='flex flex-col space-y-2 mb-2'>
                 {paymentMethods && paymentMethods.length > 0 ? (
                   paymentMethods.map(method => (
                     <label
@@ -317,6 +373,7 @@ function OrderPage() {
                   <p className='text-gray-700'>No payment methods available.</p>
                 )}
               </div>
+              {/* van chuyen */}
               <h3 className='text-lg font-semibold text-gray-900 mb-4'>
                 Phương thức vận chuyển
               </h3>
@@ -355,6 +412,7 @@ function OrderPage() {
                 )}
               </div>
               <div className='border-t'>
+                {/* chi tiet don hang */}
                 <h2 className='text-lg font-semibold text-gray-900 mt-4'>
                   Chi tiết đơn hàng
                 </h2>
@@ -388,7 +446,77 @@ function OrderPage() {
                     </div>
                   ))}
                 </div>
-                <div className='mt-6 border-t border-gray-200 pt-4'>
+                {/* khuyen mai */}
+                <div className='border-t flex items-center justify-between py-2'>
+                  <div className='font-bold text-xl'>Mã giảm giá</div>
+                  <div
+                    className='text-base hover:text-white hover:bg-primary font-semibold cursor-pointer rounded-xl p-2 border-2'
+                    onClick={() => setModalOpen(true)}
+                  >
+                    Chọn mã giảm giá
+                  </div>
+                </div>
+                {modalOpen && (
+                  <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
+                    <div className='bg-white p-6 rounded-lg shadow-lg w-[28vw] flex flex-col'>
+                      <h2 className='text-2xl font-bold mb-1 text-primary border-b-2 border-gray-300 p-2'>
+                        Chọn mã giảm giá
+                      </h2>
+
+                      <div className='my-3 flex items-center gap-2 justify-between'>
+                        <input
+                          type='text'
+                          placeholder='Mã giảm giá'
+                          value={voucherInput}
+                          onKeyPress={handleKeyPress}
+                          onChange={e => setVoucherInput(e.target.value)} // Cập nhật state khi người dùng nhập
+                          className='border rounded-lg py-2 px-4 w-4/6 focus:outline-none focus:ring-2 focus:ring-primary'
+                        />
+                        <button
+                          onClick={handleApplyVoucher} // Gọi hàm khi nhấn nút
+                          className='bg-primary text-white py-3 px-4 w-2/6 text-sm rounded-lg hover:bg-opacity-80 transition-all duration-300'
+                        >
+                          ÁP DỤNG
+                        </button>
+                      </div>
+
+                      <div className='font-semibold'>
+                        Chỉ có thể chọn 1 mã giảm giá
+                      </div>
+                      <ul className='space-y-4 max-h-60 overflow-y-auto no-scrollbar'>
+                        {discountCodes.map(code => (
+                          <li
+                            key={code.id}
+                            onClick={() => handleSelectDiscount(code)}
+                            className='cursor-pointer transition-all duration-300 rounded-lg border p-2 flex items-center gap-4 bg-gray-50 hover:bg-gray-100 shadow-md hover:shadow-lg w-full'
+                          >
+                            <div className='bg-primary p-3 rounded-full'>
+                              <Gift className='text-white text-xl' />
+                            </div>
+                            <div className='flex flex-col'>
+                              <p className='text-lg font-semibold text-gray-800'>
+                                {code.voucherName}
+                              </p>
+                              <p className='text-sm text-gray-500'>
+                                Giảm {code.discountPercentage}%
+                              </p>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <button
+                        onClick={() => setModalOpen(false)}
+                        className='mt-6 bg-primary text-white py-2 px-5 rounded-lg hover:bg-hover-primary transition-colors duration-300'
+                      >
+                        Đóng
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* tong gia */}
+                <div className=' border-t border-gray-200 '>
                   <div className='flex justify-between'>
                     <span className='text-gray-500'>Tổng tiền hàng:</span>
                     <span className='text-gray-900'>
