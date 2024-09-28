@@ -50,6 +50,10 @@ function RatingSection({ productId }) {
   }, [productId]);
 
   const handleSubmit = async () => {
+    if (rating === null || review.trim() === '') {
+      toast.error('Vui lòng chọn đánh giá và nhập nhận xét!');
+      return; // Dừng lại nếu không đủ thông tin
+    }
     try {
       await commentService.createComment(
         productId,

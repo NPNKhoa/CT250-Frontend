@@ -62,6 +62,7 @@ const LoginPage = () => {
       const accessToken = localStorage.getItem('accessToken');
       dispatch(getCartByUser(accessToken));
       dispatch(getLoggedInUser(accessToken));
+
       navigate('/');
     } else if (error) {
       toast.error('Đăng nhập thất bại. Vui lòng thử lại!');

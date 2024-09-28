@@ -242,17 +242,30 @@ const ProductDetail = () => {
             />
 
             {(giftsData?.length > 0 || benefitsData?.length > 0) && (
-              <div className='bg-gray-100 p-4 rounded-md border border-primary relative mt-5'>
-                <div className='absolute -top-4 border px-3 py-1 rounded-lg bg-gray-100 border-primary'>
-                  <h2 className='text-lg sm:text-xl font-bold text-primary flex items-center gap-3'>
-                    <CardGiftcardIcon /> Ưu đãi
+              <div className='bg-gray-100 p-4 rounded-md border border-primary relative mt-10'>
+                <div className='absolute -top-8 border px-3 py-1 rounded-lg bg-gray-100 border-primary'>
+                  <h2 className='text-lg sm:text-xl font-bold text-primary flex flex-col items-left gap-1'>
+                    <div className=''>
+                      <CardGiftcardIcon /> Ưu đãi{' '}
+                    </div>
+                    <span className='text-sm'>
+                      (từ{' '}
+                      {new Date(
+                        products.promotion?.promotionStartDate
+                      ).toLocaleDateString('vi-VN')}{' '}
+                      đến{' '}
+                      {new Date(
+                        products.promotion?.promotionExpiredDate
+                      ).toLocaleDateString('vi-VN')}
+                      )
+                    </span>
                   </h2>
                 </div>
 
                 {/* Danh sách ưu đãi */}
                 {giftsData?.length > 0 && (
                   <>
-                    <h3 className='text-lg sm:text-xl font-bold mt-4'>
+                    <h3 className='text-lg sm:text-xl font-bold mt-6'>
                       Quà tặng kèm:
                     </h3>
                     <ul className='list-disc space-y-2 mt-2'>

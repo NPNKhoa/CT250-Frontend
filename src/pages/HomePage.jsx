@@ -162,7 +162,7 @@ const HomePage = () => {
                   name={product.productName}
                   price={product.price}
                   productLink={`products/detail/${product._id}`}
-                  discount={product.discountDetails.discountPercent}
+                  discount={product.discountDetails?.discountPercent}
                 />
               ))}
           </div>

@@ -40,7 +40,7 @@ const Header = () => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isNavBarVisible, setIsNavBarVisible] = useState(false);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart);
   const cartItems = cart?.cart?.cartItems || [];
@@ -65,7 +65,6 @@ const Header = () => {
 
   const handleLogout = () => {
     dispatch(logoutThunk(localStorage.getItem('accessToken')));
-    navigate('/login');
   };
 
   const toggleSearch = () => {
