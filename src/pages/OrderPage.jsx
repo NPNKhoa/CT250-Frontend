@@ -43,6 +43,7 @@ function OrderPage() {
   const [deliveryMethod, setDeliveryMethod] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
   const [voucherInput, setVoucherInput] = useState('');
+  const [voucher, setVoucher] = useState(0);
 
   const discountCodes = [
     {
@@ -69,9 +70,7 @@ function OrderPage() {
   ];
 
   const handleSelectDiscount = code => {
-    alert(
-      `Selected Discount Code: ${code.voucherCode}\nVoucher Name: ${code.voucherName}\nDiscount Percentage: ${code.discountPercentage}%`
-    );
+    setVoucher(code.discountPercentage);
 
     setModalOpen(false);
   };
@@ -81,9 +80,7 @@ function OrderPage() {
       code => code.voucherCode === voucherInput.trim()
     );
     if (foundCode) {
-      alert(
-        `Mã giảm giá: ${foundCode.voucherName}\nGiảm: ${foundCode.discountPercentage}%`
-      );
+      setVoucher(foundCode.discountPercentage);
       setModalOpen(false);
       setVoucherInput('');
     } else {
@@ -531,12 +528,23 @@ function OrderPage() {
                         : 0}
                     </span>
                   </div>
+                  <div className='flex justify-between mt-2'>
+                    <span className='text-gray-500'>Giá giảm:</span>
+                    <span className='text-gray-900'>
+                      {voucher
+                        ? ToVietnamCurrencyFormat(
+                            (calculateTotal() * voucher) / 100
+                          )
+                        : 0}
+                    </span>
+                  </div>
                   <div className='flex justify-between mt-4 text-lg font-medium'>
                     <span>Tổng cộng:</span>
                     <span className='text-gray-900'>
                       {ToVietnamCurrencyFormat(
                         calculateTotal() +
-                          (selectedShippingMethod ? deliveryFee : 0)
+                          (selectedShippingMethod ? deliveryFee : 0) -
+                          (calculateTotal() * voucher) / 100
                       )}
                     </span>
                   </div>
