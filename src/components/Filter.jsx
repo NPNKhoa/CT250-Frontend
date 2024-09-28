@@ -2,13 +2,25 @@ import { useState, useEffect } from 'react';
 import brandService from '@services/brand.service';
 import PropTypes from 'prop-types';
 
-const Filter = ({ onPriceChange, onBrandChange }) => {
+const Filter = ({
+  onPriceChange,
+  onDiscountChange,
+  onBrandChange,
+  priceOptions,
+  discountOptions,
+}) => {
   const [selectedPrice, setSelectedPrice] = useState('');
   const [selectedMinPrice, setSelectedMinPrice] = useState(null);
   const [selectedMaxPrice, setSelectedMaxPrice] = useState(null);
+
+  const [selectedDiscount, setSelectedDiscount] = useState('');
+  const [selectedMinDiscount, setSelectedMinDiscount] = useState(null);
+  const [selectedMaxDiscount, setSelectedMaxDiscount] = useState(null);
+
   const [selectedBrand, setSelectedBrand] = useState([]);
   const [brands, setBrands] = useState([]);
 
+  // Fetch brands from the service
   useEffect(() => {
     const fetchBrands = async () => {
       try {
@@ -23,10 +35,21 @@ const Filter = ({ onPriceChange, onBrandChange }) => {
     fetchBrands();
   }, []);
 
+  // Handle price change
   useEffect(() => {
-    onPriceChange(selectedMinPrice, selectedMaxPrice);
+    if (onPriceChange) {
+      onPriceChange(selectedMinPrice, selectedMaxPrice);
+    }
   }, [selectedMinPrice, selectedMaxPrice, onPriceChange]);
 
+  // Handle discount change
+  useEffect(() => {
+    if (onDiscountChange) {
+      onDiscountChange(selectedMinDiscount, selectedMaxDiscount);
+    }
+  }, [selectedMinDiscount, selectedMaxDiscount, onDiscountChange]);
+
+  // Handle brand change
   useEffect(() => {
     onBrandChange(selectedBrand);
   }, [selectedBrand, onBrandChange]);
@@ -41,33 +64,39 @@ const Filter = ({ onPriceChange, onBrandChange }) => {
     setSelectedPrice('');
     setSelectedMinPrice(null);
     setSelectedMaxPrice(null);
+    setSelectedDiscount('');
+    setSelectedMinDiscount(null);
+    setSelectedMaxDiscount(null);
     setSelectedBrand([]);
   };
-
-  const PriceOptions = [
-    { label: 'Giá dưới 500.000đ', value: 'under-500k', min: 0, max: 500000 },
-    {
-      label: '500.000đ - 1 triệu',
-      value: '500k-1m',
-      min: 500000,
-      max: 1000000,
-    },
-    { label: '1 - 2 triệu', value: '1m-2m', min: 1000000, max: 2000000 },
-    { label: '2 - 3 triệu', value: '2m-3m', min: 2000000, max: 3000000 },
-    { label: 'Giá trên 3 triệu', value: 'above-3m', min: 3000000, max: null },
-  ];
 
   const handlePriceChange = event => {
     const value = event.target.value;
     setSelectedPrice(value);
 
-    const selectedOption = PriceOptions.find(option => option.value === value);
+    const selectedOption = priceOptions.find(option => option.value === value);
     if (selectedOption) {
       setSelectedMinPrice(selectedOption.min);
       setSelectedMaxPrice(selectedOption.max);
     } else {
       setSelectedMinPrice(null);
       setSelectedMaxPrice(null);
+    }
+  };
+
+  const handleDiscountChange = event => {
+    const value = event.target.value;
+    setSelectedDiscount(value);
+
+    const selectedOption = discountOptions.find(
+      option => option.value === value
+    );
+    if (selectedOption) {
+      setSelectedMinDiscount(selectedOption.min);
+      setSelectedMaxDiscount(selectedOption.max);
+    } else {
+      setSelectedMinDiscount(null);
+      setSelectedMaxDiscount(null);
     }
   };
 
@@ -97,7 +126,7 @@ const Filter = ({ onPriceChange, onBrandChange }) => {
           <input
             type='radio'
             className='mr-3 transform scale-125'
-            name='price'
+            name='filter'
             value={option.value}
             checked={selected === option.value}
             onChange={onChange}
@@ -110,12 +139,29 @@ const Filter = ({ onPriceChange, onBrandChange }) => {
 
   return (
     <div className='w-full p-6 bg-gray-50 shadow-lg rounded-lg'>
-      <h3 className='text-lg font-semibold mb-6'>Chọn Mức Giá</h3>
-      <RadioGroup
-        options={PriceOptions}
-        selected={selectedPrice}
-        onChange={handlePriceChange}
-      />
+      {/* Nếu có prop priceOptions, hiển thị bộ lọc giá */}
+      {priceOptions && (
+        <>
+          <h3 className='text-lg font-semibold mb-6'>Chọn Mức Giá</h3>
+          <RadioGroup
+            options={priceOptions}
+            selected={selectedPrice}
+            onChange={handlePriceChange}
+          />
+        </>
+      )}
+
+      {/* Nếu có prop discountOptions, hiển thị bộ lọc giảm giá */}
+      {discountOptions && (
+        <>
+          <h3 className='text-lg font-semibold my-6'>Chọn Mức Giảm Giá</h3>
+          <RadioGroup
+            options={discountOptions}
+            selected={selectedDiscount}
+            onChange={handleDiscountChange}
+          />
+        </>
+      )}
 
       <h3 className='text-lg font-semibold my-6'>Thương Hiệu</h3>
       <CheckboxGroup
@@ -134,8 +180,11 @@ const Filter = ({ onPriceChange, onBrandChange }) => {
 };
 
 Filter.propTypes = {
-  onPriceChange: PropTypes.func.isRequired,
+  onPriceChange: PropTypes.func, // Có thể không truyền nếu không lọc theo giá
+  onDiscountChange: PropTypes.func, // Có thể không truyền nếu không lọc theo giảm giá
   onBrandChange: PropTypes.func.isRequired,
+  priceOptions: PropTypes.array, // Có thể không truyền nếu không lọc theo giá
+  discountOptions: PropTypes.array, // Có thể không truyền nếu không lọc theo giảm giá
 };
 
 export default Filter;
