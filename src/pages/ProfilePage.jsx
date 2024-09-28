@@ -41,8 +41,16 @@ function ProfilePage() {
     { id: 'address', label: 'Địa Chỉ', icon: <LocationOn /> },
     { id: 'change-password', label: 'Đổi Mật Khẩu', icon: <Lock /> },
     { id: 'orders', label: 'Đơn Mua', icon: <ShoppingCart /> },
-    { id: 'notification-settings', label: 'Cài Đặt Thông Báo', icon: <Notifications /> },
-    { id: 'privacy-settings', label: 'Những Thiết Lập Riêng Tư', icon: <Security /> },
+    {
+      id: 'notification-settings',
+      label: 'Cài Đặt Thông Báo',
+      icon: <Notifications />,
+    },
+    {
+      id: 'privacy-settings',
+      label: 'Những Thiết Lập Riêng Tư',
+      icon: <Security />,
+    },
   ];
 
   const renderContent = () => {
@@ -71,7 +79,10 @@ function ProfilePage() {
                 user && user?.avatarImagePath
                   ? user?.avatarImagePath.startsWith('http')
                     ? user?.avatarImagePath
-                    : `http://localhost:5000/${user?.avatarImagePath.replace(/\\/g, '/')}`
+                    : `http://localhost:5000/${user?.avatarImagePath.replace(
+                        /\\/g,
+                        '/'
+                      )}`
                   : Avatar
               }
               alt='User avatar'
@@ -90,7 +101,9 @@ function ProfilePage() {
               <li key={tab.id}>
                 <button
                   className={`flex items-center gap-2 w-full text-left py-2 px-4 rounded-lg transition-colors ${
-                    selectedTab === tab.id ? 'bg-primary text-white' : 'hover:bg-gray-100'
+                    selectedTab === tab.id
+                      ? 'bg-primary text-white'
+                      : 'hover:bg-gray-100'
                   }`}
                   onClick={() => setSelectedTab(tab.id)}
                 >
