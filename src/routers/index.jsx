@@ -13,6 +13,7 @@ import ProfilePage from '@pages/ProfilePage';
 import ThankYouPage from '@pages/ThankYouPage';
 import OrderPage from '@pages/OrderPage';
 import TestPage from '@pages/TestPage';
+import SafeOffPage from '@pages/SafeOffPage';
 
 const routes = [
   {
@@ -64,9 +65,15 @@ const routes = [
   },
 
   {
+    id: 'saleoff',
+    path: '/saleoff',
+    element: <SafeOffPage />,
+  },
+
+  {
     id: 'cart',
     path: '/cart',
-    element: <CartPage />
+    element: <CartPage />,
   },
 
   {
