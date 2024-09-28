@@ -98,7 +98,7 @@ const ProductDetail = () => {
   const giftsData = promotion?.productIds || [];
   const benefitsData = promotion?.serviceIds || [];
 
-  const productData = products.technicalSpecification || [];
+  const productData = products?.technicalSpecification;
 
   const [activeTab, setActiveTab] = useState('description');
   const handleTabChange = tab => {
@@ -354,16 +354,18 @@ const ProductDetail = () => {
               >
                 Mô tả sản phẩm
               </button>
-              <button
-                className={`button ${
-                  activeTab === 'specifications'
-                    ? ' text-primary'
-                    : ' text-gray-700'
-                }`}
-                onClick={() => handleTabChange('specifications')}
-              >
-                Thông số kỹ thuật
-              </button>
+              {productData != '' && (
+                <button
+                  className={`button ${
+                    activeTab === 'specifications'
+                      ? ' text-primary'
+                      : ' text-gray-700'
+                  }`}
+                  onClick={() => handleTabChange('specifications')}
+                >
+                  Thông số kỹ thuật
+                </button>
+              )}
             </div>
 
             {activeTab === 'description' ? (

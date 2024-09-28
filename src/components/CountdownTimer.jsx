@@ -37,7 +37,7 @@ const CountdownTimer = ({ targetDate, label }) => {
   if (loading) {
     return (
       <div className='flex justify-center items-center h-16'>
-        <div className='w-8 h-8 border-4 border-blue-400 border-dotted rounded-full animate-spin'></div>
+        <div className='w-8 h-8 border-4 border-primary border-dotted rounded-full animate-spin'></div>
       </div>
     );
   }
