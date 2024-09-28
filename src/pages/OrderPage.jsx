@@ -183,9 +183,13 @@ function OrderPage() {
       setIsLoading(true);
       const response = await orderService.createOrder(order);
       if (response) {
-        dispatch(setSelectedProduct([]));
-        toast.success('Đặt hàng thành công!');
-        navigate('/thankyou');
+        if (response.redirectUrl) {
+          window.location.href = response.redirectUrl;
+        } else {
+          dispatch(setSelectedProduct([]));
+          toast.success('Đặt hàng thành công!');
+          navigate('/thankyou');
+        }
       }
       dispatch(getCartByUser(localStorage.getItem('accessToken')));
     } catch (error) {
@@ -321,9 +325,12 @@ function OrderPage() {
                   shippingMethods.map((method, index) => (
                     <label
                       key={method._id}
-                      className='flex items-center space-x-2'
+                      className={`flex items-center space-x-2 ${
+                        deliveryFees[index] ? '' : 'cursor-not-allowed'
+                      }`}
                     >
                       <input
+                        disabled={deliveryFees[index] ? false : true}
                         type='radio'
                         name='shipping'
                         value={JSON.stringify({
