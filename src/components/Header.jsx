@@ -65,6 +65,7 @@ const Header = () => {
 
   const handleLogout = () => {
     dispatch(logoutThunk(localStorage.getItem('accessToken')));
+    navigate('/login');
   };
 
   const toggleSearch = () => {

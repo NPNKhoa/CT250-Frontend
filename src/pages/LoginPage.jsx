@@ -35,7 +35,7 @@ const LoginPage = () => {
       };
     }
     dispatch(loginWithSocialThunk(user));
-    navigate(-1);
+    navigate('/');
   };
 
   const handleError = error => {
@@ -62,7 +62,7 @@ const LoginPage = () => {
       const accessToken = localStorage.getItem('accessToken');
       dispatch(getCartByUser(accessToken));
       dispatch(getLoggedInUser(accessToken));
-      navigate(-1);
+      navigate('/');
     } else if (error) {
       toast.error('Đăng nhập thất bại. Vui lòng thử lại!');
     }
