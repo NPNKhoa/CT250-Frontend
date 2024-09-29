@@ -5,9 +5,9 @@ import userIcon from '@assets/user.png';
 import authService from '@services/auth.service';
 import PasswordInput from '@components/common/PasswordInput';
 import { toast } from 'react-toastify';
+import { CircularProgress } from '@mui/material';
 
 const SignUpPage = () => {
-  const navigate = useNavigate();
   const [credentials, setCredentials] = useState({
     fullname: '',
     phone: '',
@@ -16,6 +16,8 @@ const SignUpPage = () => {
     confirmPassword: '',
     gender: '',
   });
+
+  const [loading, setLoading] = useState(false);
 
   // const [imageFile, setImageFile] = useState(null);
 
@@ -43,15 +45,21 @@ const SignUpPage = () => {
       // formData.append('imageFile', imageFile);
 
       try {
+        setLoading(true);
         await authService.signup(formData);
-        toast.success('Đăng ký tài khoản thành công!');
-        navigate('/login');
+        toast.success(
+          'Đăng ký tài khoản thành công! Vui lòng xác thực email để tiếp tục'
+        );
+        // navigate('/verify-email');
       } catch (error) {
+        setLoading(false);
         console.log(error);
-        toast.error('Đăng ký thành công!');
+        toast.error('Đăng ký thất bại!');
+      } finally {
+        setLoading(false);
       }
     },
-    [credentials, navigate]
+    [credentials]
   );
 
   const formFields = useMemo(
@@ -96,14 +104,19 @@ const SignUpPage = () => {
           </div>
         ))}
         <button
+          disabled={loading}
           type='submit'
           className='w-full bg-primary text-white py-3 rounded-lg hover:bg-hover-primary transition duration-300'
         >
-          Đăng ký tài khoản
+          {loading ? (
+            <CircularProgress size={17} color='inherit' />
+          ) : (
+            'Đăng ký tài khoản'
+          )}
         </button>
       </form>
     ),
-    [handleSubmit, credentials, handleChange, formFields]
+    [handleSubmit, formFields, loading, credentials, handleChange]
   );
 
   return (
