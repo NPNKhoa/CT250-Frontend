@@ -37,6 +37,10 @@ class authService {
     return (await this.api.post('/login-with-social', data)).data;
   }
 
+  async verifyEmail(token) {
+    return (await this.api.get(`/verify-email?token=${token}`)).data;
+  }
+
   async addRole(data) {
     return (await this.api.post('/add-role', data)).data;
   }

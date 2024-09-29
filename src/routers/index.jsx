@@ -14,6 +14,7 @@ import ThankYouPage from '@pages/ThankYouPage';
 import OrderPage from '@pages/OrderPage';
 import TestPage from '@pages/TestPage';
 import SafeOffPage from '@pages/SafeOffPage';
+import EmailVerificationPage from '@pages/EmailVerificationPage';
 
 const routes = [
   {
@@ -110,6 +111,12 @@ const routes = [
         <ThankYouPage />
       </PrivateRoute>
     ),
+  },
+
+  {
+    id: '/email-verification',
+    path: '/email-verification',
+    element: <EmailVerificationPage />,
   },
 
   {
