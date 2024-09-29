@@ -13,7 +13,7 @@ export default defineConfig({
       '/ghtk': {
         target: 'https://services.giaohangtietkiem.vn',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/ghtk/, ''),
+        rewrite: path => path.replace(/^\/ghtk/, ''),
       },
     },
   },
@@ -29,6 +29,7 @@ export default defineConfig({
       '@routers': path.resolve(__dirname, 'src/routers'),
       '@utils': path.resolve(__dirname, 'src/utils'),
       '@services': path.resolve(__dirname, 'src/services'),
+      '@configs': path.resolve(__dirname, 'src/configs'),
     },
   },
 });
