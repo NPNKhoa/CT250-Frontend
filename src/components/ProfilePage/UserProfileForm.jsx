@@ -158,7 +158,7 @@ function UserProfileForm() {
           onClick={handleChangeAvatar}
           className='ml-4 bg-primary text-white px-4 py-2 rounded-lg'
         >
-          Update Avatar
+          Đổi ảnh đại diện
         </button>
       </div>
 

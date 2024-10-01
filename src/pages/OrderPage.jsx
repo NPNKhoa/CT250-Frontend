@@ -484,7 +484,7 @@ function OrderPage() {
                           <li
                             key={voucher._id} // Sử dụng _id của UserVoucher làm key
                             onClick={() => handleSelectDiscount(voucher)}
-                            className='cursor-pointer transition-all duration-300 rounded-lg border p-2 flex items-center gap-4 bg-gray-50 hover:bg-gray-100 shadow-md hover:shadow-lg w-full'
+                            className='cursor-pointer transition-all duration-300 rounded-lg border p-2 flex items-center gap-4 mb-2 bg-gray-50 hover:bg-gray-100 shadow-md hover:shadow-lg w-full'
                           >
                             <div className='bg-primary p-3 rounded-full'>
                               <Gift className='text-white text-xl' />
