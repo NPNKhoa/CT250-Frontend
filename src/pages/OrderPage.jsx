@@ -14,6 +14,7 @@ import paymentMethodService from '@services/paymentMethod.service';
 import { Gift } from 'lucide-react';
 
 import { ToVietnamCurrencyFormat } from '../helpers/ConvertCurrency';
+import voucherService from '@services/voucher.service';
 
 function OrderPage() {
   const navigate = useNavigate();
@@ -41,58 +42,35 @@ function OrderPage() {
   const [selectedShippingMethod, setSelectedShippingMethod] = useState('');
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
   const [deliveryMethod, setDeliveryMethod] = useState(0);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [voucherInput, setVoucherInput] = useState('');
+  const [modalOpen, setModalOpen] = useState(true);
+  // const [voucherInput, setVoucherInput] = useState('');
   const [voucher, setVoucher] = useState(0);
+  const [ownVouchers, setOwnVouchers] = useState([]);
 
-  const discountCodes = [
-    {
-      voucherCode: 'CODE10',
-      discountPercentage: 10,
-      voucherName: 'Discount 10%',
-    },
-    { voucherCode: 'SALE20', discountPercentage: 20, voucherName: 'Sale 20%' },
-    {
-      voucherCode: 'DISCOUNT30',
-      discountPercentage: 30,
-      voucherName: 'Discount 30%',
-    },
-    {
-      voucherCode: 'DISCOUNT30',
-      discountPercentage: 30,
-      voucherName: 'Discount 30%',
-    },
-    {
-      voucherCode: 'DISCOUNT30',
-      discountPercentage: 30,
-      voucherName: 'Discount 30%',
-    },
-  ];
-
-  const handleSelectDiscount = code => {
-    setVoucher(code.discountPercentage);
-
+  const handleSelectDiscount = voucher => {
+    const discountPercentage = voucher.voucherId.discountPercent;
+    setVoucher(discountPercentage);
     setModalOpen(false);
   };
 
-  const handleApplyVoucher = () => {
-    const foundCode = discountCodes.find(
-      code => code.voucherCode === voucherInput.trim()
-    );
-    if (foundCode) {
-      setVoucher(foundCode.discountPercentage);
-      setModalOpen(false);
-      setVoucherInput('');
-    } else {
-      alert('Mã giảm giá không hợp lệ.');
-    }
-  };
+  // const handleApplyVoucher = () => {
+  //   const foundCode = discountCodes.find(
+  //     code => code.voucherCode === voucherInput.trim()
+  //   );
+  //   if (foundCode) {
+  //     setVoucher(foundCode.discountPercentage);
+  //     setModalOpen(false);
+  //     setVoucherInput('');
+  //   } else {
+  //     alert('Mã giảm giá không hợp lệ.');
+  //   }
+  // };
 
-  const handleKeyPress = event => {
-    if (event.key === 'Enter') {
-      handleApplyVoucher();
-    }
-  };
+  // const handleKeyPress = event => {
+  //   if (event.key === 'Enter') {
+  //     handleApplyVoucher();
+  //   }
+  // };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -185,6 +163,20 @@ function OrderPage() {
   useEffect(() => {
     setDeliveryFee(deliveryFees[deliveryMethod]);
   }, [deliveryFees, deliveryMethod]);
+
+  useEffect(() => {
+    const fetchUserVouchers = async () => {
+      try {
+        const response = await voucherService.getUserVouchers();
+        setOwnVouchers(response.data);
+      } catch (error) {
+        console.error('Error fetching user vouchers:', error);
+      }
+    };
+
+    fetchUserVouchers();
+  }, []);
+  console.log(ownVouchers);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -463,11 +455,11 @@ function OrderPage() {
                 {modalOpen && (
                   <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
                     <div className='bg-white p-6 rounded-lg shadow-lg w-[28vw] flex flex-col'>
-                      <h2 className='text-2xl font-bold mb-1 text-primary border-b-2 border-gray-300 p-2'>
+                      <h2 className='text-2xl font-bold mb-1 text-primary border-b-2 border-gray-300 p-2 flex justify-center'>
                         Chọn mã giảm giá
                       </h2>
 
-                      <div className='my-3 flex items-center gap-2 justify-between'>
+                      {/* <div className='my-3 flex items-center gap-2 justify-between'>
                         <input
                           type='text'
                           placeholder='Mã giảm giá'
@@ -482,16 +474,16 @@ function OrderPage() {
                         >
                           ÁP DỤNG
                         </button>
-                      </div>
+                      </div> */}
 
-                      <div className='font-semibold'>
+                      <div className='italic text-gray text-sm mb-2'>
                         Chỉ có thể chọn 1 mã giảm giá
                       </div>
                       <ul className='space-y-4 max-h-60 overflow-y-auto no-scrollbar'>
-                        {discountCodes.map(code => (
+                        {ownVouchers.map(voucher => (
                           <li
-                            key={code.id}
-                            onClick={() => handleSelectDiscount(code)}
+                            key={voucher._id} // Sử dụng _id của UserVoucher làm key
+                            onClick={() => handleSelectDiscount(voucher)}
                             className='cursor-pointer transition-all duration-300 rounded-lg border p-2 flex items-center gap-4 bg-gray-50 hover:bg-gray-100 shadow-md hover:shadow-lg w-full'
                           >
                             <div className='bg-primary p-3 rounded-full'>
@@ -499,10 +491,10 @@ function OrderPage() {
                             </div>
                             <div className='flex flex-col'>
                               <p className='text-lg font-semibold text-gray-800'>
-                                {code.voucherName}
+                                {voucher.voucherId.voucherName}{' '}
                               </p>
                               <p className='text-sm text-gray-500'>
-                                Giảm {code.discountPercentage}%
+                                Giảm {voucher.voucherId.discountPercent}%{' '}
                               </p>
                             </div>
                           </li>

@@ -11,6 +11,16 @@ class productService {
     return (await this.api.get('/publishing')).data;
   }
 
+  async getUserVouchers() {
+    return (
+      await this.api.get('/byuser', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+    ).data;
+  }
+
   async collect(voucherId) {
     return (
       await this.api.post(
