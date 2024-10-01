@@ -26,14 +26,14 @@ const Voucher = ({
   };
 
   return (
-    <Box className='flex border rounded-lg shadow-lg overflow-hidden w-full max-w-md'>
-      <Box className='bg-primary flex flex-col items-center justify-center p-4 text-white w-1/3'>
-        <Typography variant='h5' className='font-bold text-center'>
+    <Box className='flex border rounded-xl shadow-lg overflow-hidden w-full max-w-md'>
+      <Box className='bg-primary flex flex-col items-center justify-center p-3 text-white w-1/3'>
+        <Typography variant='h8' className='font-bold text-center'>
           {voucherName}
         </Typography>
       </Box>
 
-      <Box className='flex flex-col justify-between p-4 w-3/4'>
+      <Box className='flex flex-col justify-between p-3 w-3/4'>
         <Box>
           <Typography
             variant='h6'
@@ -52,11 +52,11 @@ const Voucher = ({
           <LinearProgress variant='determinate' value={usedPercent} />
         </Box>
 
-        <Box className='flex justify-between items-center mt-4'>
+        <Box className='flex justify-between items-center mt-2'>
           <Button
             variant='contained'
             color='error'
-            className='w-20'
+            className='w-16'
             onClick={() => collectVoucher()}
           >
             Lưu
