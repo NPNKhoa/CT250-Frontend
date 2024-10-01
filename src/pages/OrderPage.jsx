@@ -48,7 +48,7 @@ function OrderPage() {
   const [ownVouchers, setOwnVouchers] = useState([]);
 
   const handleSelectDiscount = voucher => {
-    const discountPercentage = voucher.voucherId.discountPercent;
+    const discountPercentage = voucher.voucherId;
     setVoucher(discountPercentage);
     setModalOpen(false);
   };
@@ -222,6 +222,7 @@ function OrderPage() {
       shippingMethod: selectedShippingMethod,
       paymentMethod: selectedPaymentMethod,
       shippingFee: deliveryFee,
+      voucherId: voucher._id,
     };
     try {
       setIsLoading(true);
@@ -532,7 +533,7 @@ function OrderPage() {
                     <span className='text-gray-900'>
                       {voucher
                         ? ToVietnamCurrencyFormat(
-                            (calculateTotal() * voucher) / 100
+                            (calculateTotal() * voucher.discountPercent) / 100
                           )
                         : 0}
                     </span>
@@ -543,7 +544,7 @@ function OrderPage() {
                       {ToVietnamCurrencyFormat(
                         calculateTotal() +
                           (selectedShippingMethod ? deliveryFee : 0) -
-                          (calculateTotal() * voucher) / 100
+                          (calculateTotal() * voucher.discountPercent) / 100
                       )}
                     </span>
                   </div>
