@@ -4,7 +4,7 @@ import {
   AccountCircle,
   LocationOn,
   Lock,
-  Notifications,
+  // Notifications,
   Security,
   ShoppingCart,
 } from '@mui/icons-material'; // Import icons from Material UI
@@ -15,6 +15,8 @@ import AddressSection from '@components/ProfilePage/AddressSection'; // Correct 
 import OrderHistory from '@components/ProfilePage/OrderHistory'; // Correct component path
 import { getLoggedInUser } from '@redux/thunk/userThunk';
 import { useDispatch, useSelector } from 'react-redux';
+import VoucherManager from '@components/ProfilePage/VoucherManager';
+import { Gift } from 'lucide-react';
 
 function ProfilePage() {
   const location = useLocation();
@@ -41,11 +43,12 @@ function ProfilePage() {
     { id: 'address', label: 'Địa Chỉ', icon: <LocationOn /> },
     { id: 'change-password', label: 'Đổi Mật Khẩu', icon: <Lock /> },
     { id: 'orders', label: 'Đơn Mua', icon: <ShoppingCart /> },
-    {
-      id: 'notification-settings',
-      label: 'Cài Đặt Thông Báo',
-      icon: <Notifications />,
-    },
+    { id: 'vouchers', label: 'Kho Vouchers', icon: <Gift /> },
+    // {
+    //   id: 'notification-settings',
+    //   label: 'Cài Đặt Thông Báo',
+    //   icon: <Notifications />,
+    // },
     {
       id: 'privacy-settings',
       label: 'Những Thiết Lập Riêng Tư',
@@ -63,6 +66,8 @@ function ProfilePage() {
         return <PasswordResetForm />;
       case 'orders':
         return <OrderHistory />;
+      case 'vouchers':
+        return <VoucherManager />;
       default:
         return <UserProfileForm />;
     }
