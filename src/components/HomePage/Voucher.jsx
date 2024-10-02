@@ -21,8 +21,12 @@ const Voucher = ({
         );
       }
     } catch (error) {
-      console.log(error.message);
-      toast.error('Voucher đã hết lượt thu thập');
+      console.log(error);
+      if (error.status === 409) {
+        toast.error('Bạn đã thu thập voucher này rồi!');
+      } else {
+        toast.error('Voucher đã hết lượt thu thập');
+      }
       throw new Error(error);
     }
   };
