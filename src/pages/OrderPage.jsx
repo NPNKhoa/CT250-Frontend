@@ -228,6 +228,21 @@ function OrderPage() {
       toast.error('Vui lòng nhập đầy đủ thông tin.');
       return;
     }
+
+    if (!selectedPaymentMethod && !selectedShippingMethod) {
+      toast.error('Vui lòng chọn phương thức thanh toán và vận chuyển');
+      return;
+    }
+    if (!selectedPaymentMethod) {
+      toast.error('Vui lòng chọn phương thức thanh toán');
+      return;
+    }
+
+    if (!selectedShippingMethod) {
+      toast.error('Vui lòng chọn phương thức vận chuyển');
+      return;
+    }
+
     const order = {
       orderDetail: selectedProductIds,
       shippingAddress: selectedAddress._id,
@@ -251,7 +266,6 @@ function OrderPage() {
       dispatch(getCartByUser(localStorage.getItem('accessToken')));
     } catch (error) {
       console.error(error);
-      toast.error('Vui lòng chọn phương thức thanh toán và vận chuyển');
     } finally {
       setIsLoading(false);
     }
@@ -284,6 +298,15 @@ function OrderPage() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  console.log(voucher);
+  let maxDiscountPrice = (calculateTotal() * voucher.discountPercent) / 100;
+
+  if (maxDiscountPrice > voucher.maxPriceDiscount * 1000) {
+    maxDiscountPrice = voucher.maxPriceDiscount * 1000;
+  }
+
+  console.log(maxDiscountPrice);
 
   return (
     <>
@@ -459,10 +482,10 @@ function OrderPage() {
                 <div className='border-t flex items-center justify-between py-2'>
                   <div className='font-bold text-xl'>Mã giảm giá</div>
                   <div
-                    className='text-base hover:text-white hover:bg-primary font-semibold cursor-pointer rounded-xl p-2 border-2'
+                    className='text-base hover:text-white w-[200px] flex justify-center hover:bg-primary font-semibold cursor-pointer rounded-xl p-2 border-2'
                     onClick={() => setModalOpen(true)}
                   >
-                    Chọn mã giảm giá
+                    {voucher ? voucher.voucherName : 'Chọn mã giảm giá'}
                   </div>
                 </div>
                 {modalOpen && (
@@ -508,6 +531,13 @@ function OrderPage() {
                               </p>
                               <p className='text-sm text-gray-500'>
                                 Giảm {voucher.voucherId.discountPercent}%{' '}
+                                <span className='italic'>
+                                  (Tối đa{' '}
+                                  {ToVietnamCurrencyFormat(
+                                    voucher.voucherId.maxPriceDiscount * 1000
+                                  )}
+                                  )
+                                </span>
                               </p>
                             </div>
                           </li>

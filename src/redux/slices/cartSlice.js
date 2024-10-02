@@ -13,7 +13,7 @@ const initialState = {
   totalPrice: 0,
   error: '',
   loading: false,
-  selectedProduct: null,
+  selectedProduct: '',
 };
 
 const cartSlice = createSlice({

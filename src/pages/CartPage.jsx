@@ -23,6 +23,15 @@ const CartPage = () => {
   const navigate = useNavigate();
 
   const [selectedItems, setSelectedItems] = useState([]);
+  const handleSelectAll = () => {
+    if (allItemsSelected) {
+      setSelectedItems([]);
+    } else {
+      const allIds = cartItems.map(item => item._id);
+      setSelectedItems(allIds);
+    }
+  };
+
   const allItemsSelected =
     cartItems.length > 0 && selectedItems.length === cartItems.length;
 
@@ -69,15 +78,6 @@ const CartPage = () => {
         ? prevSelectedItems.filter(itemId => itemId !== id)
         : [...prevSelectedItems, id]
     );
-  };
-
-  const handleSelectAll = () => {
-    if (allItemsSelected) {
-      setSelectedItems([]);
-    } else {
-      const allIds = cartItems.map(item => item._id);
-      setSelectedItems(allIds);
-    }
   };
 
   const calculateTotal = () => {
