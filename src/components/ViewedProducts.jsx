@@ -51,7 +51,14 @@ function ViewedProducts() {
               className='bg-white shadow-md rounded-lg overflow-hidden flex items-center gap-4 no-underline'
             >
               <img
-                src={product?.productImagePath[0]}
+                src={
+                  product?.productImagePath[0].startsWith('http')
+                    ? product?.productImagePath[0]
+                    : `http://localhost:5000/${product?.productImagePath[0].replace(
+                        /\\/g,
+                        '/'
+                      )}`
+                }
                 alt={product?.productName}
                 className='w-16 h-24 object-cover'
               />
