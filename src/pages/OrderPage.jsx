@@ -47,9 +47,22 @@ function OrderPage() {
   const [voucher, setVoucher] = useState(0);
   const [ownVouchers, setOwnVouchers] = useState([]);
 
+  const [discountPrice, setDiscountPrice] = useState(0);
+
   const handleSelectDiscount = voucher => {
-    const discountPercentage = voucher.voucherId;
-    setVoucher(discountPercentage);
+    const selectedVoucher = voucher?.voucherId;
+
+    const totalPrice = calculateTotal();
+
+    let discountPrice = (totalPrice * selectedVoucher?.discountPercent) / 100;
+
+    if (discountPrice > selectedVoucher?.maxPriceDiscount * 1000) {
+      discountPrice = selectedVoucher?.maxPriceDiscount * 1000;
+    }
+
+    setDiscountPrice(discountPrice);
+
+    setVoucher(selectedVoucher);
     setModalOpen(false);
   };
 
@@ -176,7 +189,6 @@ function OrderPage() {
 
     fetchUserVouchers();
   }, []);
-  console.log(ownVouchers);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -531,10 +543,8 @@ function OrderPage() {
                   <div className='flex justify-between mt-2'>
                     <span className='text-gray-500'>Giá giảm:</span>
                     <span className='text-gray-900'>
-                      {voucher
-                        ? ToVietnamCurrencyFormat(
-                            (calculateTotal() * voucher.discountPercent) / 100
-                          )
+                      {discountPrice
+                        ? ToVietnamCurrencyFormat(discountPrice)
                         : 0}
                     </span>
                   </div>
@@ -542,9 +552,9 @@ function OrderPage() {
                     <span>Tổng cộng:</span>
                     <span className='text-gray-900'>
                       {ToVietnamCurrencyFormat(
-                        calculateTotal() +
-                          (selectedShippingMethod ? deliveryFee : 0) -
-                          (calculateTotal() * voucher.discountPercent) / 100
+                        calculateTotal() -
+                          discountPrice +
+                          (selectedShippingMethod ? deliveryFee : 0)
                       )}
                     </span>
                   </div>
