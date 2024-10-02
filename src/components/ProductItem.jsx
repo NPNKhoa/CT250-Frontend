@@ -11,7 +11,11 @@ const ProductItem = ({ imageUrl, name, price, productLink, discount }) => {
         {/* Điều chỉnh chiều cao theo kích thước màn hình */}
         <Link to={`/${productLink}`}>
           <img
-            src={imageUrl}
+            src={
+              imageUrl.startsWith('http')
+                ? imageUrl
+                : `http://localhost:5000/${imageUrl.replace(/\\/g, '/')}`
+            }
             alt={name}
             className='w-full h-full object-cover'
           />
