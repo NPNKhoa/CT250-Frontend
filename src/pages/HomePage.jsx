@@ -5,8 +5,9 @@ import ProductItem from '@components/ProductItem';
 
 import productService from '@services/product.service';
 import FeatureBoxes from '@components/FeatureBoxes';
-import SaleBannerComponent from '@components/SaleBannerComponent';
+// import SaleBannerComponent from '@components/SaleBannerComponent';
 import ProductList from '@components/ProductList';
+import VoucherList from '@components/HomePage/VoucherList';
 // import SaleOffComponent from '@components/SaleOffComponent';
 
 const HomePage = () => {
@@ -169,14 +170,24 @@ const HomePage = () => {
         </div>
       </section>
 
+      <section className='py-4'>
+        <h2 className='text-3xl font-bold text-center hover:text-primary mb-4'>
+          Voucher hot nhất
+        </h2>
+        <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[30vw] mx-auto'></span>
+        <div className='mx-auto px-4'>
+          <VoucherList />
+        </div>
+      </section>
+
       {/* Sale banner */}
-      <div className='container mx-auto px-4 py-6'>
+      {/* <div className='container mx-auto px-4 py-6'>
         <h2 className='text-3xl font-bold text-center mb-4 hover:text-primary'>
           Khuyến mãi cực lớn
         </h2>
         <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[30vw] mx-auto'></span>
         <SaleBannerComponent />
-      </div>
+      </div> */}
 
       {/* Product List */}
       <div className='container mx-auto px-4'>
