@@ -180,7 +180,10 @@ const ProductDetail = () => {
                 src={
                   String(currentImage).startsWith('http')
                     ? currentImage
-                    : `http://localhost:5000/${String(currentImage).replace(/\\/g, '/')}`
+                    : `http://localhost:5000/${String(currentImage).replace(
+                        /\\/g,
+                        '/'
+                      )}`
                 }
                 alt={products.productName}
                 className='w-96 h-96 object-contain'
@@ -194,7 +197,10 @@ const ProductDetail = () => {
                     src={
                       String(image).startsWith('http')
                         ? image
-                        : `http://localhost:5000/${String(image).replace(/\\/g, '/')}`
+                        : `http://localhost:5000/${String(image).replace(
+                            /\\/g,
+                            '/'
+                          )}`
                     }
                     alt={`Hình ảnh ${index + 1}`}
                     className={`w-20 h-24 cursor-pointer object-contain border rounded-lg
@@ -211,9 +217,6 @@ const ProductDetail = () => {
             <h1 className='text-xl sm:text-2xl lg:text-3xl font-bold mb-2'>
               {products.productName}
             </h1>
-            <p className='text-gray-600 mb-2 text-sm sm:text-base'>
-              Mã: VNB019090
-            </p>
 
             {/* Thương hiệu và tình trạng */}
             <p className='mb-2 text-sm sm:text-base'>
@@ -233,21 +236,29 @@ const ProductDetail = () => {
                 {products.price &&
                   ToVietnamCurrencyFormat(
                     products.price *
-                      ((100 - products.discount.discountPercent) / 100)
+                      ((100 - (products?.discount?.discountPercent || 0)) / 100)
                   )}
               </p>
               <p className='line-through text-gray-400 text-sm sm:text-base'>
-                Giá niêm yết:{' '}
-                {products.price && ToVietnamCurrencyFormat(products.price)}
+                {products?.discount && (
+                  <>
+                    Giá niêm yết:{' '}
+                    {products.price && ToVietnamCurrencyFormat(products.price)}
+                  </>
+                )}
               </p>
-              <p className=' text-white font-bold bg-primary p-1 rounded-xl text-sm sm:text-base'>
-                -{products.discount?.discountPercent}%
-              </p>
+              {products?.discount?.discountPercent && (
+                <p className=' text-white font-bold bg-primary p-1 rounded-xl text-sm sm:text-base'>
+                  -{products.discount?.discountPercent}%
+                </p>
+              )}
             </div>
-            <CountdownTimer
-              targetDate={products.discount?.discountExpiredDate}
-              label='Kết thúc trong:'
-            />
+            {products?.discount && (
+              <CountdownTimer
+                targetDate={products.discount?.discountExpiredDate}
+                label='Kết thúc trong:'
+              />
+            )}
 
             {(giftsData?.length > 0 || benefitsData?.length > 0) && (
               <div className='bg-gray-100 p-4 rounded-md border border-primary relative mt-10'>
