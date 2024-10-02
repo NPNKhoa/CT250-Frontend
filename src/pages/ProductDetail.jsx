@@ -178,9 +178,9 @@ const ProductDetail = () => {
             <div className='flex flex-col items-center p-2'>
               <img
                 src={
-                  currentImage.startsWith('http')
+                  String(currentImage).startsWith('http')
                     ? currentImage
-                    : `http://localhost:5000/${currentImage.replace(/\\/g, '/')}`
+                    : `http://localhost:5000/${String(currentImage).replace(/\\/g, '/')}`
                 }
                 alt={products.productName}
                 className='w-96 h-96 object-contain'
@@ -192,9 +192,9 @@ const ProductDetail = () => {
                   <img
                     key={index}
                     src={
-                      image.startsWith('http')
+                      String(image).startsWith('http')
                         ? image
-                        : `http://localhost:5000/${image.replace(/\\/g, '/')}`
+                        : `http://localhost:5000/${String(image).replace(/\\/g, '/')}`
                     }
                     alt={`Hình ảnh ${index + 1}`}
                     className={`w-20 h-24 cursor-pointer object-contain border rounded-lg
