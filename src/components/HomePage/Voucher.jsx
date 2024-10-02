@@ -16,7 +16,9 @@ const Voucher = ({
       const response = await voucherService.collect(voucherId);
 
       if (!response.error) {
-        toast.success(`Thu thập ${response?.data?.voucherId?.voucherName}`);
+        toast.success(
+          `Thu thập thành công ${response?.data?.voucherId?.voucherName}`
+        );
       }
     } catch (error) {
       console.log(error.message);
