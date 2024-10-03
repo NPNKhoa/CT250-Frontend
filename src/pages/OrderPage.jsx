@@ -455,7 +455,15 @@ function OrderPage() {
                       className='flex items-center space-x-4 py-2'
                     >
                       <img
-                        src={item.product.productImagePath?.[0] || ''}
+                        // src={item.product.productImagePath?.[0] || ''}
+                        src={
+                          String(item.product.productImagePath?.[0]).startsWith('http')
+                            ? item.product.productImagePath?.[0]
+                            : `http://localhost:5000/${String(item.product.productImagePath?.[0]).replace(
+                                /\\/g,
+                                '/'
+                              )}`
+                        }
                         alt={item.product.productName}
                         className='w-16 h-16 object-cover rounded-md'
                       />
