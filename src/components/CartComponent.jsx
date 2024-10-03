@@ -26,7 +26,15 @@ function Cart() {
           {cartItems.map(item => (
             <div key={item._id} className='flex items-center sm:mb-4 mb-2'>
               <img
-                src={item.product?.productImagePath?.[0] || ''}
+                // src={item.product?.productImagePath?.[0] || ''}
+                src={
+                  String(item.product.productImagePath?.[0]).startsWith('http')
+                    ? item.product.productImagePath?.[0]
+                    : `http://localhost:5000/${String(item.product.productImagePath?.[0]).replace(
+                        /\\/g,
+                        '/'
+                      )}`
+                }
                 alt={item.product?.productName}
                 className='w-16 mr-2'
               />
