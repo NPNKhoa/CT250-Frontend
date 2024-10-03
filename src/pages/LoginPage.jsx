@@ -79,13 +79,13 @@ const LoginPage = () => {
                 id={field}
                 value={credentials[field]}
                 onChange={handleChange}
-                placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+                placeholder={'Mật khẩu'}
                 className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary'
               />
             ) : (
               <input
                 type={field}
-                placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+                placeholder={'Email'}
                 required
                 id={field}
                 value={credentials[field]}

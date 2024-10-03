@@ -54,7 +54,11 @@ const SignUpPage = () => {
       } catch (error) {
         setLoading(false);
         console.log(error);
-        toast.error('Đăng ký thất bại!');
+        if (error.response && error.response.status === 409) {
+          toast.error('Email đã tồn tại!');
+        } else {
+          toast.error('Đăng ký thất bại!');
+        }
       } finally {
         setLoading(false);
       }
@@ -64,14 +68,14 @@ const SignUpPage = () => {
 
   const formFields = useMemo(
     () => [
-      { id: 'fullname', type: 'text', placeholder: 'Full Name' },
+      { id: 'fullname', type: 'text', placeholder: 'Tên đầy đủ' },
       { id: 'email', type: 'email', placeholder: 'Email' },
-      { id: 'phone', type: 'text', placeholder: 'Phone' },
-      { id: 'password', type: 'password', placeholder: 'Password' },
+      { id: 'phone', type: 'text', placeholder: 'Số điện thoại' },
+      { id: 'password', type: 'password', placeholder: 'Mật khẩu' },
       {
         id: 'confirmPassword',
         type: 'password',
-        placeholder: 'Confirm Password',
+        placeholder: 'Xác nhận mật khẩu',
       },
     ],
     []
