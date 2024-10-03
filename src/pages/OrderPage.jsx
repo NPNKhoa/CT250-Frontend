@@ -48,7 +48,6 @@ function OrderPage() {
   const [ownVouchers, setOwnVouchers] = useState([]);
 
   const [discountPrice, setDiscountPrice] = useState(0);
-
   const handleSelectDiscount = voucher => {
     const selectedVoucher = voucher?.voucherId;
 
