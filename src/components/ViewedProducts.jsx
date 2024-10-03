@@ -42,7 +42,7 @@ function ViewedProducts() {
   return (
     <div className='mx-auto px-4 border p-5 bg-white rounded-lg shadow-md'>
       <h2 className='text-2xl font-bold mb-4'>Sản phẩm đã xem</h2>
-      <div className='flex flex-col gap-4 justify-center items-center'>
+      <div className='flex flex-col gap-4 justify-center items-center '>
         {Array.isArray(products) &&
           products.map(product => (
             <Link
@@ -62,7 +62,7 @@ function ViewedProducts() {
                 alt={product?.productName}
                 className='w-16 h-24 object-cover'
               />
-              <div className='p-4'>
+              <div className='p-4 '>
                 <h3
                   className='text-sm font-medium line-clamp-3'
                   style={{
