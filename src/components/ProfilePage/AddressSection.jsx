@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import Button from '@mui/material/Button';
+import { Trash2, SquarePen } from 'lucide-react';
+
 import AddressFormDialog from '@components/ProfilePage/AddressFormDialog';
 import {
   getUserAddressThunk,
@@ -86,12 +87,12 @@ function AddressSection() {
                       <span className='text-red-500 font-bold '>Mặc định</span>
                     )}
                   </div>
-                  <div className='text-right'>
+                  <div className='text-right items-center'>
                     <button
                       className='text-blue-500 hover:underline'
                       onClick={() => handleClickOpen(index)}
                     >
-                      Cập nhật
+                      <SquarePen />
                     </button>
                     {!address.isDefault && (
                       <>
@@ -99,7 +100,7 @@ function AddressSection() {
                           className='ml-4 text-red-500 hover:underline'
                           onClick={() => handleDelete(index)}
                         >
-                          Xóa
+                          <Trash2 />
                         </button>
                         <button
                           className='block mt-2 text-gray-600 border border-gray-300 py-1 px-2 rounded'
