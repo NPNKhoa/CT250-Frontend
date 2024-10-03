@@ -59,7 +59,7 @@ function OrderPage() {
     if (discountPrice > selectedVoucher?.maxPriceDiscount * 1000) {
       discountPrice = selectedVoucher?.maxPriceDiscount * 1000;
     }
-
+    console.log(ownVouchers);
     setDiscountPrice(discountPrice);
 
     setVoucher(selectedVoucher);
@@ -512,37 +512,50 @@ function OrderPage() {
                         </button>
                       </div> */}
 
-                      <div className='italic text-gray text-sm mb-2'>
-                        Chỉ có thể chọn 1 mã giảm giá
+                      <div className='italic text-gray text-sm mb-2 flex justify-center'>
+                        {ownVouchers.length > 0
+                          ? 'Chỉ có thể chọn 1 mã giảm giá'
+                          : 'Bạn chưa có voucher nào'}
                       </div>
-                      <ul className='space-y-4 max-h-60 overflow-y-auto no-scrollbar'>
-                        {ownVouchers.map(voucher => (
-                          <li
-                            key={voucher._id} // Sử dụng _id của UserVoucher làm key
-                            onClick={() => handleSelectDiscount(voucher)}
-                            className='cursor-pointer transition-all duration-300 rounded-lg border p-2 flex items-center gap-4 mb-2 bg-gray-50 hover:bg-gray-100 shadow-md hover:shadow-lg w-full'
+                      {ownVouchers.length > 0 ? (
+                        <ul className='space-y-4 max-h-60 overflow-y-auto no-scrollbar'>
+                          {ownVouchers.map(voucher => (
+                            <li
+                              key={voucher._id} // Sử dụng _id của UserVoucher làm key
+                              onClick={() => handleSelectDiscount(voucher)}
+                              className='cursor-pointer transition-all duration-300 rounded-lg border p-2 flex items-center gap-4 mb-2 bg-gray-50 hover:bg-gray-100 shadow-md hover:shadow-lg w-full'
+                            >
+                              <div className='bg-primary p-3 rounded-full'>
+                                <Gift className='text-white text-xl' />
+                              </div>
+                              <div className='flex flex-col'>
+                                <p className='text-lg font-semibold text-gray-800'>
+                                  {voucher.voucherId.voucherName}{' '}
+                                </p>
+                                <p className='text-sm text-gray-500'>
+                                  Giảm {voucher.voucherId.discountPercent}%{' '}
+                                  <span className='italic'>
+                                    (Tối đa{' '}
+                                    {ToVietnamCurrencyFormat(
+                                      voucher.voucherId.maxPriceDiscount * 1000
+                                    )}
+                                    )
+                                  </span>
+                                </p>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <div className=' flex justify-center my-3 '>
+                          <button
+                            className='p-2 border bg-primary text-white w-[50%] rounded-xl flex justify-center'
+                            onClick={() => navigate('/')}
                           >
-                            <div className='bg-primary p-3 rounded-full'>
-                              <Gift className='text-white text-xl' />
-                            </div>
-                            <div className='flex flex-col'>
-                              <p className='text-lg font-semibold text-gray-800'>
-                                {voucher.voucherId.voucherName}{' '}
-                              </p>
-                              <p className='text-sm text-gray-500'>
-                                Giảm {voucher.voucherId.discountPercent}%{' '}
-                                <span className='italic'>
-                                  (Tối đa{' '}
-                                  {ToVietnamCurrencyFormat(
-                                    voucher.voucherId.maxPriceDiscount * 1000
-                                  )}
-                                  )
-                                </span>
-                              </p>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
+                            Thu thập ngay
+                          </button>
+                        </div>
+                      )}
 
                       <button
                         onClick={() => setModalOpen(false)}

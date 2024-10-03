@@ -5,8 +5,6 @@ import ProductItem from '@components/ProductItem';
 import Filter from '@components/Filter';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
 import PaginationComponent from '@components/common/PaginationComponent';
-import { CircularProgress } from '@mui/material';
-
 const SafeOffPage = () => {
   const location = useLocation();
   const query = useMemo(
@@ -122,7 +120,7 @@ const SafeOffPage = () => {
         <div className='w-full lg:w-4/5 ml-2'>
           {loading ? (
             <div className='w-full h-full flex justify-center items-center'>
-              <CircularProgress />
+              <div className='w-24 h-24 border-8 border-primary border-dotted rounded-full animate-spin'></div>
             </div>
           ) : (
             <>

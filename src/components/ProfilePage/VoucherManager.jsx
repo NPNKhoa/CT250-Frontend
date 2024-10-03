@@ -3,10 +3,12 @@ import { Gift } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { LinearProgress, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const VoucherManager = () => {
   const [loading, setLoading] = useState(false);
   const [ownVouchers, setOwnVouchers] = useState([]);
+  const navigate = useNavigate();
 
   // Fetch danh sách vouchers của người dùng
   useEffect(() => {
@@ -36,6 +38,14 @@ const VoucherManager = () => {
       <div className='p-6 bg-white rounded-lg shadow-md'>
         <h1 className='text-2xl font-bold mb-4'>Kho Vouchers của bạn</h1>
         <p className='text-gray-500'>Bạn chưa có voucher nào.</p>
+        <div className=' flex justify-center my-3 '>
+          <button
+            className='p-2 border bg-primary text-white w-[20%] rounded-xl'
+            onClick={() => navigate('/')}
+          >
+            Thu thập ngay
+          </button>
+        </div>
       </div>
     );
   }
@@ -45,7 +55,7 @@ const VoucherManager = () => {
       <h1 className='text-2xl font-bold mb-4'>Kho Vouchers của bạn</h1>
 
       {/* Danh sách voucher */}
-      <ul className=' max-h-60 overflow-y-auto no-scrollbar grid grid-cols-2 gap-5'>
+      <ul className='  grid grid-cols-2 gap-5'>
         {ownVouchers.map(voucher => (
           <div
             key={voucher._id}
