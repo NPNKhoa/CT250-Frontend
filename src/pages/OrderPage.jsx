@@ -34,7 +34,7 @@ function OrderPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const selectedProductIds = useSelector(state => state.cart.selectedProduct);
-
+  
   const [productItems, setProductItems] = useState([]);
 
   const [shippingMethods, setShippingMethods] = useState([]);
