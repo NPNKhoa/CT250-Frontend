@@ -142,7 +142,15 @@ const CartPage = () => {
                       </td>
                       <td className='flex items-center py-2 px-4'>
                         <img
-                          src={item.product.productImagePath?.[0] || ''}
+                          // src={item.product.productImagePath?.[0] || ''}
+                          src={
+                            String(item.product.productImagePath?.[0]).startsWith('http')
+                              ? item.product.productImagePath?.[0]
+                              : `http://localhost:5000/${String(item.product.productImagePath?.[0]).replace(
+                                  /\\/g,
+                                  '/'
+                                )}`
+                          }
                           alt={item.product.productName}
                           className='w-16 h-16 sm:w-20 sm:h-20 object-cover rounded mr-4'
                         />
