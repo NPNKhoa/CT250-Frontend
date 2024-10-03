@@ -55,6 +55,7 @@ const SearchPage = () => {
               name={product.productName}
               price={product.price}
               productLink={`products/detail/${product._id}`}
+              discount={product.discountDetails?.discountPercent}
             />
           ))}
         <div className='col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-5 mt-4 flex justify-center'>
