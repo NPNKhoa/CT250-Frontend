@@ -99,6 +99,7 @@ const CartPage = () => {
       return;
     }
     dispatch(setSelectedProduct(selectedItems));
+    localStorage.setItem('selectedProductIds', JSON.stringify(selectedItems));
     setTimeout(() => navigate('/order'), 1000);
   };
 
@@ -144,12 +145,13 @@ const CartPage = () => {
                         <img
                           // src={item.product.productImagePath?.[0] || ''}
                           src={
-                            String(item.product.productImagePath?.[0]).startsWith('http')
+                            String(
+                              item.product.productImagePath?.[0]
+                            ).startsWith('http')
                               ? item.product.productImagePath?.[0]
-                              : `http://localhost:5000/${String(item.product.productImagePath?.[0]).replace(
-                                  /\\/g,
-                                  '/'
-                                )}`
+                              : `http://localhost:5000/${String(
+                                  item.product.productImagePath?.[0]
+                                ).replace(/\\/g, '/')}`
                           }
                           alt={item.product.productName}
                           className='w-16 h-16 sm:w-20 sm:h-20 object-cover rounded mr-4'
