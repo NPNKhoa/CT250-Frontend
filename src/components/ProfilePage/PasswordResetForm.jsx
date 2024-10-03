@@ -54,6 +54,12 @@ function PasswordResetForm() {
     if (name === 'confirmPassword') setConfirmPassword(value);
   };
 
+  const passwordFieldLabels = {
+    currentPassword: 'Mật khẩu hiện tại',
+    newPassword: 'Mật khẩu mới',
+    confirmPassword: 'Xác nhận mật khẩu',
+  };
+
   return (
     <form onSubmit={handleSubmitPasswordReset} className=''>
       {['currentPassword', 'newPassword', 'confirmPassword'].map(field => (
@@ -62,9 +68,7 @@ function PasswordResetForm() {
             htmlFor={field}
             className='block text-gray-700 text-sm font-bold mb-2'
           >
-            {field.charAt(0).toUpperCase() +
-              field.slice(1).replace(/([A-Z])/g, ' $1')}
-            :
+            {passwordFieldLabels[field]}:
           </label>
 
           <PasswordInput
