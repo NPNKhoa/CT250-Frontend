@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCredentials } from '@redux/slices/authSlice';
 import { logoutThunk } from '@redux/thunk/authThunk';
 import { getCartByUser } from '@redux/thunk/cartThunk';
 import { getLoggedInUser } from '@redux/thunk/userThunk';
 import NavBar from '@components/NavBar';
-import LogoImg from '@assets/logo.svg';
 import SearchComponent from '@components/SearchComponent';
 import CartComponent from '@components/CartComponent';
 import SearchIcon from '@mui/icons-material/Search';
@@ -21,6 +20,7 @@ import {
   PersonSearchRounded as PersonSearchRoundedIcon,
   PhoneCallbackSharp as PhoneCallbackSharpIcon,
 } from '@mui/icons-material';
+import { getCurrentConfigs } from '@redux/thunk/systemConfig';
 
 // Custom hook for handling modal states
 const useModalState = (initialState = false) => {
@@ -46,6 +46,9 @@ const Header = () => {
   const cartItems = cart?.cart?.cartItems || [];
   const user = useSelector(state => state.auth.authUser);
   const userExist = useSelector(state => state.users.user);
+  const currentConfigs = useSelector(
+    state => state.systemConfigs.currentConfigs
+  );
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
@@ -61,6 +64,8 @@ const Header = () => {
       dispatch(getLoggedInUser(accessToken));
       dispatch(getCartByUser(accessToken));
     }
+
+    dispatch(getCurrentConfigs());
   }, [dispatch]);
 
   const handleLogout = () => {
@@ -100,7 +105,7 @@ const Header = () => {
             <div className='px-6 py-3 mx-auto'>
               <Link to='/'>
                 <img
-                  src={LogoImg}
+                  src={`http://localhost:5000/${currentConfigs?.shopLogoImgPath}`}
                   alt='Logo'
                   className='w-[40px] sm:w-[60px]'
                 />
