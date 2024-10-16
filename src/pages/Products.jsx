@@ -8,6 +8,7 @@ import Filter from '@components/Filter';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
 import PaginationComponent from '@components/common/PaginationComponent';
 import { CircularProgress } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 const Products = () => {
   const location = useLocation();
@@ -91,18 +92,38 @@ const Products = () => {
     setIsDesc(value === 'desc' ? 'true' : 'false');
   };
 
-  const PriceOptions = [
-    { label: 'Giá dưới 500.000đ', value: 'under-500k', min: 0, max: 500000 },
-    {
-      label: '500.000đ - 1 triệu',
-      value: '500k-1m',
-      min: 500000,
-      max: 1000000,
-    },
-    { label: '1 - 2 triệu', value: '1m-2m', min: 1000000, max: 2000000 },
-    { label: '2 - 3 triệu', value: '2m-3m', min: 2000000, max: 3000000 },
-    { label: 'Giá trên 3 triệu', value: 'above-3m', min: 3000000, max: null },
-  ];
+  const currentConfigsData = useSelector(state => state.systemConfigs);
+
+  const PriceOptions = currentConfigsData?.currentConfigs?.shopPriceFilter?.map((filter) => {
+    let label = '';
+    if (filter.toPrice === null) {
+      label = `Giá trên ${filter.fromPrice.toLocaleString('vi-VN')}đ`;
+    } else if (filter.fromPrice === 0 || filter.fromPrice === null) {
+      label = `Giá dưới ${filter.toPrice.toLocaleString('vi-VN')}đ`;
+    } else {
+      label = `${filter.fromPrice.toLocaleString('vi-VN')}đ - ${filter.toPrice.toLocaleString('vi-VN')}đ`;
+    }
+  
+    return {
+      label: label,
+      value: `${filter.fromPrice}-${filter.toPrice || 'above'}`,
+      min: filter.fromPrice,
+      max: filter.toPrice
+    };
+  });
+
+  // const PriceOptions = [
+  //   { label: 'Giá dưới 500.000đ', value: 'under-500k', min: 0, max: 500000 },
+  //   {
+  //     label: '500.000đ - 1 triệu',
+  //     value: '500k-1m',
+  //     min: 500000,
+  //     max: 1000000,
+  //   },
+  //   { label: '1 - 2 triệu', value: '1m-2m', min: 1000000, max: 2000000 },
+  //   { label: '2 - 3 triệu', value: '2m-3m', min: 2000000, max: 3000000 },
+  //   { label: 'Giá trên 3 triệu', value: 'above-3m', min: 3000000, max: null },
+  // ];
 
   return (
     <>
