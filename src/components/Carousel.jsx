@@ -9,7 +9,7 @@ const Carousel = () => {
   );
   const banners = systemConfigs.bannerImgPath;
 
-  const totalSlides = banners.length;
+  const totalSlides = banners?.length;
 
   const changeSlide = direction => {
     setCurrentSlide(prevSlide => {
@@ -31,7 +31,7 @@ const Carousel = () => {
   }, [totalSlides, changeSlide]); // Thêm totalSlides vào dependencies
 
   useEffect(() => {
-    if (banners.length > 0) {
+    if (banners?.length > 0) {
       setCurrentSlide(0); // Đặt lại khi banners thay đổi
     }
   }, [banners]);

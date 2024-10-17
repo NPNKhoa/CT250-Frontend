@@ -22,7 +22,7 @@ const ProductItem = ({ imageUrl, name, price, productLink, discount }) => {
         </Link>
       </div>
 
-      <div className='p-4 flex flex-col justify-between h-28 md:h-32'>
+      <div className='p-4 mt-5  flex flex-col justify-between h-28 md:h-32'>
         {/* Điều chỉnh padding và chiều cao theo kích thước màn hình */}
         <Link to={`/${productLink}`}>
           <h3 className='text-xs md:text-base text-gray-800 sm:line-clamp-2 line-clamp-3'>
