@@ -1,8 +1,5 @@
-import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
-import WhatshotSharpIcon from '@mui/icons-material/WhatshotSharp';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import MicNoneIcon from '@mui/icons-material/MicNone';
@@ -53,13 +50,12 @@ export default function SearchPopover() {
         navigate(
           `/search?searchString=${encodeURIComponent(queryRef.current)}`
         );
-        setQuery(''); // Xóa giá trị của input sau khi tìm kiếm
+        setQuery('');
       }
     };
 
     recognitionRef.current = recognition;
 
-    // Cleanup khi component unmount
     return () => {
       recognition.stop();
     };
@@ -73,43 +69,27 @@ export default function SearchPopover() {
     }
   };
 
-  // const handleClose = () => {
-  //   setAnchorEl(null);
-  // };
-
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
-    inputRef.current?.focus(); // Tự động focus vào input khi click
+    inputRef.current?.focus();
   };
 
   const handleSubmit = event => {
     event.preventDefault();
-    setQuery(inputRef.current.value.trim()); // Lấy giá trị tìm kiếm
+    setQuery(inputRef.current.value.trim());
     if (query) {
-      navigate(`/search?searchString=${encodeURIComponent(query)}`); // Chuyển hướng đến trang search với query
-      setQuery(''); // Xóa giá trị tìm kiếm sau khi điều hướng
+      navigate(`/search?searchString=${encodeURIComponent(query)}`);
+      setQuery('');
     }
   };
 
   const open = Boolean(anchorEl);
-  // const id = open ? 'search-popover' : undefined;
-
-  // const categories = [
-  //   { label: 'Vợt cầu lông', href: '/products/vot-cau-long' },
-  //   { label: 'Cước cầu lông', href: '/products/cuoc-cau-long' },
-  //   { label: 'Vợt tenis', href: '/products/vot-tenis' },
-  //   { label: 'Minh Tu deptrai', href: '/profile/minh-tu' },
-  // ];
-
-  // const products = [
-  //   // Các sản phẩm như bạn đã cung cấp
-  // ];
 
   useEffect(() => {
     if (open && inputRef.current) {
       setTimeout(() => {
         inputRef.current.focus();
-      }, 100); // Thử tăng delay để đảm bảo focus sau khi Popover hiển thị
+      }, 100);
     }
   }, [open]);
 
@@ -149,81 +129,6 @@ export default function SearchPopover() {
           </div>
         </div>
       </form>
-
-      {/* <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        PaperProps={{
-          style: {
-            width: '100%', // Chiếm toàn bộ chiều rộng màn hình nhỏ
-            maxWidth: '80vw', // Đặt chiều rộng tối đa
-            maxHeight: '80vh', // Giới hạn chiều cao
-            overflowY: 'auto', // Thêm thanh cuộn nếu nội dung vượt quá chiều cao
-            padding: '1rem', // Thêm padding để nội dung không bị sát viền
-          },
-        }}
-      >
-        <Typography sx={{ p: 2 }}>
-          <div className='text-lg font-semibold border-b-2 flex items-center gap-2 mb-2'>
-            <WhatshotSharpIcon className='text-primary' />
-            <h1>Tìm kiếm nhiều nhất</h1>
-          </div>
-
-          <div className='flex flex-wrap space-x-2 mb-4'>
-            {categories.map(category => (
-              <Link
-                key={category.label}
-                to={category.href}
-                onClick={() => setAnchorEl(null)}
-                className='bg-gray-200 hover:bg-gray-300 text-xs mt-2 text-gray-800 font-bold p-1 rounded'
-              >
-                {category.label}
-              </Link>
-            ))}
-          </div>
-
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
-            {products.map(product => (
-              <div
-                key={product.id}
-                className='bg-white shadow-md rounded-lg overflow-hidden flex items-center'
-              >
-                <Link to={product.href}>
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className='w-16 object-cover'
-                  />
-                </Link>
-
-                <div className='p-2'>
-                  <Link to={product.href}>
-                    <h3 className='text-sm font-semibold hover:text-primary'>
-                      {product.name}
-                    </h3>
-                  </Link>
-                  <p className='text-primary'>
-                    {product.price.toLocaleString('vi-VN', {
-                      style: 'currency',
-                      currency: 'VND',
-                    })}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Typography>
-      </Popover> */}
     </div>
   );
 }

@@ -7,7 +7,7 @@ const Carousel = () => {
   const systemConfigs = useSelector(
     state => state.systemConfigs.currentConfigs
   );
-  const banners = systemConfigs.bannerImgPath;
+  const banners = systemConfigs?.banners;
 
   const totalSlides = banners.length;
 
@@ -49,7 +49,7 @@ const Carousel = () => {
             >
               <Link to={slide?.link} rel='noopener noreferrer'>
                 <img
-                  src={`http://localhost:5000/${slide}`} // Đảm bảo đường dẫn đúng
+                  src={`http://localhost:5000/${slide?.bannerImgPath}`}
                   alt={`Slide ${index + 1}`}
                   className='w-full object-cover'
                 />
