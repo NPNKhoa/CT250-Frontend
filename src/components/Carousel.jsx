@@ -33,7 +33,7 @@ const Carousel = () => {
   const systemConfigs = useSelector(
     state => state.systemConfigs.currentConfigs
   );
-  const banners = systemConfigs.bannerImgPath;
+  const banners = systemConfigs?.banners;
 
   const changeSlide = direction => {
     setCurrentSlide(
@@ -66,7 +66,7 @@ const Carousel = () => {
             >
               <Link to={slide?.link} rel='noopener noreferrer'>
                 <img
-                  src={`http://localhost:5000/${slide}`}
+                  src={`http://localhost:5000/${slide?.bannerImgPath}`}
                   alt={`Slide ${index + 1}`}
                   className='w-full  object-cover'
                 />
