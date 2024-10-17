@@ -128,6 +128,14 @@ function UserProfileForm() {
     dispatch(getLoggedInUser(accessToken));
   };
 
+  const fieldLabels = {
+    email: 'Email',
+    fullName: 'Họ và tên',
+    phoneNumber: 'Số điện thoại',
+    gender: 'Giới tính',
+    dateOfBirth: 'Ngày sinh',
+  };
+
   return (
     <form onSubmit={handleSubmit} className=''>
       <div className='flex items-center mb-4'>
@@ -169,9 +177,7 @@ function UserProfileForm() {
               htmlFor={field}
               className='block text-gray-700 text-sm font-bold mb-2'
             >
-              {field.charAt(0).toUpperCase() +
-                field.slice(1).replace(/([A-Z])/g, ' $1')}
-              :
+              {fieldLabels[field]}:
             </label>
             {field === 'gender' ? (
               <select

@@ -1,44 +1,21 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
-import Banner_1 from '@assets/SaleBanner/30_1727123673.webp';
-import Banner_2 from '@assets/SaleBanner/thiet-ke-chua-co-ten-12_1727137763.webp';
-import Banner_3 from '@assets/SaleBanner/banner-sale-12_1695182579.webp';
-import Banner_4 from '@assets/SaleBanner/1000z-launch-website-banner_1695177885.webp';
 import { useSelector } from 'react-redux';
-
-const slides = [
-  {
-    image: Banner_1,
-    link: '#',
-  },
-  {
-    image: Banner_2,
-    link: '#',
-  },
-  {
-    image: Banner_3,
-    link: '#',
-  },
-  {
-    image: Banner_4,
-    link: '#',
-  },
-];
 
 const Carousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const totalSlides = slides.length;
-
   const systemConfigs = useSelector(
     state => state.systemConfigs.currentConfigs
   );
   const banners = systemConfigs?.banners;
 
+  const totalSlides = banners.length;
+
   const changeSlide = direction => {
-    setCurrentSlide(
-      prevSlide => (prevSlide + direction + totalSlides) % totalSlides
-    );
+    setCurrentSlide(prevSlide => {
+      const newSlide = (prevSlide + direction + totalSlides) % totalSlides;
+      return newSlide < 0 ? totalSlides - 1 : newSlide; // Bảo đảm không bị âm
+    });
   };
 
   const goToSlide = index => {
@@ -51,7 +28,13 @@ const Carousel = () => {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [totalSlides, changeSlide]); // Thêm totalSlides vào dependencies
+
+  useEffect(() => {
+    if (banners.length > 0) {
+      setCurrentSlide(0); // Đặt lại khi banners thay đổi
+    }
+  }, [banners]);
 
   return (
     <div className='relative w-full overflow-hidden'>
@@ -68,7 +51,7 @@ const Carousel = () => {
                 <img
                   src={`http://localhost:5000/${slide?.bannerImgPath}`}
                   alt={`Slide ${index + 1}`}
-                  className='w-full  object-cover'
+                  className='w-full object-cover'
                 />
               </Link>
             </div>

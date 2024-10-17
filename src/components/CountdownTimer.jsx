@@ -29,7 +29,7 @@ const CountdownTimer = ({ targetDate, label }) => {
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
       setLoading(false);
-    }, 1000);
+    }, 200);
 
     return () => clearInterval(timer);
   }, [targetDate]);

@@ -5,8 +5,7 @@ import ProductItem from '@components/ProductItem';
 import Filter from '@components/Filter';
 import BreadcrumbsComponent from '@components/common/Breadcrumb';
 import PaginationComponent from '@components/common/PaginationComponent';
-import { CircularProgress } from '@mui/material';
-
+import { useSelector } from 'react-redux';
 const SafeOffPage = () => {
   const location = useLocation();
   const query = useMemo(
@@ -94,11 +93,34 @@ const SafeOffPage = () => {
     setSelectedDiscount(value);
   };
 
-  const DiscountOptions = [
-    { label: 'Giảm giá dưới 30%', value: 'under-30', min: 0, max: 30 },
-    { label: 'Giảm giá từ 30% đến 50%', value: '30-50', min: 30, max: 50 },
-    { label: 'Giảm giá trên 50%', value: 'above-50', min: 50, max: null },
-  ];
+  const currentConfigsData = useSelector(state => state.systemConfigs);
+
+  console.log(currentConfigsData);
+
+  const DiscountOptions =
+    currentConfigsData?.currentConfigs?.shopPercentFilter?.map(filter => {
+      let label = '';
+      if (filter.toValue === null) {
+        label = `Giảm trên ${filter.fromValue}%`;
+      } else if (filter.fromValue === 0 || filter.fromValue === null) {
+        label = `Giảm dưới ${filter.toValue}%`;
+      } else {
+        label = `${filter.fromValue}% - ${filter.toValue}%`;
+      }
+
+      return {
+        label: label,
+        value: `${filter.fromValue}-${filter.toValue || 'above'}`,
+        min: filter.fromValue,
+        max: filter.toValue,
+      };
+    });
+
+  // const DiscountOptions = [
+  //   { label: 'Giảm giá dưới 30%', value: 'under-30', min: 0, max: 30 },
+  //   { label: 'Giảm giá từ 30% đến 50%', value: '30-50', min: 30, max: 50 },
+  //   { label: 'Giảm giá trên 50%', value: 'above-50', min: 50, max: null },
+  // ];
 
   return (
     <>
@@ -122,7 +144,7 @@ const SafeOffPage = () => {
         <div className='w-full lg:w-4/5 ml-2'>
           {loading ? (
             <div className='w-full h-full flex justify-center items-center'>
-              <CircularProgress />
+              <div className='w-24 h-24 border-8 border-primary border-dotted rounded-full animate-spin'></div>
             </div>
           ) : (
             <>
@@ -156,12 +178,22 @@ const SafeOffPage = () => {
                         imageUrl={product.productImagePath[0]}
                         name={product.productName}
                         price={
-                          product.price *
-                          ((100 - product.discountDetails.discountPercent) /
-                            100)
+                          new Date(
+                            product.discountDetails.discountExpiredDate
+                          ) > new Date()
+                            ? product.price *
+                              ((100 - product.discountDetails.discountPercent) /
+                                100) // Hiển thị giá đã giảm nếu chưa hết hạn
+                            : product.price // Hiển thị giá gốc nếu đã hết hạn
                         }
                         productLink={`products/detail/${product._id}`}
-                        discount={product.discountDetails.discountPercent}
+                        discount={
+                          new Date(
+                            product.discountDetails.discountExpiredDate
+                          ) > new Date()
+                            ? product.discountDetails.discountPercent
+                            : null // Không hiển thị phần trăm giảm giá nếu đã hết hạn
+                        }
                       />
                     ))}
                   </div>
