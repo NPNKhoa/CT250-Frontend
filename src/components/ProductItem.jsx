@@ -33,9 +33,11 @@ const ProductItem = ({ imageUrl, name, price, productLink, discount }) => {
           <p className='text-primary font-bold text-sm md:text-lg'>
             {formattedPrice}
           </p>
-          <p className=' text-white font-bold bg-primary px-2 py-1 rounded-xl text-sm sm:text-base'>
-            -{discount}%
-          </p>
+          {discount !== null && discount !== undefined && (
+            <p className='text-white font-bold bg-primary px-2 py-1 rounded-xl text-sm sm:text-base'>
+              -{discount}%
+            </p>
+          )}
         </div>
       </div>
     </div>

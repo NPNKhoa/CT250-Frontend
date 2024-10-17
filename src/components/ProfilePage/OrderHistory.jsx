@@ -174,7 +174,7 @@ function OrderHistory() {
                       <td className='py-2 px-4 border-b text-center'>
                         <button
                           onClick={() => handleViewDetails(order)}
-                          className='px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700'
+                          className='px-3 py-1 bg-primary text-white rounded hover:bg-hover-primary'
                         >
                           Xem chi tiết
                         </button>
@@ -261,12 +261,13 @@ function OrderHistory() {
                     <img
                       // src={item.product.productImagePath?.[0] || ''}
                       src={
-                        String(item.product.productImagePath?.[0]).startsWith('http')
+                        String(item.product.productImagePath?.[0]).startsWith(
+                          'http'
+                        )
                           ? item.product.productImagePath?.[0]
-                          : `http://localhost:5000/${String(item.product.productImagePath?.[0]).replace(
-                              /\\/g,
-                              '/'
-                            )}`
+                          : `http://localhost:5000/${String(
+                              item.product.productImagePath?.[0]
+                            ).replace(/\\/g, '/')}`
                       }
                       alt={item.product.productName}
                       className='w-16 h-16 object-cover rounded-md'

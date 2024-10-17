@@ -34,7 +34,7 @@ function OrderPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const selectedProductIds = useSelector(state => state.cart.selectedProduct);
-  
+
   const [productItems, setProductItems] = useState([]);
 
   const [shippingMethods, setShippingMethods] = useState([]);
@@ -271,14 +271,16 @@ function OrderPage() {
   };
 
   const calculateTotal = () => {
-    return productItems.reduce(
-      (total, item) =>
-        total +
-        item.itemPrice *
-          ((100 - item.product.discount?.discountPercent) / 100) *
-          item.quantity,
-      0
-    );
+    return productItems.reduce((total, item) => {
+      const isDiscountActive =
+        new Date(item.product.discount?.discountExpiredDate) > new Date();
+      const itemPrice = isDiscountActive
+        ? item.itemPrice *
+          ((100 - (item.product.discount?.discountPercent || 0)) / 100)
+        : item.itemPrice;
+
+      return total + itemPrice * item.quantity;
+    }, 0);
   };
 
   const breadcrumbs = [
@@ -306,6 +308,18 @@ function OrderPage() {
   }
 
   console.log(maxDiscountPrice);
+  console.log(productItems);
+
+  const giftsData = [
+    {
+      id: 1,
+      name: 'Túi xách thời trang',
+      price: 150000,
+      discountPrice: 0, // Giá giảm
+      image:
+        'https://cdn.shopvnb.com/uploads/gallery/tui-cau-long-victor-br2101-c-den-chinh-hang-8.webp', // Thay thế bằng URL hình ảnh thực tế
+    },
+  ];
 
   return (
     <>
@@ -449,38 +463,72 @@ function OrderPage() {
                 </h2>
                 <div className='mt-4'>
                   {productItems.map(item => (
-                    <div
-                      key={item.id}
-                      className='flex items-center space-x-4 py-2'
-                    >
-                      <img
-                        // src={item.product.productImagePath?.[0] || ''}
-                        src={
-                          String(item.product.productImagePath?.[0]).startsWith('http')
-                            ? item.product.productImagePath?.[0]
-                            : `http://localhost:5000/${String(item.product.productImagePath?.[0]).replace(
-                                /\\/g,
-                                '/'
-                              )}`
-                        }
-                        alt={item.product.productName}
-                        className='w-16 h-16 object-cover rounded-md'
-                      />
-                      <div>
-                        <h3 className='text-gray-900'>
-                          {item.product.productName}
-                        </h3>
-                        <p className='text-gray-500'>
-                          Số lượng: {item.quantity}
-                        </p>
-                        <p>
-                          {ToVietnamCurrencyFormat(
-                            item.itemPrice *
-                              ((100 - item.product.discount?.discountPercent) /
-                                100) *
-                              item.quantity
-                          )}
-                        </p>
+                    <div key={item.id} className='flex flex-col '>
+                      <div className='flex items-center space-x-4 py-2'>
+                        <img
+                          src={
+                            String(
+                              item.product.productImagePath?.[0]
+                            ).startsWith('http')
+                              ? item.product.productImagePath?.[0]
+                              : `http://localhost:5000/${String(
+                                  item.product.productImagePath?.[0]
+                                ).replace(/\\/g, '/')}`
+                          }
+                          alt={item.product.productName}
+                          className='w-16 h-16 object-cover rounded-md'
+                        />{' '}
+                        <div>
+                          <h3 className='text-gray-900'>
+                            {item.product.productName}
+                          </h3>
+                          <p className='text-gray-500'>
+                            Số lượng: {item.quantity}
+                          </p>
+                          <p>
+                            {ToVietnamCurrencyFormat(
+                              new Date(
+                                item.product.discount?.discountExpiredDate
+                              ) > new Date()
+                                ? item.itemPrice *
+                                    ((100 -
+                                      (item.product.discount?.discountPercent ||
+                                        0)) /
+                                      100) *
+                                    item.quantity
+                                : item.itemPrice * item.quantity
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                      {/* Hiển thị quà tặng */}
+                      <div className='mt-2'>
+                        <h4 className='text-lg font-semibold text-gray-800'>
+                          Quà tặng kèm:
+                        </h4>
+                        <ul className='list-disc pl-2'>
+                          {giftsData.map(gift => (
+                            <li
+                              key={gift.id}
+                              className='flex items-center text-gray-600'
+                            >
+                              <img
+                                src={gift.image} // Hình ảnh quà tặng
+                                alt={gift.name}
+                                className='w-10 h-10 object-cover rounded-md mr-2'
+                              />
+                              <span>
+                                {gift.name} (trị giá:{' '}
+                                {ToVietnamCurrencyFormat(gift.price)})
+                              </span>
+                              <span className='ml-2 text-red-500'>
+                                Giảm còn:{' '}
+                                {ToVietnamCurrencyFormat(gift.discountPrice)}{' '}
+                                {/* Hiển thị giá giảm */}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     </div>
                   ))}
