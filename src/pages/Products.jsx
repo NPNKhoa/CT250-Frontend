@@ -194,19 +194,19 @@ const Products = () => {
                         name={product.productName}
                         price={
                           new Date(
-                            product.discountDetails.discountExpiredDate
+                            product?.discountDetails?.discountExpiredDate
                           ) > new Date()
                             ? product.price *
-                              ((100 - product.discountDetails.discountPercent) /
+                              ((100 - product?.discountDetails?.discountPercent) /
                                 100) // Hiển thị giá đã giảm nếu chưa hết hạn
                             : product.price // Hiển thị giá gốc nếu đã hết hạn
                         }
                         productLink={`products/detail/${product._id}`}
                         discount={
                           new Date(
-                            product.discountDetails.discountExpiredDate
+                            product?.discountDetails?.discountExpiredDate
                           ) > new Date()
-                            ? product.discountDetails.discountPercent
+                            ? product?.discountDetails?.discountPercent
                             : null // Không hiển thị phần trăm giảm giá nếu đã hết hạn
                         }
                       />
