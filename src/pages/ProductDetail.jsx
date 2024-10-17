@@ -234,105 +234,115 @@ const ProductDetail = () => {
             <div className='flex flex-row items-center gap-1 sm:gap-3 mb-1'>
               <p className='text-xl sm:text-2xl font-bold text-primary'>
                 {products.price &&
-                  ToVietnamCurrencyFormat(
-                    products.price *
-                      ((100 - (products?.discount?.discountPercent || 0)) / 100)
-                  )}
+                  (products?.discount?.discountExpiredDate &&
+                  new Date(products.discount.discountExpiredDate) > new Date()
+                    ? ToVietnamCurrencyFormat(
+                        products.price *
+                          ((100 - products.discount.discountPercent) / 100)
+                      )
+                    : ToVietnamCurrencyFormat(products.price))}
               </p>
-              <p className='line-through text-gray-400 text-sm sm:text-base'>
-                {products?.discount && (
-                  <>
+
+              {products?.discount &&
+                new Date(products?.discount?.discountExpiredDate) >
+                  new Date() && (
+                  <p className='line-through text-gray-400 text-sm sm:text-base'>
                     Giá niêm yết:{' '}
                     {products.price && ToVietnamCurrencyFormat(products.price)}
-                  </>
+                  </p>
                 )}
-              </p>
-              {products?.discount?.discountPercent && (
-                <p className=' text-white font-bold bg-primary p-1 rounded-xl text-sm sm:text-base'>
-                  -{products.discount?.discountPercent}%
-                </p>
-              )}
+
+              {products?.discount?.discountPercent &&
+                new Date(products.discount?.discountExpiredDate) >
+                  new Date() && (
+                  <p className='text-white font-bold bg-primary p-1 rounded-xl text-sm sm:text-base'>
+                    -{products.discount?.discountPercent}%
+                  </p>
+                )}
             </div>
-            {products?.discount && (
-              <CountdownTimer
-                targetDate={products.discount?.discountExpiredDate}
-                label='Kết thúc trong:'
-              />
-            )}
+            {products?.discount &&
+              new Date(products.discount?.discountExpiredDate) > new Date() && (
+                <CountdownTimer
+                  targetDate={products.discount?.discountExpiredDate}
+                  label='Kết thúc trong:'
+                />
+              )}
 
-            {(giftsData?.length > 0 || benefitsData?.length > 0) && (
-              <div className='bg-gray-100 p-4 rounded-md border border-primary relative mt-10'>
-                <div className='absolute -top-8 border px-3 py-1 rounded-lg bg-gray-100 border-primary'>
-                  <h2 className='text-lg sm:text-xl font-bold text-primary flex flex-col items-left gap-1'>
-                    <div className=''>
-                      <CardGiftcardIcon /> Ưu đãi{' '}
-                    </div>
-                    <span className='text-sm'>
-                      (từ{' '}
-                      {new Date(
-                        products.promotion?.promotionStartDate
-                      ).toLocaleDateString('vi-VN')}{' '}
-                      đến{' '}
-                      {new Date(
-                        products.promotion?.promotionExpiredDate
-                      ).toLocaleDateString('vi-VN')}
-                      )
-                    </span>
-                  </h2>
-                </div>
+            {new Date(products?.promotion?.promotionExpiredDate) > new Date() &&
+              (giftsData?.length > 0 || benefitsData?.length > 0) && (
+                <div className='bg-gray-100 p-4 rounded-md border border-primary relative mt-10'>
+                  <div className='absolute -top-8 border px-3 py-1 rounded-lg bg-gray-100 border-primary'>
+                    <h2 className='text-lg sm:text-xl font-bold text-primary flex flex-col items-left gap-1'>
+                      <div className=''>
+                        <CardGiftcardIcon /> Ưu đãi{' '}
+                      </div>
+                      <span className='text-sm'>
+                        (từ{' '}
+                        {new Date(
+                          products.promotion?.promotionStartDate
+                        ).toLocaleDateString('vi-VN')}{' '}
+                        đến{' '}
+                        {new Date(
+                          products.promotion?.promotionExpiredDate
+                        ).toLocaleDateString('vi-VN')}
+                        )
+                      </span>
+                    </h2>
+                  </div>
 
-                {/* Danh sách ưu đãi */}
-                {giftsData?.length > 0 && (
-                  <>
-                    <h3 className='text-lg sm:text-xl font-bold mt-6'>
-                      Quà tặng kèm:
-                    </h3>
-                    <ul className='list-disc space-y-2 mt-2'>
-                      {giftsData.map((gift, index) => (
-                        <li
-                          key={index}
-                          className='list-none flex items-center gap-2'
-                        >
-                          <CheckIcon className='text-primary font-bold' />
-                          <Link
-                            className='hover:text-primary'
-                            to={`/products/detail/${gift._id}`}
+                  {/* Danh sách ưu đãi */}
+                  {giftsData?.length > 0 && (
+                    <>
+                      <h3 className='text-lg sm:text-xl font-bold mt-6'>
+                        Quà tặng kèm:
+                      </h3>
+                      <ul className='list-disc space-y-2 mt-2'>
+                        {giftsData.map((gift, index) => (
+                          <li
+                            key={index}
+                            className='list-none flex items-center gap-2'
                           >
-                            {gift.productName}
-                          </Link>
-                          <p className='italic text-red-600'>
-                            (trị giá: {ToVietnamCurrencyFormat(gift.price)})
-                          </p>
-                        </li>
-                      ))}
-                    </ul>
-                  </>
-                )}
-                {/* Ưu đãi thêm */}
-                {benefitsData?.length > 0 && (
-                  <>
-                    <h3 className='text-lg sm:text-xl font-bold mt-4'>
-                      Dịch vụ kèm theo:
-                    </h3>
-                    <ul className='list-disc space-y-2 mt-2'>
-                      {benefitsData.map((benefit, index) => (
-                        <li
-                          key={index}
-                          className='list-none flex items-center gap-2'
-                        >
-                          <CheckBoxIcon className='text-green-500' />
-                          {benefit.serviceName}
-                          <p className='italic text-red-600'>
-                            (trị giá:{' '}
-                            {ToVietnamCurrencyFormat(benefit.servicePrice)})
-                          </p>
-                        </li>
-                      ))}
-                    </ul>
-                  </>
-                )}
-              </div>
-            )}
+                            <CheckIcon className='text-primary font-bold' />
+                            <Link
+                              className='hover:text-primary'
+                              to={`/products/detail/${gift._id}`}
+                            >
+                              {gift.productName}
+                            </Link>
+                            <p className='italic text-red-600'>
+                              (trị giá: {ToVietnamCurrencyFormat(gift.price)})
+                            </p>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+
+                  {/* Ưu đãi thêm */}
+                  {benefitsData?.length > 0 && (
+                    <>
+                      <h3 className='text-lg sm:text-xl font-bold mt-4'>
+                        Dịch vụ kèm theo:
+                      </h3>
+                      <ul className='list-disc space-y-2 mt-2'>
+                        {benefitsData.map((benefit, index) => (
+                          <li
+                            key={index}
+                            className='list-none flex items-center gap-2'
+                          >
+                            <CheckBoxIcon className='text-green-500' />
+                            {benefit.serviceName}
+                            <p className='italic text-red-600'>
+                              (trị giá:{' '}
+                              {ToVietnamCurrencyFormat(benefit.servicePrice)})
+                            </p>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                </div>
+              )}
 
             {/* Nút tăng/giảm số lượng */}
             <div className='flex items-center mt-5'>
