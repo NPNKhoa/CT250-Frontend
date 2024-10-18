@@ -157,16 +157,17 @@ const HomePage = () => {
           <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 justify-items-center'>
             {Array.isArray(products) &&
               products.map((product, index) => (
+                console.log(product),
                 <ProductItem
                   key={index}
-                  imageUrl={product.productImagePath[0]}
-                  name={product.productName}
+                  imageUrl={product?.productImagePath[0]}
+                  name={product?.productName}
                   price={
-                    product.price *
-                    ((100 - product.discountDetails?.discountPercent) / 100)
+                    product?.price *
+                    ((100 - (product?.discountDetails?.discountPercent || 0)) / 100)
                   }
                   productLink={`products/detail/${product._id}`}
-                  discount={product.discountDetails?.discountPercent}
+                  discount={product?.discountDetails?.discountPercent}
                 />
               ))}
           </div>
