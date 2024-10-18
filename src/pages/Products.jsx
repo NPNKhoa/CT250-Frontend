@@ -28,6 +28,7 @@ const Products = () => {
 
   const page = parseInt(query.get('page') || '1', 10);
   const brand = query.get('brand') || '';
+  const productType = query.get('productType') || '';
 
   useEffect(() => {
     const fetchProductTypes = async () => {
@@ -128,6 +129,8 @@ const Products = () => {
   //   { label: 'Giá trên 3 triệu', value: 'above-3m', min: 3000000, max: null },
   // ];
 
+  console.log(products);
+
   return (
     <>
       {products.length > 0 && (
@@ -135,13 +138,13 @@ const Products = () => {
           breadcrumbs={[
             { label: 'Trang chủ', href: '/' },
             {
-              label: `${products[0].productTypeDetails?.productTypeName}`,
-              href: `/products?productType=${products[0].productTypeDetails?.productTypeName}`,
+              label: `${productType}`,
+              href: `/products?productType=${productType}`,
             },
             ...(brand
               ? [
                   {
-                    label: `${products[0].productTypeDetails?.productTypeName} ${brand}`,
+                    label: `${productType} ${brand}`,
                   },
                 ]
               : []),
@@ -167,7 +170,7 @@ const Products = () => {
                 <div className='container mx-auto px-5'>
                   <div className='flex justify-between border bg-gray-50 rounded-lg px-4'>
                     <h1 className='text-sm sm:text-xl font-bold my-4'>
-                      {`${products[0]?.productTypeDetails?.productTypeName} ${brand}`}
+                      {`${productType} ${brand}`}
                     </h1>
                     <div className='flex items-center space-x-2'>
                       <span className='font-semibold text-sm sm:text-lg'>

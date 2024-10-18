@@ -63,6 +63,8 @@ const ProductDetail = () => {
     );
   };
 
+  console.log(products);
+
   const breadcrumbs = [
     { label: 'Trang chủ', href: '/' },
     {
