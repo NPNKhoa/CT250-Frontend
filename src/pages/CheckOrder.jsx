@@ -49,7 +49,21 @@ const CheckOrder = () => {
     setOrderDetail(null);
   };
 
-  console.log(selectedOrder);
+  const totalPriceItems = selectedOrder?.orderDetail.reduce((total, item) => {
+    return (
+      total +
+      item.itemPrice *
+        item.quantity *
+        (1 - item.product.discount.discountPercent / 100)
+    );
+  }, 0);
+
+  const maxPriceDiscount = selectedOrder?.voucher
+    ? Math.min(
+        totalPriceItems * (selectedOrder.voucher.discountPercent / 100),
+        selectedOrder.voucher.maxPriceDiscount * 1000
+      )
+    : 0;
 
   return (
     <>
@@ -150,10 +164,10 @@ const CheckOrder = () => {
                 </div>
               </div>
 
-              <div className='mb-6 grid grid-cols-3 gap-4'>
+              <div className='mb-6 grid grid-cols-4 gap-4'>
                 <div className='rounded-lg bg-gray-100 p-2 text-center'>
                   <p>Ngày đặt:</p>
-                  <p className='font-semibold'>
+                  <p className='font-semibold text-orange-700'>
                     {new Date(selectedOrder.orderDate).toLocaleDateString(
                       'vi-VN'
                     )}
@@ -161,15 +175,41 @@ const CheckOrder = () => {
                 </div>
                 <div className='rounded-lg bg-gray-100 p-2 text-center'>
                   <p>Phí vận chuyển:</p>
-                  <p className='font-semibold'>
+                  <p className='font-semibold text-green-700'>
                     {ToVietnamCurrencyFormat(selectedOrder.shippingFee)}
+                  </p>
+                  <p className='text-sm'>
+                    ({selectedOrder.shippingMethod.shippingMethod})
                   </p>
                 </div>
                 <div className='rounded-lg bg-gray-100 p-2 text-center'>
-                  <p>Tổng tiền</p>
-                  <p className='font-semibold'>
+                  <p>Voucher:</p>
+                  {selectedOrder?.voucher?.discountPercent ? (
+                    <div>
+                      <p className='font-semibold text-red-700'>
+                        - {ToVietnamCurrencyFormat(maxPriceDiscount)}
+                      </p>
+                      <p className='text-sm'>
+                        (Giảm {selectedOrder?.voucher?.discountPercent}%{' '}
+                        <span className='text-primary'>
+                          tối đa{' '}
+                          {ToVietnamCurrencyFormat(
+                            selectedOrder?.voucher?.maxPriceDiscount * 1000
+                          )}
+                        </span>
+                        )
+                      </p>
+                    </div>
+                  ) : (
+                    <p className='font-semibold'>Không có voucher</p>
+                  )}
+                </div>
+                <div className='rounded-lg bg-gray-100 p-2 text-center'>
+                  <p>Tổng tiền:</p>
+                  <p className='font-semibold text-blue-700'>
                     {ToVietnamCurrencyFormat(selectedOrder.totalPrice)}
                   </p>
+                  <p className='text-sm'>(Đã bao gồm phí vận chuyển)</p>
                 </div>
               </div>
 
@@ -272,6 +312,9 @@ const CheckOrder = () => {
                         </div>
                       </Link>
                     ))}
+                    <p className='text-right font-semibold'>
+                      Tổng: {ToVietnamCurrencyFormat(totalPriceItems)}
+                    </p>
                   </div>
                 </div>
               </div>
