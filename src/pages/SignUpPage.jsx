@@ -18,23 +18,49 @@ const SignUpPage = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({}); // Để lưu trữ thông báo lỗi
 
-  // const [imageFile, setImageFile] = useState(null);
+  const validateEmail = useCallback(email => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  }, []);
+
+  const validatePhone = useCallback(phone => {
+    const regex = /^[0-9]{10,15}$/; // Kiểm tra số điện thoại từ 10 đến 15 ký tự
+    return regex.test(phone);
+  }, []);
+
+  const validatePassword = useCallback(password => {
+    return password.length >= 8; // Độ dài tối thiểu của mật khẩu
+  }, []);
 
   const handleChange = useCallback(e => {
     const { id, value } = e.target;
     setCredentials(prev => ({ ...prev, [id]: value }));
   }, []);
 
-  // const handleFileChange = useCallback(e => {
-  //   setImageFile(e.target.files[0]);
-  // }, []);
-
   const handleSubmit = useCallback(
     async e => {
       e.preventDefault();
+      setErrors({}); // Reset thông báo lỗi
+
+      const newErrors = {};
+
+      // Kiểm tra tính hợp lệ của các trường
+      if (!credentials.fullname) newErrors.fullname = 'Tên đầy đủ là bắt buộc!';
+      if (!validateEmail(credentials.email))
+        newErrors.email = 'Email không hợp lệ!';
+      if (!validatePhone(credentials.phone))
+        newErrors.phone = 'Số điện thoại không hợp lệ!';
+      if (!validatePassword(credentials.password))
+        newErrors.password = 'Mật khẩu tối thiểu 8 ký tự!';
       if (credentials.password !== credentials.confirmPassword) {
-        toast.error('Mật khẩu không trùng khớp!');
+        newErrors.confirmPassword = 'Mật khẩu không trùng khớp!';
+      }
+
+      // Nếu có lỗi, hiển thị thông báo và không gửi form
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
         return;
       }
 
@@ -42,7 +68,6 @@ const SignUpPage = () => {
       Object.keys(credentials).forEach(key =>
         formData.append(key, credentials[key])
       );
-      // formData.append('imageFile', imageFile);
 
       try {
         setLoading(true);
@@ -63,7 +88,7 @@ const SignUpPage = () => {
         setLoading(false);
       }
     },
-    [credentials]
+    [credentials, validateEmail, validatePhone, validatePassword]
   );
 
   const formFields = useMemo(
@@ -105,6 +130,8 @@ const SignUpPage = () => {
                 className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary'
               />
             )}
+            {errors[id] && <p className='text-red-500 text-sm'>{errors[id]}</p>}{' '}
+            {/* Hiển thị thông báo lỗi */}
           </div>
         ))}
         <button
@@ -120,7 +147,7 @@ const SignUpPage = () => {
         </button>
       </form>
     ),
-    [handleSubmit, formFields, loading, credentials, handleChange]
+    [handleSubmit, formFields, loading, credentials, handleChange, errors]
   );
 
   return (
