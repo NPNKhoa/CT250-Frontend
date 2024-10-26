@@ -139,12 +139,19 @@ const SearchPage = () => {
               imageUrl={product.productImagePath[0]}
               name={product.productName}
               price={
-                (product.price *
-                  (100 - product.discountDetails?.discountPercent)) /
-                100
+                new Date(product?.discountDetails?.discountExpiredDate) >
+                new Date()
+                  ? product.price *
+                    ((100 - product?.discountDetails?.discountPercent) / 100) // Hiển thị giá đã giảm nếu chưa hết hạn
+                  : product.price // Hiển thị giá gốc nếu đã hết hạn
               }
               productLink={`products/detail/${product._id}`}
-              discount={product.discountDetails?.discountPercent}
+              discount={
+                new Date(product?.discountDetails?.discountExpiredDate) >
+                new Date()
+                  ? product?.discountDetails?.discountPercent
+                  : null // Không hiển thị phần trăm giảm giá nếu đã hết hạn
+              }
             />
           ))}
         <div className='col-span-2 sm:col-span-3 md:col-span-4 mt-4 flex justify-center'>

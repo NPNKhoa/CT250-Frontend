@@ -49,6 +49,8 @@ const CheckOrder = () => {
     setOrderDetail(null);
   };
 
+  console.log(selectedOrder);
+
   return (
     <>
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
@@ -104,7 +106,7 @@ const CheckOrder = () => {
               <tbody className='bg-white divide-y divide-gray-200'>
                 <tr>
                   <td className='px-6 py-4 whitespace-nowrap'>
-                    {selectedOrder._id}
+                    #{selectedOrder._id}
                   </td>
                   <td className='px-6 py-4 whitespace-nowrap'>
                     {new Date(selectedOrder.orderDate).toLocaleDateString(
@@ -131,89 +133,146 @@ const CheckOrder = () => {
           </div>
         )}
         {isModalOpen && orderDetail && (
-          <div className='fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center'>
-            <div className='bg-white rounded-lg p-6 w-1/2 max-h-[90vh] shadow-2xl'>
-              <div className='flex justify-between my-2 item-center'>
-                <h3 className='text-2xl font-semibold text-center text-gray-800'>
-                  Chi tiết đơn hàng
-                </h3>
-                <button
-                  onClick={handleCloseModal}
-                  className='px-4 py-2 bottom-0 bg-orange-500 text-white rounded hover:bg-orange-600 transition ease-in-out duration-300'
-                >
-                  Đóng
-                </button>
+          <div className='fixed inset-0 z-50 flex items-center justify-center bg-gray-600 bg-opacity-50'>
+            <div className='container mx-auto h-[90%] w-[80%] overflow-y-auto rounded-xl bg-white p-4'>
+              {/* Header */}
+              <div className='mb-4 flex items-center justify-between'>
+                <h1 className='text-2xl font-semibold'>
+                  Đơn hàng #{selectedOrder._id}
+                </h1>
+                <div className='flex space-x-2'>
+                  <button
+                    onClick={handleCloseModal}
+                    className='rounded-xl bg-gray-200 px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-300'
+                  >
+                    X
+                  </button>
+                </div>
               </div>
 
-              <p>
-                <strong>Mã đơn hàng:</strong> #{selectedOrder._id}
-              </p>
-              <p>
-                <strong>Ngày đặt:</strong>{' '}
-                {new Date(selectedOrder.orderDate).toLocaleDateString('vi-VN')}
-              </p>
-              <p>
-                <strong>Địa chỉ:</strong> {selectedOrder.shippingAddress.detail}
-                , {selectedOrder.shippingAddress.commune},{' '}
-                {selectedOrder.shippingAddress.district},{' '}
-                {selectedOrder.shippingAddress.province}
-              </p>
-              <p>
-                <strong>Tiền hàng:</strong>{' '}
-                {ToVietnamCurrencyFormat(selectedOrder.totalPrice)}
-              </p>
-              <p>
-                <strong>Trạng thái:</strong>{' '}
-                {selectedOrder.orderStatus.orderStatus}
-              </p>
-
-              <div className='border-t border-gray-200 my-2 pt-4'>
-                <p>
-                  <strong>Phí vận chuyển:</strong>{' '}
-                  {ToVietnamCurrencyFormat(selectedOrder.shippingFee)}
-                </p>
-                <p>
-                  <strong>Phương thức vận chuyển:</strong>{' '}
-                  {selectedOrder.shippingMethod.shippingMethod}
-                </p>
-                <p>
-                  <strong>Phương thức thanh toán:</strong>{' '}
-                  {selectedOrder.paymentMethod.paymentMethodName}
-                </p>
+              <div className='mb-6 grid grid-cols-3 gap-4'>
+                <div className='rounded-lg bg-gray-100 p-2 text-center'>
+                  <p>Ngày đặt:</p>
+                  <p className='font-semibold'>
+                    {new Date(selectedOrder.orderDate).toLocaleDateString(
+                      'vi-VN'
+                    )}
+                  </p>
+                </div>
+                <div className='rounded-lg bg-gray-100 p-2 text-center'>
+                  <p>Phí vận chuyển:</p>
+                  <p className='font-semibold'>
+                    {ToVietnamCurrencyFormat(selectedOrder.shippingFee)}
+                  </p>
+                </div>
+                <div className='rounded-lg bg-gray-100 p-2 text-center'>
+                  <p>Tổng tiền</p>
+                  <p className='font-semibold'>
+                    {ToVietnamCurrencyFormat(selectedOrder.totalPrice)}
+                  </p>
+                </div>
               </div>
 
-              <div className='border-t'>
-                <h2 className='text-lg font-semibold text-gray-900 mt-4'>
-                  Sản phẩm
-                </h2>
+              <div className='mb-6 grid grid-cols-3 gap-4'>
+                {/* Customer & Order */}
+                <div className='rounded-lg border p-4'>
+                  <div className='mb-2 flex justify-between'>
+                    <h2 className='font-semibold'>THÔNG TIN ĐẶT HÀNG</h2>
+                  </div>
+                  <p>
+                    <span className='font-semibold'>Tên:</span>{' '}
+                    {selectedOrder.user.fullname}
+                  </p>
+                  <p>
+                    <span className='font-semibold'>Email:</span>{' '}
+                    {selectedOrder.user.email}
+                  </p>
+                  <p>
+                    <span className='font-semibold'>Số điện thoại:</span>{' '}
+                    {selectedOrder.user.phone}
+                  </p>
+                </div>
 
-                <div className='mt-4 max-h-64 overflow-y-auto no-scrollbar'>
-                  {selectedOrder.orderDetail?.map(item => (
-                    <Link
-                      to={`/products/detail/${item.product._id}`}
-                      key={item.id}
-                      className='flex items-center space-x-4 py-2'
-                    >
-                      <img
-                        src={item.product.productImagePath?.[0] || ''}
-                        alt={item.product.productName}
-                        className='w-16 h-16 object-cover rounded-md'
-                      />
-                      <div>
-                        <h3 className='text-gray-900'>
-                          {item.product.productName}
-                        </h3>
-                        <p className='text-gray-500'>
-                          Số lượng: {item.quantity}
-                        </p>
-                        <p>
-                          {ToVietnamCurrencyFormat(
-                            item.itemPrice * ((100 - 15) / 100) * item.quantity
-                          )}
-                        </p>
-                      </div>
-                    </Link>
-                  ))}
+                <div className='rounded-lg border p-4'>
+                  <div className='mb-2 flex justify-between'>
+                    <h2 className='font-semibold'>ĐỊA CHỈ GIAO HÀNG</h2>
+                  </div>
+                  <p>{selectedOrder?.shippingAddress.detail}</p>
+                  <p>
+                    {selectedOrder?.shippingAddress.commune},{' '}
+                    {selectedOrder?.shippingAddress.district},{' '}
+                    {selectedOrder?.shippingAddress.province}
+                  </p>
+                </div>
+
+                <div className='rounded-lg border p-4'>
+                  <div className='mb-2 flex justify-between'>
+                    <h2 className='font-semibold'>THANH TOÁN</h2>
+                  </div>
+                  <p>
+                    <span className='font-semibold'>Trạng thái:</span>{' '}
+                    {selectedOrder?.paymentStatus
+                      ? 'Đã thanh toán'
+                      : 'Chờ thanh toán'}
+                  </p>
+                  <p>
+                    <span className='font-semibold'>Phương thức:</span>{' '}
+                    {selectedOrder.paymentMethod.paymentMethodName}
+                  </p>
+                </div>
+              </div>
+
+              <div className='mb-6'>
+                <h2 className='mb-2 font-semibold'>SẢN PHẨM ĐÃ ĐẶT</h2>
+                <div className='rounded-lg border p-4'>
+                  <div className='no-scrollbar mb-4 max-h-64 overflow-y-auto'>
+                    {selectedOrder.orderDetail?.map(item => (
+                      <Link
+                        to={`/products/detail/${item.product._id}`}
+                        key={item._id}
+                        className='flex items-center space-x-4 py-2'
+                      >
+                        <img
+                          src={
+                            String(
+                              item.product.productImagePath?.[0]
+                            ).startsWith('http')
+                              ? item.product.productImagePath?.[0]
+                              : `http://localhost:5000/${String(
+                                  item.product.productImagePath?.[0]
+                                ).replace(/\\/g, '/')}`
+                          }
+                          alt={item.product.productName}
+                          className='h-16 w-16 rounded-md object-cover'
+                        />
+                        <div>
+                          <h3 className='text-gray-900'>
+                            {item.product.productName}
+                          </h3>
+                          <p className='text-gray-500'>
+                            Số lượng: {item.quantity}
+                          </p>
+                          <p className='text-sm text-gray-400 line-through sm:text-base'>
+                            {item?.product.discount && (
+                              <>
+                                {ToVietnamCurrencyFormat(
+                                  item.itemPrice * item.quantity
+                                )}
+                              </>
+                            )}
+                          </p>
+                          <p className='text-primary font-bold'>
+                            {ToVietnamCurrencyFormat(
+                              item.itemPrice *
+                                item.quantity *
+                                (1 -
+                                  item.product.discount.discountPercent / 100)
+                            )}
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
