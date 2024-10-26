@@ -24,8 +24,8 @@ function OrderHistory() {
 
   const [isLatestOrder, setIsLatestOrder] = useState('latest');
 
-  const handleChangeFilter = e => {
-    setSelectedOrderStatus(e.target.value);
+  const handleChangeFilter = statusId => {
+    setSelectedOrderStatus(statusId);
   };
 
   const handleChangeOrdering = e => {
@@ -73,6 +73,15 @@ function OrderHistory() {
     setSelectedOrder(null);
   };
 
+  const totalPriceItems = selectedOrder?.orderDetail.reduce((total, item) => {
+    return (
+      total +
+      item.itemPrice *
+        item.quantity *
+        (1 - item.product.discount.discountPercent / 100)
+    );
+  }, 0);
+
   const getStatusClass = status => {
     switch (status) {
       case 'Đã giao hàng':
@@ -86,32 +95,47 @@ function OrderHistory() {
     }
   };
 
+  const maxPriceDiscount = selectedOrder?.voucher
+    ? Math.min(
+        totalPriceItems * (selectedOrder.voucher.discountPercent / 100),
+        selectedOrder.voucher.maxPriceDiscount * 1000
+      )
+    : 0;
+
   return (
     <>
       <div className='container mx-auto py-8 px-4'>
         <div className='flex justify-between items-center mb-4'>
           <div className='flex items-center'>
-            <h3 className='inline-block'>Lọc đơn hàng:</h3>
-            <FormControl sx={{ m: 1, minWidth: 120 }} size='small'>
-              <InputLabel>Trạng thái</InputLabel>
-              <Select
-                value={selectedOrderStatus}
-                label='Trạng thái'
-                onChange={handleChangeFilter}
+            <div className='flex space-x-2'>
+              <button
+                onClick={() => handleChangeFilter('')}
+                className={`px-4 py-2 rounded-lg ${
+                  selectedOrderStatus === ''
+                    ? 'bg-primary text-white'
+                    : 'bg-gray-200'
+                }`}
               >
-                <MenuItem value=''>
-                  <em>Tất cả</em>
-                </MenuItem>
-                {Array.isArray(orderStatus) &&
-                  orderStatus.map(({ _id, orderStatus }) => (
-                    <MenuItem key={_id} value={_id}>
-                      {orderStatus}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
+                Tất cả
+              </button>
+              {Array.isArray(orderStatus) &&
+                orderStatus.map(({ _id, orderStatus }) => (
+                  <button
+                    key={_id}
+                    onClick={() => handleChangeFilter(_id)}
+                    className={`px-4 py-2 rounded-lg ${
+                      selectedOrderStatus === _id
+                        ? 'bg-primary text-white'
+                        : 'bg-gray-200'
+                    }`}
+                  >
+                    {orderStatus}
+                  </button>
+                ))}
+            </div>
           </div>
 
+          {/* Phần sắp xếp giữ nguyên */}
           <div className='flex items-center'>
             <h3 className='inline-block'>Sắp xếp:</h3>
             <FormControl sx={{ m: 1, minWidth: 120 }} size='small'>
@@ -127,6 +151,7 @@ function OrderHistory() {
             </FormControl>
           </div>
         </div>
+
         {orders.length === 0 ? (
           <div className='text-center'>
             <p className='text-lg'>Bạn chưa có đơn hàng nào.</p>
@@ -166,10 +191,10 @@ function OrderHistory() {
                       </td>
                       <td
                         className={`py-2 px-4 border-b text-center ${getStatusClass(
-                          order.orderStatus.orderStatus
+                          order.orderStatus?.orderStatus
                         )}`}
                       >
-                        {order.orderStatus.orderStatus}
+                        {order.orderStatus?.orderStatus}
                       </td>
                       <td className='py-2 px-4 border-b text-center'>
                         <button
@@ -185,11 +210,12 @@ function OrderHistory() {
             </table>
           </div>
         )}
+
         <div className='col-span-4 mt-6 flex justify-center'>
           <PaginationComponent
             path={`${location.pathname}`}
             totalPages={totalPage}
-            currentPage={page} // Thêm tham số trang hiện tại
+            currentPage={page}
           />
         </div>
       </div>
@@ -212,10 +238,10 @@ function OrderHistory() {
               </div>
             </div>
 
-            <div className='mb-6 grid grid-cols-3 gap-4'>
+            <div className='mb-6 grid grid-cols-4 gap-4'>
               <div className='rounded-lg bg-gray-100 p-2 text-center'>
                 <p>Ngày đặt:</p>
-                <p className='font-semibold'>
+                <p className='font-semibold text-orange-700'>
                   {new Date(selectedOrder.orderDate).toLocaleDateString(
                     'vi-VN'
                   )}
@@ -223,15 +249,41 @@ function OrderHistory() {
               </div>
               <div className='rounded-lg bg-gray-100 p-2 text-center'>
                 <p>Phí vận chuyển:</p>
-                <p className='font-semibold'>
+                <p className='font-semibold text-green-700'>
                   {ToVietnamCurrencyFormat(selectedOrder.shippingFee)}
+                </p>
+                <p className='text-sm'>
+                  ({selectedOrder.shippingMethod.shippingMethod})
                 </p>
               </div>
               <div className='rounded-lg bg-gray-100 p-2 text-center'>
-                <p>Tổng tiền</p>
-                <p className='font-semibold'>
+                <p>Voucher:</p>
+                {selectedOrder?.voucher?.discountPercent ? (
+                  <div>
+                    <p className='font-semibold text-red-700'>
+                      - {ToVietnamCurrencyFormat(maxPriceDiscount)}
+                    </p>
+                    <p className='text-sm'>
+                      (Giảm {selectedOrder?.voucher?.discountPercent}%{' '}
+                      <span className='text-primary'>
+                        tối đa{' '}
+                        {ToVietnamCurrencyFormat(
+                          selectedOrder?.voucher?.maxPriceDiscount * 1000
+                        )}
+                      </span>
+                      )
+                    </p>
+                  </div>
+                ) : (
+                  <p className='font-semibold'>Không có voucher</p>
+                )}
+              </div>
+              <div className='rounded-lg bg-gray-100 p-2 text-center'>
+                <p>Tổng tiền:</p>
+                <p className='font-semibold text-blue-700'>
                   {ToVietnamCurrencyFormat(selectedOrder.totalPrice)}
                 </p>
+                <p className='text-sm'>(Đã bao gồm phí vận chuyển)</p>
               </div>
             </div>
 
@@ -333,6 +385,9 @@ function OrderHistory() {
                       </div>
                     </Link>
                   ))}
+                  <p className='text-right font-semibold'>
+                    Tổng: {ToVietnamCurrencyFormat(totalPriceItems)}
+                  </p>
                 </div>
               </div>
             </div>
