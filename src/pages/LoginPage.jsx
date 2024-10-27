@@ -13,10 +13,10 @@ import { getCartByUser } from '@redux/thunk/cartThunk';
 const LoginPage = () => {
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState({ email: '', password: '' });
-  const [error, setError] = useState({ email: '', password: '' }); // State for error messages
   const dispatch = useDispatch();
 
   const loading = useSelector(state => state.auth.loading);
+  const error = useSelector(state => state.auth.error);
   const authUser = useSelector(state => state.auth.authUser);
 
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -45,49 +45,12 @@ const LoginPage = () => {
   const handleChange = useCallback(e => {
     const { id, value } = e.target;
     setCredentials(prev => ({ ...prev, [id]: value }));
-
-    // Reset error messages when user types
-    if (id === 'email') {
-      setError(prev => ({ ...prev, email: '' }));
-    } else if (id === 'password') {
-      setError(prev => ({ ...prev, password: '' }));
-    }
   }, []);
-
-  const validateEmail = email => {
-    // Regular expression for validating email format
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailPattern.test(email);
-  };
-
-  const validatePassword = password => {
-    // Example validation: at least 6 characters
-    return password.length >= 8;
-  };
 
   const handleSubmit = useCallback(
     async e => {
       e.preventDefault();
-
-      const { email, password } = credentials;
-      let valid = true;
-
-      // Validate email
-      if (!validateEmail(email)) {
-        setError(prev => ({ ...prev, email: 'Email không hợp lệ' }));
-        valid = false;
-      }
-
-      // Validate password
-      if (!validatePassword(password)) {
-        setError(prev => ({ ...prev, password: 'Mật khẩu tối thiểu 8 ký tự' }));
-        valid = false;
-      }
-
-      // If valid, dispatch login
-      if (valid) {
-        dispatch(loginThunk(credentials));
-      }
+      dispatch(loginThunk(credentials));
     },
     [credentials, dispatch]
   );
@@ -101,8 +64,10 @@ const LoginPage = () => {
       dispatch(getLoggedInUser(accessToken));
 
       navigate('/');
+    } else if (error) {
+      toast.error('Đăng nhập thất bại. Vui lòng thử lại!');
     }
-  }, [authUser, navigate, dispatch]);
+  }, [authUser, error, navigate, dispatch]);
 
   const loginForm = useMemo(
     () => (
@@ -125,13 +90,8 @@ const LoginPage = () => {
                 id={field}
                 value={credentials[field]}
                 onChange={handleChange}
-                className={`w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary ${
-                  error.email ? 'border-red-500' : ''
-                }`}
+                className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary'
               />
-            )}
-            {error[field] && (
-              <span className='text-red-500 text-sm'>{error[field]}</span>
             )}
           </div>
         ))}
@@ -148,7 +108,7 @@ const LoginPage = () => {
         </button>
       </form>
     ),
-    [handleSubmit, credentials, handleChange, loading, error]
+    [handleSubmit, credentials, handleChange, loading]
   );
 
   return (
@@ -209,7 +169,7 @@ const LoginPage = () => {
                   <img
                     src='https://img.icons8.com/?size=100&id=13912&format=png&color=000000'
                     className='absolute left-0 w-5'
-                    alt='facebook logo'
+                    alt='google logo'
                   />
                   <span className='block w-max font-semibold tracking-wide text-gray-700 text-sm transition duration-300 group-hover:text-blue-600 sm:text-base'>
                     Đăng nhập với Facebook
@@ -222,7 +182,7 @@ const LoginPage = () => {
             <span className='cursor-pointer hover:text-primary'>
               Quên mật khẩu?
             </span>
-            <Link to='/signup' className='font-semibold hover:text-primary'>
+            <Link to='/signup' className='text-primary hover:underline'>
               {' '}
               Đăng ký
             </Link>
