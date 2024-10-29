@@ -27,8 +27,7 @@ const Products = () => {
   const [loading, setLoading] = useState(false);
 
   const page = parseInt(query.get('page') || '1', 10);
-  const brand = query.get('brand') || '';
-  const productType = query.get('productType') || '';
+  const category = query.get('category') || '';
 
   useEffect(() => {
     const fetchProductTypes = async () => {
@@ -131,6 +130,8 @@ const Products = () => {
 
   console.log(products);
 
+   const productType = category.split(' ').slice(0, -1).join(' ') || query.get('productType');
+
   return (
     <>
       {products.length > 0 && (
@@ -141,10 +142,10 @@ const Products = () => {
               label: `${productType}`,
               href: `/products?productType=${productType}`,
             },
-            ...(brand
+            ...(category
               ? [
                   {
-                    label: `${productType} ${brand}`,
+                    label: `${category}`,
                   },
                 ]
               : []),
@@ -170,7 +171,7 @@ const Products = () => {
                 <div className='container mx-auto px-5'>
                   <div className='flex justify-between border bg-gray-50 rounded-lg px-4'>
                     <h1 className='text-sm sm:text-xl font-bold my-4'>
-                      {`${productType} ${brand}`}
+                      {`${category}`}
                     </h1>
                     <div className='flex items-center space-x-2'>
                       <span className='font-semibold text-sm sm:text-lg'>
