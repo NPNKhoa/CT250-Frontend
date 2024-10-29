@@ -17,6 +17,7 @@ class productService {
     if (query.get('productType'))
       params.append('productType', query.get('productType'));
     if (query.get('brand')) params.append('brand', query.get('brand'));
+    if (query.get('category')) params.append('category', query.get('category'));
     if (query.get('minPrice')) params.append('minPrice', query.get('minPrice'));
     if (query.get('maxPrice')) params.append('maxPrice', query.get('maxPrice'));
 
