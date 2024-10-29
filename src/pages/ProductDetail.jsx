@@ -68,12 +68,12 @@ const ProductDetail = () => {
   const breadcrumbs = [
     { label: 'Trang chủ', href: '/' },
     {
-      label: `${products.productType?.productTypeName}`,
-      href: `/products?productType=${products.productType?.productTypeName}`,
+      label: `${products?.category?.productType?.productTypeName}`,
+      href: `/products?productType=${products?.category?.productType?.productTypeName}`,
     },
     {
-      label: `${products.productType?.productTypeName} ${products.productBrand?.brandName}`,
-      href: `/products?productType=${products.productType?.productTypeName}&brand=${products.productBrand?.brandName}`,
+      label: `${products?.category?.categoryName}`,
+      href: `/products?category=${products?.category?.categoryName}`,
     },
     {
       label: `${products.productName}`,
