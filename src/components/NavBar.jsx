@@ -5,7 +5,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import CloseIcon from '@mui/icons-material/Close';
 
 import productTypeService from '@services/productType.service';
-import brandService from '@services/brand.service';
+import categoryService from '@services/category.service';
 
 const NavBar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -13,15 +13,15 @@ const NavBar = () => {
   const [showNavBar, setShowNavBar] = useState(true); // Thêm state mới
 
   const [productTypes, setProductTypes] = useState([]);
-  const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const fetchProductTypes = async () => {
       try {
         const responseType = await productTypeService.getAll();
         setProductTypes(responseType.data);
-        const responsebrand = await brandService.getAll();
-        setBrands(responsebrand.data);
+        const responseCategory = await categoryService.getAll();
+        setCategories(responseCategory.data);
       } catch (error) {
         console.error('Error fetching product types:', error);
       }
@@ -37,14 +37,12 @@ const NavBar = () => {
     { value: 'contact', label: 'Liên hệ' },
   ];
 
-  const productCategories = productTypes.map(type => ({
+  const Categories = productTypes.map(type => ({
     title: type.productTypeName,
-    items: [
-      ...brands.map(brand =>
-        type.productTypeName.concat(` ${brand.brandName}`)
-      ),
-    ],
-    brand: [...brands.map(brand => `${brand.brandName}`)],
+    items: categories
+      .filter(category => category.productType.productTypeName === type.productTypeName)
+      .map(category => category.categoryName),
+    category: [...categories.map(category => `${category.categoryName}`)],
   }));
 
   const handleMenuToggle = () => {
@@ -128,7 +126,7 @@ const NavBar = () => {
           onMouseLeave={() => setShowDropdown(false)}
         >
           <div className='max-w-screen-xl mx-auto flex flex-col lg:flex-row flex-wrap justify-start p-4'>
-            {productCategories.map((category, idx) => (
+            {Categories.map((category, idx) => (
               <div key={idx} className='w-full sm:w-1/2 lg:w-1/4 mb-4'>
                 <h3 className='text-primary font-semibold mb-2 border-b-2'>
                   {category.title.toUpperCase()}
@@ -139,7 +137,7 @@ const NavBar = () => {
                       <Link
                         to={`/products?productType=${encodeURIComponent(
                           category.title
-                        )}&brand=${encodeURIComponent(category.brand[i])}`}
+                        )}&category=${encodeURIComponent(category.category[i])}`}
                         onClick={() => {
                           setShowDropdown(false);
                         }}
@@ -166,7 +164,7 @@ const NavBar = () => {
           onMouseLeave={() => setShowDropdown(false)}
         >
           <div className='max-w-screen-xl mx-auto flex flex-col lg:flex-row flex-wrap justify-start p-4'>
-            {productCategories.map((category, idx) => (
+            {Categories.map((category, idx) => (
               <div key={idx} className='w-full sm:w-1/2 lg:w-1/4 mb-4'>
                 <h3 className='text-primary font-semibold mb-2 border-b-2'>
                   {category.title.toUpperCase()}
@@ -175,9 +173,7 @@ const NavBar = () => {
                   {category.items.map((product, i) => (
                     <li key={i} className='text-gray-600 mb-1'>
                       <Link
-                        to={`/products?productType=${encodeURIComponent(
-                          category.title
-                        )}&brand=${encodeURIComponent(category.brand[i])}`}
+                        to={`/products?category=${encodeURIComponent(category.category[i])}`}
                         onClick={() => {
                           setShowDropdown(false);
                         }}
