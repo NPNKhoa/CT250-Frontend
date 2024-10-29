@@ -170,15 +170,15 @@ const NavBar = () => {
                   {category.title.toUpperCase()}
                 </h3>
                 <ul>
-                  {category.items.map((product, i) => (
+                  {category.items.map((item, i) => (
                     <li key={i} className='text-gray-600 mb-1'>
                       <Link
-                        to={`/products?category=${encodeURIComponent(category.category[i])}`}
+                        to={`/products?category=${encodeURIComponent((item))}`}
                         onClick={() => {
                           setShowDropdown(false);
                         }}
                       >
-                        {product}
+                        {item}
                       </Link>
                     </li>
                   ))}
