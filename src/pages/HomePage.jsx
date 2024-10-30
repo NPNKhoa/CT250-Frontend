@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import Carousel from '@components/Carousel';
 import ProductItem from '@components/ProductItem';
 
-import productService from '@services/product.service';
 import FeatureBoxes from '@components/FeatureBoxes';
 // import SaleBannerComponent from '@components/SaleBannerComponent';
 import ProductList from '@components/ProductList';
 import VoucherList from '@components/HomePage/VoucherList';
+import recommendationService from '@services/recommendation.service';
 // import SaleOffComponent from '@components/SaleOffComponent';
 
 const HomePage = () => {
@@ -16,7 +16,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await productService.getAll(null, 1, 5);
+        const response = await recommendationService.getNewProduct(5);
         setProducts(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -154,7 +154,7 @@ const HomePage = () => {
               </a>
             </div>
           </div>
-          <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 justify-items-center'>
+          <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 justify-items-center'>
             {Array.isArray(products) &&
               products.map((product, index) => (
                 console.log(product),
@@ -164,10 +164,10 @@ const HomePage = () => {
                   name={product?.productName}
                   price={
                     product?.price *
-                    ((100 - (product?.discountDetails?.discountPercent || 0)) / 100)
+                    ((100 - (product?.discount?.discountPercent || 0)) / 100)
                   }
                   productLink={`products/detail/${product._id}`}
-                  discount={product?.discountDetails?.discountPercent}
+                  discount={product?.discount?.discountPercent}
                 />
               ))}
           </div>

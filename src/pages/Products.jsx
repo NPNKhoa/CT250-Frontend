@@ -190,7 +190,7 @@ const Products = () => {
                   </div>
 
                   {/* Grid để chứa các product items */}
-                  <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1'>
+                  <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3'>
                     {products.map((product, index) => (
                       <ProductItem
                         key={index}
