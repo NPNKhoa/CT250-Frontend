@@ -12,6 +12,8 @@ import RatingSection from '@components/RatingSection';
 
 import productService from '@services/product.service';
 import cartService from '@services/cart.service';
+import recommendationService from '@services/recommendation.service';
+import ProductItem from '@components/ProductItem';
 
 import { setSelectedProduct } from '@redux/slices/cartSlice';
 
@@ -27,6 +29,7 @@ const ProductDetail = () => {
   const { id } = useParams();
   const [products, setProducts] = useState({});
   const [promotion, setPromotion] = useState([]);
+  const [similarProducts, setSimilarProducts] = useState([]);
   const navigate = useNavigate();
 
   const userId = localStorage.getItem('loggedInUserId');
@@ -37,6 +40,9 @@ const ProductDetail = () => {
         const productResponse = await productService.getById(id);
         setProducts(productResponse.data);
         setPromotion(productResponse.data.promotion);
+
+        const response = await recommendationService.getSimilarProduct(5, id);
+        setSimilarProducts(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -481,6 +487,35 @@ const ProductDetail = () => {
               </h3>
             </div>
           </div> */}
+        </div>
+        <div className='container mx-auto px-4'>
+          <h2 className='text-2xl font-bold text-center hover:text-primary mb-4'>
+            Sản phẩm tương tự
+          </h2>
+          <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[30vw] mx-auto'></span>
+          <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 justify-items-center'>
+            {Array.isArray(similarProducts) &&
+              similarProducts.map(
+                (product, index) => (
+                  console.log(product),
+                  (
+                    <ProductItem
+                      key={index}
+                      imageUrl={product?.productImagePath[0]}
+                      name={product?.productName}
+                      price={
+                        product?.price *
+                        ((100 -
+                          (product?.discountDetails?.discountPercent || 0)) /
+                          100)
+                      }
+                      productLink={`products/detail/${product._id}`}
+                      discount={product?.discountDetails?.discountPercent}
+                    />
+                  )
+                )
+              )}
+          </div>
         </div>
 
         <div className='flex flex-col lg:flex-row'>
