@@ -7,7 +7,7 @@ const Carousel = () => {
   const systemConfigs = useSelector(
     state => state.systemConfigs.currentConfigs
   );
-  const banners = systemConfigs?.banners;
+  const banners = systemConfigs?.banners.filter(banner => banner.isActiveBanner);
 
   const totalSlides = banners?.length;
 
