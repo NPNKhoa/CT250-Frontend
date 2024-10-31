@@ -25,7 +25,7 @@ const Filter = ({
   useEffect(() => {
     const fetchBrands = async () => {
       try {
-        const response = await brandService.getAll();
+        const response = await brandService.getAll(0);
         const brands = response.data.map(brand => brand.brandName);
         setBrands(brands);
       } catch (error) {

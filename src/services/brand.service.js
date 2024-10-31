@@ -5,8 +5,8 @@ class brandService {
     this.api = createApiClient(path);
   }
 
-  async getAll() {
-    return (await this.api.get('/')).data;
+  async getAll(limit) {
+    return (await this.api.get(`/?limit=${limit}`)).data;
   }
 
   async getById(id) {
