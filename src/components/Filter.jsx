@@ -138,7 +138,7 @@ const Filter = ({
     </div>
   );
 
-  const [value, setValue] = useState([20, 37]);
+  const [value, setValue] = useState([0, 100]);
 
   const handleChangeCommitted = () => {
     setSelectedMinDiscount(value[0]);
