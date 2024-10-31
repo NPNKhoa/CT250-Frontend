@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import brandService from '@services/brand.service';
 import PropTypes from 'prop-types';
+import Slider from '@mui/material/Slider';
 
 const Filter = ({
   onPriceChange,
@@ -137,6 +138,27 @@ const Filter = ({
     </div>
   );
 
+  const [value, setValue] = useState([20, 37]);
+
+  const handleChangeCommitted = () => {
+    setSelectedMinDiscount(value[0]);
+    setSelectedMaxDiscount(value[1]);
+  };
+
+  const minDistance = 1;
+
+  const handleChangeSlider = (event, newValue, activeThumb) => {
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+
+    if (activeThumb === 0) {
+      setValue([Math.min(newValue[0], value[1] - minDistance), value[1]]);
+    } else {
+      setValue([value[0], Math.max(newValue[1], value[0] + minDistance)]);
+    }
+  };
+
   return (
     <div className='w-full p-6 bg-gray-50 shadow-lg rounded-lg'>
       {/* Nếu có prop priceOptions, hiển thị bộ lọc giá */}
@@ -155,10 +177,20 @@ const Filter = ({
       {discountOptions && (
         <>
           <h3 className='text-lg font-semibold my-6'>Chọn Mức Giảm Giá</h3>
-          <RadioGroup
+          {/* <RadioGroup
             options={discountOptions}
             selected={selectedDiscount}
             onChange={handleDiscountChange}
+          /> */}
+          <Slider
+            getAriaLabel={() => 'Minimum distance'}
+            value={value}
+            onChange={handleChangeSlider}
+            onChangeCommitted={handleChangeCommitted}
+            valueLabelDisplay='on'
+            valueLabelFormat={(x) => `${x}%`}
+            disableSwap
+            className='mt-5'
           />
         </>
       )}

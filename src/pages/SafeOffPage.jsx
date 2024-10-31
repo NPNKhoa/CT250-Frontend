@@ -13,10 +13,11 @@ const SafeOffPage = () => {
     [location.search]
   );
 
-  const [selectedMinPrice, setSelectedMinPrice] = useState(null);
-  const [selectedMaxPrice, setSelectedMaxPrice] = useState(null);
+  const [selectedMinPercentDiscount, setselectedMinPercentDiscount] =
+    useState(null);
+  const [selectedMaxPercentDiscount, setselectedMaxPercentDiscount] =
+    useState(null);
   const [selectedBrand, setSelectedBrand] = useState([]);
-  const [selectedDiscount, setSelectedDiscount] = useState(null); // Thêm biến để lưu trữ phần trăm giảm giá đã chọn
   const sortBy = 'price';
   const [sortOption, setSortOption] = useState(query.get('sortBy'));
   const [isDesc, setIsDesc] = useState('false');
@@ -34,11 +35,10 @@ const SafeOffPage = () => {
 
         if (selectedBrand.length > 0)
           updatedQuery.set('brand', selectedBrand.join(','));
-        if (selectedMinPrice !== null)
-          updatedQuery.set('minPrice', selectedMinPrice);
-        if (selectedMaxPrice !== null)
-          updatedQuery.set('maxPrice', selectedMaxPrice);
-        // if (selectedDiscount) updatedQuery.set('discount', selectedDiscount); // Thêm tham số discount
+        if (selectedMinPercentDiscount !== null)
+          updatedQuery.set('minPercentDiscount', selectedMinPercentDiscount);
+        if (selectedMaxPercentDiscount !== null)
+          updatedQuery.set('maxPercentDiscount', selectedMaxPercentDiscount);
 
         // Cập nhật tham số sắp xếp
         updatedQuery.set('sortBy', sortOption);
@@ -66,17 +66,16 @@ const SafeOffPage = () => {
   }, [
     location.search,
     selectedBrand,
-    selectedMinPrice,
-    selectedMaxPrice,
-    // selectedDiscount, // Thêm selectedDiscount vào dependency
+    selectedMinPercentDiscount,
+    selectedMaxPercentDiscount,
     sortOption,
     isDesc,
     page,
   ]);
 
   const handleDiscountChange = (minPrice, maxPrice) => {
-    setSelectedMinPrice(minPrice);
-    setSelectedMaxPrice(maxPrice);
+    setselectedMinPercentDiscount(minPrice);
+    setselectedMaxPercentDiscount(maxPrice);
   };
 
   const handleBrandChange = brands => {
@@ -87,10 +86,6 @@ const SafeOffPage = () => {
     const value = e.target.value;
     setSortOption(value);
     setIsDesc(value === 'desc' ? 'true' : 'false');
-  };
-
-  const handleDiscountPercentageChange = value => {
-    setSelectedDiscount(value);
   };
 
   const currentConfigsData = useSelector(state => state.systemConfigs);
@@ -138,7 +133,6 @@ const SafeOffPage = () => {
             onDiscountChange={handleDiscountChange}
             onBrandChange={handleBrandChange}
             discountOptions={DiscountOptions}
-            onDiscountPercentageChange={handleDiscountPercentageChange} // Thêm callback cho phần trăm giảm giá
           />
         </div>
         <div className='w-full lg:w-4/5 ml-2'>
@@ -182,7 +176,8 @@ const SafeOffPage = () => {
                             product?.discountDetails?.discountExpiredDate
                           ) > new Date()
                             ? product.price *
-                              ((100 - product?.discountDetails?.discountPercent) /
+                              ((100 -
+                                product?.discountDetails?.discountPercent) /
                                 100) // Hiển thị giá đã giảm nếu chưa hết hạn
                             : product.price // Hiển thị giá gốc nếu đã hết hạn
                         }

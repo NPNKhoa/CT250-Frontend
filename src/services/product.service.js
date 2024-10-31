@@ -12,15 +12,14 @@ class productService {
 
     const params = new URLSearchParams();
 
-    if (query.get('searchString'))
-      params.append('searchString', query.get('searchString'));
-    if (query.get('productType'))
-      params.append('productType', query.get('productType'));
+    if (query.get('searchString')) params.append('searchString', query.get('searchString'));
+    if (query.get('productType')) params.append('productType', query.get('productType'));
     if (query.get('brand')) params.append('brand', query.get('brand'));
     if (query.get('category')) params.append('category', query.get('category'));
     if (query.get('minPrice')) params.append('minPrice', query.get('minPrice'));
     if (query.get('maxPrice')) params.append('maxPrice', query.get('maxPrice'));
-
+    if (query.get('minPercentDiscount')) params.append('minPercentDiscount', query.get('minPercentDiscount'));
+    if (query.get('maxPercentDiscount')) params.append('maxPercentDiscount', query.get('maxPercentDiscount'));
     if (page) params.append('page', page);
     if (limit) params.append('limit', limit);
 
@@ -35,8 +34,7 @@ class productService {
         // Server responded with a status other than 2xx
         console.error('Error response:', error.response);
         throw new Error(
-          `Request failed with status code ${error.response.status}: ${
-            error.response.data?.error || 'Unknown error'
+          `Request failed with status code ${error.response.status}: ${error.response.data?.error || 'Unknown error'
           }`
         );
       } else if (error.request) {
