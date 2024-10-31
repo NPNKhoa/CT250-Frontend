@@ -10,12 +10,12 @@ const ThankYouPage = () => {
           style={{ fontSize: '4rem' }}
         />
         <h1 className='text-3xl font-extrabold text-gray-800 mb-4'>
-          Cảm ơn bạn đã thanh toán!
+          Cảm ơn bạn đã đặt hàng!
         </h1>
         <p className='text-gray-600 mb-6'>
-          Đơn hàng của bạn đã được xử lý thành công. Chúng tôi sẽ thông báo khi
-          đơn hàng của bạn được giao. Bạn có thể kiểm tra thông tin đơn hàng của
-          mình bất cứ lúc nào.
+          Đơn hàng của bạn đang được xử lý. Chúng tôi sẽ thông báo khi đơn hàng
+          của bạn được giao. Bạn có thể kiểm tra thông tin đơn hàng của mình bất
+          cứ lúc nào.
         </p>
 
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-6'>
