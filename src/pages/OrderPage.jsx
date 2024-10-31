@@ -264,7 +264,7 @@ function OrderPage() {
       }
       dispatch(getCartByUser(localStorage.getItem('accessToken')));
     } catch (error) {
-      console.error(error);
+      console.error(error + 'hehe');
     } finally {
       setIsLoading(false);
     }

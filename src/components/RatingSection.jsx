@@ -15,6 +15,16 @@ function RatingSection({ productId }) {
 
   const accessToken = localStorage.getItem('accessToken');
 
+  const [isVisible, setIsVisible] = useState(false);
+  useEffect(() => {
+    // Đặt timer để ẩn phần tử sau 5 phút
+    const timer = setTimeout(() => {
+      setIsVisible(true); // Đặt state thành true để hiện phần tử
+    }, 150000);
+
+    return () => clearTimeout(timer); // Dọn dẹp timer khi component unmount
+  }, []);
+
   const fetchComments = async () => {
     if (!productId) return;
 
@@ -198,30 +208,63 @@ function RatingSection({ productId }) {
               </span>
             </div>
             <div className='mt-2'>
-              <p className='font-semibold flex items-center'>
-                Đánh giá:
-                <span className='inline-flex ml-2'>
-                  {[...Array(5)].map((_, i) => (
-                    <svg
-                      key={i}
-                      xmlns='http://www.w3.org/2000/svg'
-                      className={`h-5 w-5 ${
-                        i < comment.star ? 'text-yellow-400' : 'text-gray-300'
-                      }`}
-                      viewBox='0 0 20 20'
-                      fill='currentColor'
-                    >
-                      <path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.042 3.209a1 1 0 00.95.69h3.362c.969 0 1.371 1.24.588 1.81l-2.72 1.977a1 1 0 00-.364 1.118l1.042 3.209c.3.921-.755 1.688-1.54 1.118l-2.72-1.977a1 1 0 00-1.176 0l-2.72 1.977c-.785.57-1.84-.197-1.54-1.118l1.042-3.209a1 1 0 00-.364-1.118L2.545 8.636c-.783-.57-.381-1.81.588-1.81h3.362a1 1 0 00.95-.69l1.042-3.209z' />
-                    </svg>
-                  ))}
-                </span>
-              </p>
-              <p className='mt-1 font-semibold'>
-                Nhận xét:{' '}
-                <span className='text-gray-700 font-thin'>
-                  {comment.content}
-                </span>
-              </p>
+              <div className=''>
+                <p className='font-semibold flex items-center'>
+                  Đánh giá:
+                  <span className='inline-flex ml-2'>
+                    {[...Array(5)].map((_, i) => (
+                      <svg
+                        key={i}
+                        xmlns='http://www.w3.org/2000/svg'
+                        className={`h-5 w-5 ${
+                          i < comment.star ? 'text-yellow-400' : 'text-gray-300'
+                        }`}
+                        viewBox='0 0 20 20'
+                        fill='currentColor'
+                      >
+                        <path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.042 3.209a1 1 0 00.95.69h3.362c.969 0 1.371 1.24.588 1.81l-2.72 1.977a1 1 0 00-.364 1.118l1.042 3.209c.3.921-.755 1.688-1.54 1.118l-2.72-1.977a1 1 0 00-1.176 0l-2.72 1.977c-.785.57-1.84-.197-1.54-1.118l1.042-3.209a1 1 0 00-.364-1.118L2.545 8.636c-.783-.57-.381-1.81.588-1.81h3.362a1 1 0 00.95-.69l1.042-3.209z' />
+                      </svg>
+                    ))}
+                  </span>
+                </p>
+                <p className='mt-1 font-semibold'>
+                  Nhận xét:{' '}
+                  <span className='text-gray-700 font-base'>
+                    {comment.content}
+                  </span>
+                </p>
+              </div>
+              <div className='flex justify-end ml-auto mt-3'>
+                {isVisible && ( // Chỉ hiển thị nếu isVisible là false
+                  <div className='bg-gray-100 p-4 rounded-lg'>
+                    <div className='flex items-center mb-2'>
+                      <img
+                        src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2eSyK4zRPihr2JDlF7txHRNhlWu0nqTFFOg&s'
+                        alt='Avatar'
+                        className='w-10 h-10 rounded-full mr-2'
+                      />
+                      <div className='flex justify-between w-full'>
+                        <p className='font-bold text-lg'>Quản trị viên</p>
+                        <span className='text-sm text-gray-500'>
+                          {new Date(comment.createdAt).toLocaleString('vi-VN', {
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            day: 'numeric',
+                            month: 'numeric',
+                            year: 'numeric',
+                          })}
+                        </span>
+                      </div>
+                    </div>
+                    <span className='text-gray-700 font-base'>
+                      Chúng tôi rất vui khi bạn hài lòng với sản phẩm của chúng
+                      tôi. Hãy chia sẻ trải nghiệm của bạn với bạn bè và người
+                      thân nhé. Chúng tôi rất mong tiếp tục được phục vụ bạn
+                      trong những lần mua sắm sau.
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         ))}
