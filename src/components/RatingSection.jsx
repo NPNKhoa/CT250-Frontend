@@ -15,6 +15,16 @@ function RatingSection({ productId }) {
 
   const accessToken = localStorage.getItem('accessToken');
 
+  const [isVisible, setIsVisible] = useState(false);
+  useEffect(() => {
+    // Đặt timer để ẩn phần tử sau 5 phút
+    const timer = setTimeout(() => {
+      setIsVisible(true); // Đặt state thành true để hiện phần tử
+    }, 150000);
+
+    return () => clearTimeout(timer); // Dọn dẹp timer khi component unmount
+  }, []);
+
   const fetchComments = async () => {
     if (!productId) return;
 
@@ -225,33 +235,35 @@ function RatingSection({ productId }) {
                 </p>
               </div>
               <div className='flex justify-end ml-auto mt-3'>
-                <div className='bg-gray-100 p-4 rounded-lg'>
-                  <div className='flex items-center mb-2'>
-                    <img
-                      src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2eSyK4zRPihr2JDlF7txHRNhlWu0nqTFFOg&s'
-                      alt='Avatar'
-                      className='w-10 h-10 rounded-full mr-2'
-                    />
-                    <div className='flex justify-between w-full'>
-                      <p className='font-bold text-lg'>Quản trị viên</p>
-                      <span className='text-sm text-gray-500'>
-                        {new Date(comment.createdAt).toLocaleString('vi-VN', {
-                          hour: 'numeric',
-                          minute: 'numeric',
-                          day: 'numeric',
-                          month: 'numeric',
-                          year: 'numeric',
-                        })}
-                      </span>
+                {isVisible && ( // Chỉ hiển thị nếu isVisible là false
+                  <div className='bg-gray-100 p-4 rounded-lg'>
+                    <div className='flex items-center mb-2'>
+                      <img
+                        src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2eSyK4zRPihr2JDlF7txHRNhlWu0nqTFFOg&s'
+                        alt='Avatar'
+                        className='w-10 h-10 rounded-full mr-2'
+                      />
+                      <div className='flex justify-between w-full'>
+                        <p className='font-bold text-lg'>Quản trị viên</p>
+                        <span className='text-sm text-gray-500'>
+                          {new Date(comment.createdAt).toLocaleString('vi-VN', {
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            day: 'numeric',
+                            month: 'numeric',
+                            year: 'numeric',
+                          })}
+                        </span>
+                      </div>
                     </div>
+                    <span className='text-gray-700 font-base'>
+                      Chúng tôi rất vui khi bạn hài lòng với sản phẩm của chúng
+                      tôi. Hãy chia sẻ trải nghiệm của bạn với bạn bè và người
+                      thân nhé. Chúng tôi rất mong tiếp tục được phục vụ bạn
+                      trong những lần mua sắm sau.
+                    </span>
                   </div>
-                  <span className='text-gray-700 font-base'>
-                    Chúng tôi rất vui khi bạn hài lòng với sản phẩm của chúng
-                    tôi. Hãy chia sẻ trải nghiệm của bạn với bạn bè và người
-                    thân nhé. Chúng tôi rất mong tiếp tục được phục vụ bạn trong
-                    những lần mua sắm sau.
-                  </span>
-                </div>
+                )}
               </div>
             </div>
           </div>
