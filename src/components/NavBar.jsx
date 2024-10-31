@@ -40,7 +40,10 @@ const NavBar = () => {
   const Categories = productTypes.map(type => ({
     title: type.productTypeName,
     items: categories
-      .filter(category => category.productType.productTypeName === type.productTypeName)
+      .filter(
+        category =>
+          category.productType.productTypeName === type.productTypeName
+      )
       .map(category => category.categoryName),
     category: [...categories.map(category => `${category.categoryName}`)],
   }));
@@ -167,13 +170,22 @@ const NavBar = () => {
             {Categories.map((category, idx) => (
               <div key={idx} className='w-full sm:w-1/2 lg:w-1/4 mb-4'>
                 <h3 className='text-primary font-semibold mb-2 border-b-2'>
-                  {category.title.toUpperCase()}
+                  <Link
+                    to={`/products?productType=${encodeURIComponent(
+                      category.title
+                    )}`}
+                    onClick={() => {
+                      setShowDropdown(false);
+                    }}
+                  >
+                    {category.title.toUpperCase()}
+                  </Link>
                 </h3>
                 <ul>
                   {category.items.map((item, i) => (
                     <li key={i} className='text-gray-600 mb-1'>
                       <Link
-                        to={`/products?category=${encodeURIComponent((item))}`}
+                        to={`/products?category=${encodeURIComponent(item)}`}
                         onClick={() => {
                           setShowDropdown(false);
                         }}
