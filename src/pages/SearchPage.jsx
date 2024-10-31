@@ -32,7 +32,7 @@ const SearchPage = () => {
   const [selectedMinPrice, setSelectedMinPrice] = useState(null);
   const [selectedMaxPrice, setSelectedMaxPrice] = useState(null);
   const [selectedBrand, setSelectedBrand] = useState([]);
-  const sortBy = 'price';
+  const [sortBy, setSortBy] = useState('');
   const [sortOption, setSortOption] = useState(query.get('sortBy'));
   const [isDesc, setIsDesc] = useState('false');
   const [products, setProducts] = useState([]);
@@ -91,6 +91,12 @@ const SearchPage = () => {
   const handleSortChange = e => {
     const value = e.target.value;
     setSortOption(value);
+    if (value === 'default') {
+      setSortBy('');
+      setIsDesc('false');
+      return;
+    }
+    setSortBy('price');
     setIsDesc(value === 'desc' ? 'true' : 'false');
   };
 
