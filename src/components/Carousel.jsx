@@ -7,14 +7,20 @@ const Carousel = () => {
   const systemConfigs = useSelector(
     state => state.systemConfigs.currentConfigs
   );
-  const banners = systemConfigs?.banners?.filter(banner => banner.isActiveBanner);
 
-  const totalSlides = banners?.length;
+  const [banners, setBanners] = useState([]);
+
+  useEffect(() => {
+    const activeBanners =
+      systemConfigs?.banners?.filter(banner => banner.isActiveBanner) || [];
+    setBanners(activeBanners);
+  }, [systemConfigs]);
 
   const changeSlide = direction => {
     setCurrentSlide(prevSlide => {
-      const newSlide = (prevSlide + direction + totalSlides) % totalSlides;
-      return newSlide < 0 ? totalSlides - 1 : newSlide; // Bảo đảm không bị âm
+      const newSlide =
+        (prevSlide + direction + banners.length) % banners.length;
+      return newSlide < 0 ? banners.length - 1 : newSlide; // Ensure it doesn't go negative
     });
   };
 
@@ -28,11 +34,11 @@ const Carousel = () => {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [totalSlides, changeSlide]); // Thêm totalSlides vào dependencies
+  }, [banners.length]);
 
   useEffect(() => {
     if (banners?.length > 0) {
-      setCurrentSlide(0); // Đặt lại khi banners thay đổi
+      setCurrentSlide(0);
     }
   }, [banners]);
 
