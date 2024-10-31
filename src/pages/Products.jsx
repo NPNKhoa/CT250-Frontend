@@ -130,7 +130,7 @@ const Products = () => {
 
   console.log(products);
 
-   const productType = category.split(' ').slice(0, -1).join(' ') || query.get('productType');
+  const productType = products[0]?.productTypeDetails?.productTypeName;
 
   return (
     <>
@@ -201,7 +201,8 @@ const Products = () => {
                             product?.discountDetails?.discountExpiredDate
                           ) > new Date()
                             ? product.price *
-                              ((100 - product?.discountDetails?.discountPercent) /
+                              ((100 -
+                                product?.discountDetails?.discountPercent) /
                                 100) // Hiển thị giá đã giảm nếu chưa hết hạn
                             : product.price // Hiển thị giá gốc nếu đã hết hạn
                         }
