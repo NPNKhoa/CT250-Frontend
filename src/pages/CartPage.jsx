@@ -99,7 +99,7 @@ const CartPage = () => {
       return;
     }
     dispatch(setSelectedProduct(selectedItems));
-    localStorage.setItem('selectedProductIds', JSON.stringify(selectedItems));
+    sessionStorage.setItem('selectedProductIds', JSON.stringify(selectedItems));
     setTimeout(() => navigate('/order'), 1000);
   };
 
