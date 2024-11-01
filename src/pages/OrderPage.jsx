@@ -33,7 +33,9 @@ function OrderPage() {
   const [deliveryFee, setDeliveryFee] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  const selectedProductIds = useSelector(state => state.cart.selectedProduct);
+  // const selectedProductIds = useSelector(state => state.cart.selectedProduct);
+  const selectedProductIds = JSON.parse(localStorage.getItem('selectedProductIds') || '[]');
+  console.log("productIds: ", selectedProductIds)
 
   const [productItems, setProductItems] = useState([]);
 
@@ -58,7 +60,6 @@ function OrderPage() {
     if (discountPrice > selectedVoucher?.maxPriceDiscount * 1000) {
       discountPrice = selectedVoucher?.maxPriceDiscount * 1000;
     }
-    console.log(ownVouchers);
     setDiscountPrice(discountPrice);
 
     setVoucher(selectedVoucher);
@@ -103,6 +104,7 @@ function OrderPage() {
     const fetchCartDetail = async () => {
       const product = [];
       selectedProductIds.forEach(async id => {
+        console.log('hehe: ', id)
         try {
           const data = await cartService.getCartDetail(id);
           product.push(data.data);
@@ -114,7 +116,7 @@ function OrderPage() {
     };
 
     fetchCartDetail();
-  }, [selectedProductIds]);
+  }, []);
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
@@ -300,15 +302,11 @@ function OrderPage() {
     setOpen(false);
   };
 
-  console.log(voucher);
   let maxDiscountPrice = (calculateTotal() * voucher.discountPercent) / 100;
 
   if (maxDiscountPrice > voucher.maxPriceDiscount * 1000) {
     maxDiscountPrice = voucher.maxPriceDiscount * 1000;
   }
-
-  console.log(maxDiscountPrice);
-  console.log(productItems);
 
   const giftsData = [
     {
