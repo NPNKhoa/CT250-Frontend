@@ -7,8 +7,6 @@ const GHN_SHOP_ID = parseInt(import.meta.env.VITE_GHN_SHOP_ID);
 
 const GHTK_TOKEN_API = import.meta.env.VITE_GHTK_TOKEN_API;
 
-const accessToken = localStorage.getItem('accessToken');
-
 class OrderService {
   constructor(path = '/order') {
     this.api = createApiClient(path);
@@ -19,6 +17,7 @@ class OrderService {
 
   async createOrder(order) {
     try {
+      const accessToken = localStorage.getItem('accessToken');
       const response = await this.api.post('/', order, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -40,6 +39,7 @@ class OrderService {
     if (isLatest) params.append('isLatest', isLatest);
 
     try {
+      const accessToken = localStorage.getItem('accessToken');
       const response = await this.api.get('/get-order-by-user', {
         params: params,
         headers: {
