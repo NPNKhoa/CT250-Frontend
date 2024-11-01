@@ -34,7 +34,7 @@ function OrderPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   // const selectedProductIds = useSelector(state => state.cart.selectedProduct);
-  const selectedProductIds = JSON.parse(localStorage.getItem('selectedProductIds') || '[]');
+  const selectedProductIds = JSON.parse(sessionStorage.getItem('selectedProductIds') || '[]');
   console.log("productIds: ", selectedProductIds)
 
   const [productItems, setProductItems] = useState([]);

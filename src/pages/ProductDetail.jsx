@@ -170,7 +170,7 @@ const ProductDetail = () => {
       }
     );
     dispatch(setSelectedProduct([response.data._id]));
-    localStorage.setItem('selectedProductIds', JSON.stringify([response.data._id]));
+    sessionStorage.setItem('selectedProductIds', JSON.stringify([response.data._id]));
     toast.success('Thanh toán ngay');
     navigate('/order');
   };
