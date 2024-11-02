@@ -34,6 +34,7 @@ const NavBar = () => {
     { value: 'products', label: 'Sản phẩm' },
     { value: 'saleoff', label: 'Khuyến mãi' },
     { value: 'about', label: 'Giới thiệu' },
+    { value: 'policy', label: 'Blog' },
     { value: 'contact', label: 'Liên hệ' },
   ];
 
@@ -122,44 +123,6 @@ const NavBar = () => {
         </div>
       </div>
 
-      {/* {showDropdown && (
-        <div
-          className='absolute top-12 w-full  lg:w-screen h-[70vh] bg-white shadow-lg z-50  overflow-y-auto no-scrollbar'
-          onMouseEnter={() => setShowDropdown(true)}
-          onMouseLeave={() => setShowDropdown(false)}
-        >
-          <div className='max-w-screen-xl mx-auto flex flex-col lg:flex-row flex-wrap justify-start p-4'>
-            {Categories.map((category, idx) => (
-              <div key={idx} className='w-full sm:w-1/2 lg:w-1/4 mb-4'>
-                <h3 className='text-primary font-semibold mb-2 border-b-2'>
-                  {category.title.toUpperCase()}
-                </h3>
-                <ul>
-                  {category.items.map((product, i) => (
-                    <li key={i} className='text-gray-600 mb-1'>
-                      <Link
-                        to={`/products?productType=${encodeURIComponent(
-                          category.title
-                        )}&category=${encodeURIComponent(category.category[i])}`}
-                        onClick={() => {
-                          setShowDropdown(false);
-                        }}
-                      >
-                        {product}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  // to={`/${item.value}`}
-                  className='text-primary mt-2 inline-block'
-                  onClick={handleMenuToggle}
-                ></Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      )} */}
       {showDropdown && (
         <div
           className='absolute top-12 w-full  lg:w-screen h-[70vh] bg-white shadow-lg z-50  overflow-y-auto no-scrollbar'

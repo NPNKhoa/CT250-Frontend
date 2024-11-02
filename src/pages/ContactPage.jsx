@@ -82,7 +82,7 @@ const ContactPage = () => {
   return (
     <>
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
-      <div className='container mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8'>
+      <div className='container mx-auto p-4 flex flex-col lg:flex-row gap-3'>
         <div className='w-full lg:w-1/2'>
           <h1 className='text-2xl font-bold mb-4'>Liên hệ với chúng tôi</h1>
           <form
