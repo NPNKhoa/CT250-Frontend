@@ -15,6 +15,8 @@ import OrderPage from '@pages/OrderPage';
 import TestPage from '@pages/TestPage';
 import SafeOffPage from '@pages/SafeOffPage';
 import EmailVerificationPage from '@pages/EmailVerificationPage';
+import PolicyPage from '@pages/PolicyPage';
+import ArticleCardDetail from '@components/PolicyPage/ArticleCardDetail';
 
 const routes = [
   {
@@ -123,6 +125,17 @@ const routes = [
     id: 'test',
     path: '/test',
     element: <TestPage />,
+  },
+
+  {
+    id: 'policy',
+    path: '/policy',
+    element: <PolicyPage />,
+  },
+  {
+    id: 'policydetail',
+    path: '/policydetail',
+    element: <ArticleCardDetail />,
   },
 ];
 
