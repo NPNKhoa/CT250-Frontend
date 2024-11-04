@@ -20,10 +20,6 @@
       "@helpers/*": ["helpers/*"]
     }
   },
-  "include": [
-    "src/**/*",
-    "tailwind.config.js",
-    "../CT250-admin/src/pages/RatingPage.jsx"
-  ], // Bao gồm tất cả các tệp trong thư mục src
+  "include": ["src/**/*", "tailwind.config.js"], // Bao gồm tất cả các tệp trong thư mục src
   "exclude": ["node_modules", "dist"] // Loại trừ thư mục không cần thiết
 }
