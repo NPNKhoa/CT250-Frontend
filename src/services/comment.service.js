@@ -7,7 +7,7 @@ class CommentService {
 
   async getAllComments(productId) {
     try {
-      const response = await this.api.get('/by-product', {
+      const response = await this.api.get('/byproduct', {
         params: { productId },
       });
       return response.data;
