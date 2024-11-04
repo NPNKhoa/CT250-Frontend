@@ -68,11 +68,13 @@ function RatingSection({ productId }) {
       setRating(5);
       toast.success('Đánh giá thành công! Cảm ơn bạn đã sử dụng dịch vụ');
 
-      // Gọi lại hàm fetchComments để cập nhật danh sách nhận xét
       fetchComments();
     } catch (error) {
-      console.log(error);
-      toast.error('Vui lòng mua sản phẩm để đánh giá!');
+      if (error.message == 'You can only comment once per product!') {
+        toast.error('Bạn chỉ có thể đánh giá một lần cho mỗi sản phẩm!');
+      } else {
+        toast.error('Đánh giá thất bại! Vui lòng thử lại sau!');
+      }
     }
   };
 
