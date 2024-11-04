@@ -34,7 +34,7 @@ const NavBar = () => {
     { value: 'products', label: 'Sản phẩm' },
     { value: 'saleoff', label: 'Khuyến mãi' },
     { value: 'about', label: 'Giới thiệu' },
-    { value: 'policy', label: 'Blog' },
+    { value: 'article', label: 'Bài viết' },
     { value: 'contact', label: 'Liên hệ' },
   ];
 

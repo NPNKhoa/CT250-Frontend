@@ -15,8 +15,8 @@ import OrderPage from '@pages/OrderPage';
 import TestPage from '@pages/TestPage';
 import SafeOffPage from '@pages/SafeOffPage';
 import EmailVerificationPage from '@pages/EmailVerificationPage';
-import PolicyPage from '@pages/PolicyPage';
-import ArticleCardDetail from '@components/PolicyPage/ArticleCardDetail';
+import ArticlePage from '@pages/ArticlePage';
+import ArticleCardDetail from '@components/ArticlePage/ArticleCardDetail';
 
 const routes = [
   {
@@ -129,12 +129,12 @@ const routes = [
 
   {
     id: 'policy',
-    path: '/policy',
-    element: <PolicyPage />,
+    path: '/article',
+    element: <ArticlePage />,
   },
   {
     id: 'policydetail',
-    path: '/policydetail',
+    path: '/articledetail/:id',
     element: <ArticleCardDetail />,
   },
 ];
