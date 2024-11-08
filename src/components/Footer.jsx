@@ -32,10 +32,16 @@ const Footer = () => {
     {
       title: 'Hướng dẫn',
       links: [
-        { label: 'Hướng dẫn thanh toán', link: '#' },
-        { label: 'Kiểm tra bảo hành', link: '#' },
-        { label: 'Kiểm tra đơn hàng', link: '#' },
-        { label: 'HƯỚNG DẪN MUA HÀNG', link: '#' },
+        {
+          label: 'Hướng dẫn thanh toán',
+          link: '/articledetail/6728f343320ce0b1476237c5',
+        },
+        // { label: 'Kiểm tra bảo hành', link: '#' },
+        { label: 'Kiểm tra đơn hàng', link: '/checkorder' },
+        {
+          label: 'HƯỚNG DẪN MUA HÀNG',
+          link: '/articledetail/6728fa4a701c2544fac7aa40',
+        },
       ],
     },
     {
