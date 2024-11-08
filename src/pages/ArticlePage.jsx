@@ -12,15 +12,13 @@ const breadcrumbs = [
 const PolicyPage = () => {
   const [articles, setArticles] = useState([]);
 
-  useEffect (() => {
+  useEffect(() => {
     const fetchArticles = async () => {
       const articles = await articleService.getAll();
-      console.log(articles);
       setArticles(articles.data);
-    }
+    };
     fetchArticles();
-  }
-  , []);
+  }, []);
 
   return (
     <>
