@@ -22,22 +22,28 @@ const VoucherList = () => {
 
   return (
     <div className='p-8 flex justify-around items-center'>
-      {publishingVouchers.map(voucher => {
-        const usedPercent = Math.ceil(
-          voucher.collectedCount / voucher.maxUsage
-        );
+      {publishingVouchers?.length !== 0 ? (
+        publishingVouchers.map(voucher => {
+          const usedPercent = Math.ceil(
+            voucher.collectedCount / voucher.maxUsage
+          );
 
-        return (
-          <Voucher
-            key={voucher._id}
-            voucherId={voucher._id}
-            voucherName={voucher.voucherName}
-            discountPercent={voucher.discountPercent}
-            usedPercent={usedPercent}
-            maxPriceDiscount={voucher.maxPriceDiscount}
-          />
-        );
-      })}
+          return (
+            <Voucher
+              key={voucher._id}
+              voucherId={voucher._id}
+              voucherName={voucher.voucherName}
+              discountPercent={voucher.discountPercent}
+              usedPercent={usedPercent}
+              maxPriceDiscount={voucher.maxPriceDiscount}
+            />
+          );
+        })
+      ) : (
+        <h2 className='text-2xl font-semibold text-primary italic'>
+          Hiện chưa có voucher khả dụng
+        </h2>
+      )}
     </div>
   );
 };
