@@ -136,37 +136,46 @@ const SearchPage = () => {
           </select>
         </div>
       </div>
-
-      <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4  gap-1 m-6'>
-        {Array.isArray(products) &&
-          products.map((product, index) => (
-            <ProductItem
-              key={index}
-              imageUrl={product.productImagePath[0]}
-              name={product.productName}
-              price={
-                new Date(product?.discountDetails?.discountExpiredDate) >
-                new Date()
-                  ? product.price *
-                    ((100 - product?.discountDetails?.discountPercent) / 100) // Hiển thị giá đã giảm nếu chưa hết hạn
-                  : product.price // Hiển thị giá gốc nếu đã hết hạn
-              }
-              productLink={`products/detail/${product._id}`}
-              discount={
-                new Date(product?.discountDetails?.discountExpiredDate) >
-                new Date()
-                  ? product?.discountDetails?.discountPercent
-                  : null // Không hiển thị phần trăm giảm giá nếu đã hết hạn
-              }
-            />
-          ))}
-        <div className='col-span-2 sm:col-span-3 md:col-span-4 mt-4 flex justify-center'>
-          <PaginationComponent
-            path={`${location.pathname}`}
-            totalPages={totalPage}
-          />
+      {loading ? (
+        <div className='w-full h-full flex justify-center items-center'>
+          <div className='w-24 h-24 mb-8 border-8 border-primary border-dotted rounded-full animate-spin'></div>
         </div>
-      </div>
+      ) : products.length !== 0 ? (
+        <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4  gap-1 m-6'>
+          {Array.isArray(products) &&
+            products.map((product, index) => (
+              <ProductItem
+                key={index}
+                imageUrl={product.productImagePath[0]}
+                name={product.productName}
+                price={
+                  new Date(product?.discountDetails?.discountExpiredDate) >
+                  new Date()
+                    ? product.price *
+                      ((100 - product?.discountDetails?.discountPercent) / 100) // Hiển thị giá đã giảm nếu chưa hết hạn
+                    : product.price // Hiển thị giá gốc nếu đã hết hạn
+                }
+                productLink={`products/detail/${product._id}`}
+                discount={
+                  new Date(product?.discountDetails?.discountExpiredDate) >
+                  new Date()
+                    ? product?.discountDetails?.discountPercent
+                    : null // Không hiển thị phần trăm giảm giá nếu đã hết hạn
+                }
+              />
+            ))}
+          <div className='col-span-2 sm:col-span-3 md:col-span-4 mt-4 flex justify-center'>
+            <PaginationComponent
+              path={`${location.pathname}`}
+              totalPages={totalPage}
+            />
+          </div>
+        </div>
+      ) : (
+        <div className='w-full h-full mb-8 flex justify-center items-center'>
+          <h2 className='font-semibold text-3xl'>Không tìm thấy sản phẩm</h2>
+        </div>
+      )}
     </>
   );
 };
