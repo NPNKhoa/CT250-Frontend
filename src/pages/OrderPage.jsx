@@ -34,8 +34,10 @@ function OrderPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   // const selectedProductIds = useSelector(state => state.cart.selectedProduct);
-  const selectedProductIds = JSON.parse(sessionStorage.getItem('selectedProductIds') || '[]');
-  console.log("productIds: ", selectedProductIds)
+  const selectedProductIds = JSON.parse(
+    sessionStorage.getItem('selectedProductIds') || '[]'
+  );
+  console.log('productIds: ', selectedProductIds);
 
   const [productItems, setProductItems] = useState([]);
 
@@ -104,7 +106,7 @@ function OrderPage() {
     const fetchCartDetail = async () => {
       const product = [];
       selectedProductIds.forEach(async id => {
-        console.log('hehe: ', id)
+        console.log('hehe: ', id);
         try {
           const data = await cartService.getCartDetail(id);
           product.push(data.data);
@@ -266,7 +268,10 @@ function OrderPage() {
       }
       dispatch(getCartByUser(localStorage.getItem('accessToken')));
     } catch (error) {
-      console.error(error + 'hehe');
+      if (error.message) {
+        toast.error('Xin lỗi. Voucher bạn chọn đã hết hạn!');
+      }
+      console.error(error.message);
     } finally {
       setIsLoading(false);
     }

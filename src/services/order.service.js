@@ -25,7 +25,7 @@ class OrderService {
       });
       return response.data;
     } catch (error) {
-      throw new Error(error.message || 'Error creating order');
+      throw new Error(error.data.error || 'Error creating order');
     }
   }
 
