@@ -50,7 +50,7 @@ const HomePage = () => {
       image:
         'https://cdn.shopvnb.com/img/400x400/uploads/danh_muc/thumb/7.webp',
       name: 'Phụ kiện cầu lông',
-      link: '#',
+      link: '/products?productType=Phụ%20kiện%20cầu%20lông',
     },
   ];
 
@@ -59,25 +59,25 @@ const HomePage = () => {
       image:
         'https://cdn.shopvnb.com/img/400x400/uploads/danh_muc/thumb/bvot-tennis.jpg',
       name: 'Vợt TENNIS',
-      link: '#',
+      link: '/products?productType=Vợt%20tennis',
     },
     {
       image:
         'https://cdn.shopvnb.com/img/400x400/uploads/danh_muc/thumb/b-tui-tennis.jpg',
       name: 'Túi tennis',
-      link: '#',
+      link: '/products?productType=Túi%20tennis',
     },
     {
       image:
         'https://cdn.shopvnb.com/img/400x400/uploads/danh_muc/thumb/b-balo-tennis.jpg',
       name: 'Balo tennis',
-      link: '#',
+      link: '/products?productType=Balo%20tennis',
     },
     {
       image:
         'https://cdn.shopvnb.com/img/400x400/uploads/danh_muc/thumb/cuoc-tennis.jpg',
       name: 'Phụ kiện tennis',
-      link: '#',
+      link: '/products?productType=Phụ%20kiện%20tennis',
     },
   ];
 
@@ -86,25 +86,25 @@ const HomePage = () => {
       image:
         'https://cdn.shopvnb.com/img/400x400/uploads/danh_muc/thumb/vot-pickleball_1718941016.jpg',
       name: 'Vợt pickleball',
-      link: '#',
+      link: '/products?productType=Vợt%20PickleBall',
     },
     {
       image:
         'https://cdn.shopvnb.com/img/400x400/uploads/danh_muc/thumb/tui-pickleball_1718941360.jpg',
       name: 'Túi pickleball',
-      link: '#',
+      link: '/products?productType=Túi%20Pickleball',
     },
     {
       image:
         'https://cdn.shopvnb.com/img/400x400/uploads/danh_muc/thumb/bong-pickleball_1718941306.jpg',
-      name: 'Bóng pickleball',
-      link: '#',
+      name: 'Balo pickleball',
+      link: '/products?productType=Balo%20Pickleball',
     },
     {
       image:
         'https://cdn.shopvnb.com/img/400x400/uploads/danh_muc/thumb/phu-kien-pickleball-2_1719190265.jpg',
       name: 'Phụ kiện pickleball',
-      link: '#',
+      link: '/products?productType=Phụ%20kiện%20Pickleball',
     },
   ];
 
