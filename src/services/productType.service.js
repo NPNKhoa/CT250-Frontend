@@ -6,7 +6,7 @@ class productTypeService {
   }
 
   async getAll() {
-    return (await this.api.get('/')).data;
+    return (await this.api.get('/?limit=0')).data;
   }
 
   async getById(id) {
