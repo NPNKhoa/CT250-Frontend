@@ -5,8 +5,8 @@ class articleService {
     this.api = createApiClient(path);
   }
 
-  async getAll() {
-    return (await this.api.get('/')).data;
+  async getAll(page, limit) {
+    return (await this.api.get(`/?limit=${limit}&page=${page}`)).data;
   }
 
   async getById(id) {
