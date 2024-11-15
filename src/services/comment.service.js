@@ -16,17 +16,24 @@ class CommentService {
     }
   }
 
-  async createComment(productId, star, content, accessToken) {
+  async createComment(productId, star, content, reviewImages, accessToken) {
     try {
-      const response = await this.api.post(
-        '/',
-        { productId, star, content },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const formData = new FormData();
+
+      formData.append('productId', productId);
+      formData.append('star', star);
+      formData.append('content', content);
+
+      reviewImages.forEach(file => {
+        formData.append('reviewImages', file);
+      });
+
+      const response = await this.api.post('/', formData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       return response.data;
     } catch (error) {
       throw new Error(error.response?.data?.error || 'Error creating comment');

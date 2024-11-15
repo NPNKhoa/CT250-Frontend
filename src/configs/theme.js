@@ -30,9 +30,11 @@ const theme = createTheme({
         outlined: {
           borderColor: '#EA580C',
           color: '#EA580C',
+          backgroundColor: '#FFEBE8',
           '&:hover': {
+            color: '#FFFFFF',
             borderColor: '#AC3A00',
-            backgroundColor: '#FFEBE8',
+            backgroundColor: '#EA580C',
           },
         },
         text: {
