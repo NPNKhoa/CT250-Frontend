@@ -44,16 +44,6 @@ function ProfilePage() {
     { id: 'change-password', label: 'Đổi Mật Khẩu', icon: <Lock /> },
     { id: 'orders', label: 'Đơn Mua', icon: <ShoppingCart /> },
     { id: 'vouchers', label: 'Kho Vouchers', icon: <Gift /> },
-    // {
-    //   id: 'notification-settings',
-    //   label: 'Cài Đặt Thông Báo',
-    //   icon: <Notifications />,
-    // },
-    {
-      id: 'privacy-settings',
-      label: 'Những Thiết Lập Riêng Tư',
-      icon: <Security />,
-    },
   ];
 
   const renderContent = () => {

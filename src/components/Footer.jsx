@@ -39,7 +39,7 @@ const Footer = () => {
         // { label: 'Kiểm tra bảo hành', link: '#' },
         { label: 'Kiểm tra đơn hàng', link: '/checkorder' },
         {
-          label: 'HƯỚNG DẪN MUA HÀNG',
+          label: 'Hướng dẫn mua hàng',
           link: '/articledetail/6728fa4a701c2544fac7aa40',
         },
       ],
@@ -58,7 +58,7 @@ const Footer = () => {
           icon: <LocationOnIcon className='text-white mr-2' />,
         },
         {
-          label: 'minhtu15112k3gmail.com',
+          label: 'clone.ct250@gmail.com',
           link: '#',
           icon: <MailIcon className='text-white mr-2' />,
         },
@@ -137,10 +137,10 @@ const Footer = () => {
 
       <div className='py-3 bg-black text-center'>
         <p className='text-white text-sm'>
-          © Copyright {new Date().getFullYear()} By BaKaTu
+          © Copyright {new Date().getFullYear()} By KTB Sport
           <span className='hidden sm:inline'> - </span>
           <span className='block sm:inline'>
-            GĐ/Sở hữu website: Nguyễn Minh Tứ
+            GĐ/Sở hữu website: KTB Sport
           </span>
         </p>
       </div>
