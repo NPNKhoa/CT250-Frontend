@@ -1,19 +1,50 @@
-import { Rating } from '@mui/material';
+import { Button, Rating } from '@mui/material';
 import commentService from '@services/comment.service';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import ImageWithAction from './common/ImageWithAction';
 
 // eslint-disable-next-line react/prop-types
 function RatingSection({ productId }) {
   const [ratingsData, setRatingsData] = useState([0, 0, 0, 0, 0]);
   const [averageRating, setAverageRating] = useState(5);
   const [totalRatings, setTotalRatings] = useState(0);
-  const [rating, setRating] = useState(5);
+  const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
   const [comments, setComments] = useState([]);
   const [visibleComments, setVisibleComments] = useState(5);
 
+  const [reviewImg, setReviewImg] = useState([]);
+  const [reviewImgFiles, setReviewImgFiles] = useState([]);
+
   const accessToken = localStorage.getItem('accessToken');
+
+  const onLoadImage = files => {
+    const fileArray = Array.from(files);
+    const tempUrls = fileArray.map(file => URL.createObjectURL(file));
+
+    setReviewImgFiles(fileArray);
+
+    setReviewImg(prevImg => [...prevImg, ...tempUrls]);
+  };
+
+  const onDeleteReviewImg = image => {
+    console.log('Deleting review image: ' + image);
+
+    const imageIndex = reviewImg.findIndex(img => img === image);
+
+    if (imageIndex !== -1) {
+      const updatedUrls = reviewImg.filter((_, index) => index !== imageIndex);
+      setReviewImg(updatedUrls);
+
+      const updatedFiles = reviewImgFiles.filter(
+        (_, index) => index !== imageIndex
+      );
+      setReviewImgFiles(updatedFiles);
+    }
+  };
 
   const fetchComments = async () => {
     if (!productId) return;
@@ -44,8 +75,6 @@ function RatingSection({ productId }) {
     }
   };
 
-  console.log(comments);
-
   // useEffect để gọi fetchComments khi productId thay đổi
   useEffect(() => {
     fetchComments();
@@ -61,12 +90,15 @@ function RatingSection({ productId }) {
         productId,
         rating,
         review,
+        reviewImgFiles,
         accessToken
       );
 
       setReview('');
       setRating(5);
       toast.success('Đánh giá thành công! Cảm ơn bạn đã sử dụng dịch vụ');
+
+      setReviewImg([]);
 
       fetchComments();
     } catch (error) {
@@ -141,17 +173,19 @@ function RatingSection({ productId }) {
         </div>
       </div>
       <div className='flex flex-col items-start p-4 md:p-6 bg-white rounded-lg shadow-md w-full mx-auto'>
-        <p className='text-md md:text-lg font-semibold mb-4'>
-          Bạn đánh giá sao về sản phẩm này?
-        </p>
-        <Rating
-          name='product-rating'
-          value={rating}
-          onChange={handleRatingChange}
-          precision={1}
-          size='large'
-          className='mb-4'
-        />
+        <div className='flex justify-between items-center gap-4'>
+          <p className='text-md md:text-lg font-semibold mb-4'>
+            Bạn đánh giá sao về sản phẩm này?
+          </p>
+          <Rating
+            name='product-rating'
+            value={rating}
+            onChange={handleRatingChange}
+            precision={1}
+            size='large'
+            className='mb-4'
+          />
+        </div>
         <textarea
           value={review}
           onChange={handleReviewChange}
@@ -159,12 +193,39 @@ function RatingSection({ productId }) {
           rows='4'
           className='w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary resize-none mb-4'
         />
-        <button
-          onClick={handleSubmit}
-          className='bg-primary hover:bg-hover-primary text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-150 ease-in-out'
-        >
-          Đánh giá ngay
-        </button>
+        <div className='flex justify-between items-center w-full'>
+          <Button
+            component='label'
+            variant='outlined'
+            startIcon={<AddAPhotoIcon />}
+          >
+            Thêm ảnh
+            <input
+              type='file'
+              multiple
+              onChange={event => onLoadImage(event.target.files)}
+              className='absolute inset-0 w-px h-px opacity-0'
+            />
+          </Button>
+          <button
+            onClick={handleSubmit}
+            className='bg-primary hover:bg-hover-primary text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-150 ease-in-out'
+          >
+            Đánh giá ngay
+          </button>
+        </div>
+        {reviewImg.length !== 0 && (
+          <div className='flex justify-start w-full items-center gap-5 mt-3 flex-wrap'>
+            {reviewImg.map((image, index) => (
+              <ImageWithAction
+                key={`reviewImg-${index}`}
+                imageUrl={image}
+                onDelete={() => onDeleteReviewImg(image)}
+                className='w-1/4'
+              />
+            ))}
+          </div>
+        )}
       </div>
       {comments
         .slice()
@@ -226,6 +287,19 @@ function RatingSection({ productId }) {
                     {comment.content}
                   </span>
                 </p>
+                {comment?.reviewImagePath &&
+                  comment.reviewImagePath.length !== 0 && (
+                    <div className='flex justify-start items-center flex-wrap gap-3 w-full mt-3'>
+                      {comment.reviewImagePath.map((img, index) => (
+                        <img
+                          key={`${img}-${index}`}
+                          src={`http://localhost:5000/${img}`}
+                          alt='Ảnh khách hàng đánh giá'
+                          className='w-[30%]'
+                        />
+                      ))}
+                    </div>
+                  )}
               </div>
               <div className='flex justify-start mt-3'>
                 {comment.replies.length > 0 && (
