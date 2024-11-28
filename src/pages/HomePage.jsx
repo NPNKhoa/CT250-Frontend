@@ -117,10 +117,10 @@ const HomePage = () => {
 
       <section className='py-6 bg-white'>
         <div className='container mx-auto px-4 text-center'>
-          <h1 className='text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 mb-4'>
+          <h1 className='text-2xl sm:text-4xl md:text-5xl font-bold text-gray-800 mb-4'>
             Chào mừng đến với cửa hàng của chúng tôi!
           </h1>
-          <p className='text-base sm:text-lg md:text-xl text-gray-600'>
+          <p className='text-sm sm:text-lg md:text-xl text-gray-600'>
             Khám phá những sản phẩm mới nhất và ưu đãi hấp dẫn dành riêng cho
             bạn.
           </p>
@@ -136,17 +136,18 @@ const HomePage = () => {
           <SaleOffComponent />
         </div>
       </section> */}
-
       <section className='py-4'>
         <div className='container mx-auto px-4'>
+          {/* Tiêu đề */}
           <h2 className='text-3xl font-bold text-center hover:text-primary mb-4'>
             Sản phẩm mới nhất
           </h2>
-          <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[30vw] mx-auto'></span>
-          <div className='flex justify-between items-center mb-4'>
+          <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[50vw] md:w-[30vw] mx-auto'></span>
+
+          {/* Thanh điều hướng */}
+          <div className='flex justify-between mb-4'>
             <div className='flex items-center space-x-4'></div>
-            {/* Link "Xem tất cả" */}
-            <div>
+            <div className='mt-2 sm:mt-0'>
               <a
                 href='/products?productType=Vợt%20cầu%20lông'
                 className='text-primary hover:underline'
@@ -155,27 +156,27 @@ const HomePage = () => {
               </a>
             </div>
           </div>
-          <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 justify-items-center'>
+
+          {/* Khu vực sản phẩm */}
+          <div className='flex md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 overflow-x-auto md:overflow-visible scrollbar-hide'>
             {Array.isArray(products) &&
-              products.map(
-                (product, index) => (
-                  console.log(product),
-                  (
-                    <ProductItem
-                      key={index}
-                      imageUrl={product?.productImagePath[0]}
-                      name={product?.productName}
-                      price={
-                        product?.price *
-                        ((100 - (product?.discount?.discountPercent || 0)) /
-                          100)
-                      }
-                      productLink={`products/detail/${product._id}`}
-                      discount={product?.discount?.discountPercent}
-                    />
-                  )
-                )
-              )}
+              products.map((product, index) => (
+                <div
+                  key={index}
+                  className='flex-shrink-0 w-[calc(80vw/2)] sm:w-[calc(90vw/2)] md:w-auto'
+                >
+                  <ProductItem
+                    imageUrl={product?.productImagePath[0]}
+                    name={product?.productName}
+                    price={
+                      product?.price *
+                      ((100 - (product?.discount?.discountPercent || 0)) / 100)
+                    }
+                    productLink={`products/detail/${product._id}`}
+                    discount={product?.discount?.discountPercent}
+                  />
+                </div>
+              ))}
           </div>
         </div>
       </section>
@@ -185,7 +186,7 @@ const HomePage = () => {
           <h2 className='text-3xl font-bold text-center hover:text-primary mb-4'>
             Có thể bạn cũng thích
           </h2>
-          <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[30vw] mx-auto'></span>
+          <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[50vw] md:w-[30vw] mx-auto'></span>
           <SuggestedProducts />
         </div>
       </section>
@@ -194,7 +195,7 @@ const HomePage = () => {
         <h2 className='text-3xl font-bold text-center hover:text-primary mb-4'>
           Voucher hot nhất
         </h2>
-        <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[30vw] mx-auto'></span>
+        <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[50vw] md:w-[30vw] mx-auto'></span>
         <div className='mx-auto px-4'>
           <VoucherList />
         </div>
@@ -214,7 +215,7 @@ const HomePage = () => {
         <h2 className='text-3xl font-bold text-center mb-4 hover:text-primary'>
           Sản phẩm cầu lông
         </h2>
-        <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[30vw] mx-auto'></span>
+        <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[50vw] md:w-[30vw] mx-auto'></span>
         <ProductList products={productsBMT} />
       </div>
 
@@ -222,7 +223,7 @@ const HomePage = () => {
         <h2 className='text-3xl font-bold text-center mb-4 hover:text-primary'>
           Sản phẩm Tennis
         </h2>
-        <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[30vw] mx-auto'></span>
+        <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[50vw] md:w-[30vw] mx-auto'></span>
         <ProductList products={productsTN} />
       </div>
 
@@ -230,7 +231,7 @@ const HomePage = () => {
         <h2 className='text-3xl font-bold text-center mb-4 hover:text-primary'>
           Sản phẩm Pickleball
         </h2>
-        <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[30vw] mx-auto'></span>
+        <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[50vw] md:w-[30vw] mx-auto'></span>
         <ProductList products={productsBKB} />
       </div>
     </div>
