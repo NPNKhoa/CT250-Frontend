@@ -67,7 +67,7 @@ function AddressSection() {
         <h2 className='text-xl font-semibold mb-4'>Danh sách địa chỉ</h2>
         {loading && <p>Loading...</p>}
         {addresses.length > 0 ? (
-          <div className='overflow-y-auto max-h-96 no-scrollbar'>
+          <div className='overflow-y-auto lg:max-h-96 max-h-full no-scrollbar'>
             {addresses.map((address, index) => (
               <div key={index} className='border-t border-gray-300 py-5'>
                 <div className='flex justify-between'>
