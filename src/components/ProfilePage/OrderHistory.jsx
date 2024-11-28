@@ -105,12 +105,13 @@ function OrderHistory() {
   return (
     <>
       <div className='container mx-auto py-8 px-4'>
-        <div className='flex justify-between items-center mb-4'>
-          <div className='flex items-center'>
-            <div className='flex space-x-2'>
+        <div className='flex flex-col md:flex-row md:justify-between md:items-center mb-4'>
+          {/* Lọc trạng thái đơn hàng */}
+          <div className='flex items-center mb-4 md:mb-0'>
+            <div className='flex space-x-2 overflow-x-auto'>
               <button
                 onClick={() => handleChangeFilter('')}
-                className={`px-4 py-2 rounded-lg ${
+                className={`flex-shrink-0 px-4 py-2 rounded-lg ${
                   selectedOrderStatus === ''
                     ? 'bg-primary text-white'
                     : 'bg-gray-200'
@@ -123,7 +124,7 @@ function OrderHistory() {
                   <button
                     key={_id}
                     onClick={() => handleChangeFilter(_id)}
-                    className={`px-4 py-2 rounded-lg ${
+                    className={`flex-shrink-0 px-4 py-2 rounded-lg ${
                       selectedOrderStatus === _id
                         ? 'bg-primary text-white'
                         : 'bg-gray-200'
@@ -135,20 +136,23 @@ function OrderHistory() {
             </div>
           </div>
 
-          {/* Phần sắp xếp giữ nguyên */}
-          <div className='flex items-center'>
-            <h3 className='inline-block'>Sắp xếp:</h3>
-            <FormControl sx={{ m: 1, minWidth: 120 }} size='small'>
-              <InputLabel>Ngày đặt</InputLabel>
-              <Select
-                value={isLatestOrder}
-                label='Ngày đặt'
-                onChange={handleChangeOrdering}
-              >
-                <MenuItem value='latest'>Mới nhất</MenuItem>
-                <MenuItem value='oldest'>Cũ nhất</MenuItem>
-              </Select>
-            </FormControl>
+          {/* Phần sắp xếp */}
+          <div className='flex justify-between'>
+            <div className=''></div>
+            <div className='flex items-center'>
+              <h3 className='inline-block mr-2'>Sắp xếp:</h3>
+              <FormControl sx={{ m: 1, minWidth: 120 }} size='small'>
+                <InputLabel>Ngày đặt</InputLabel>
+                <Select
+                  value={isLatestOrder}
+                  label='Ngày đặt'
+                  onChange={handleChangeOrdering}
+                >
+                  <MenuItem value='latest'>Mới nhất</MenuItem>
+                  <MenuItem value='oldest'>Cũ nhất</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
           </div>
         </div>
 
@@ -165,7 +169,7 @@ function OrderHistory() {
         ) : (
           <div className='overflow-x-auto no-scrollbar'>
             <table className='min-w-full bg-white border mx-auto'>
-              <thead>
+              <thead className='hidden md:table-header-group'>
                 <tr>
                   <th className='py-2 px-4 border-b text-center'>
                     Mã đơn hàng
@@ -179,24 +183,44 @@ function OrderHistory() {
               <tbody>
                 {Array.isArray(orders) &&
                   orders.map(order => (
-                    <tr key={order._id} className='hover:bg-gray-50'>
-                      <td className='py-2 px-4 border-b text-center'>
+                    <tr
+                      key={order._id}
+                      className='md:table-row flex flex-col md:flex-row items-start md:items-center mb-4 md:mb-0 hover:bg-gray-50'
+                    >
+                      {/* Mã đơn hàng */}
+                      <td className='py-2 px-4 border-b md:border-0 text-left md:text-center'>
+                        <span className='block md:hidden font-semibold'>
+                          Mã đơn hàng:
+                        </span>
                         #{order._id}
                       </td>
-                      <td className='py-2 px-4 border-b text-center'>
+                      {/* Ngày đặt */}
+                      <td className='py-2 px-4 border-b md:border-0 text-left md:text-center'>
+                        <span className='block md:hidden font-semibold'>
+                          Ngày đặt:
+                        </span>
                         {new Date(order.orderDate).toLocaleDateString('vi-VN')}
                       </td>
-                      <td className='py-2 px-4 border-b text-center'>
+                      {/* Tổng tiền */}
+                      <td className='py-2 px-4 border-b md:border-0 text-left md:text-center'>
+                        <span className='block md:hidden font-semibold'>
+                          Tổng tiền:
+                        </span>
                         {ToVietnamCurrencyFormat(order.totalPrice)}
                       </td>
+                      {/* Trạng thái */}
                       <td
-                        className={`py-2 px-4 border-b text-center ${getStatusClass(
+                        className={`py-2 px-4 border-b md:border-0 text-left md:text-center ${getStatusClass(
                           order.orderStatus?.orderStatus
                         )}`}
                       >
+                        <span className='block md:hidden font-semibold'>
+                          Trạng thái:
+                        </span>
                         {order.orderStatus?.orderStatus}
                       </td>
-                      <td className='py-2 px-4 border-b text-center'>
+                      {/* Hành động */}
+                      <td className='py-2 px-4 border-b md:border-0 text-left md:text-center'>
                         <button
                           onClick={() => handleViewDetails(order)}
                           className='px-3 py-1 bg-primary text-white rounded hover:bg-hover-primary'
@@ -221,24 +245,23 @@ function OrderHistory() {
       </div>
 
       {selectedOrder && (
-        <div className='fixed inset-0 z-50 flex items-center justify-center bg-gray-600 bg-opacity-50'>
-          <div className='container mx-auto h-[90%] w-[80%] overflow-y-auto rounded-xl bg-white p-4'>
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-gray-600 bg-opacity-50 p-4'>
+          <div className='container mx-auto h-[90%] w-full sm:w-[80%] overflow-y-auto rounded-xl bg-white p-4'>
             {/* Header */}
             <div className='mb-4 flex items-center justify-between'>
-              <h1 className='text-2xl font-semibold'>
+              <h1 className='text-lg font-semibold md:text-2xl'>
                 Đơn hàng #{selectedOrder._id}
               </h1>
-              <div className='flex space-x-2'>
-                <button
-                  onClick={handleCloseModal}
-                  className='rounded-xl bg-gray-200 px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-300'
-                >
-                  X
-                </button>
-              </div>
+              <button
+                onClick={handleCloseModal}
+                className='rounded-xl bg-gray-200 px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-300'
+              >
+                X
+              </button>
             </div>
 
-            <div className='mb-6 grid grid-cols-4 gap-4'>
+            {/* Order Summary */}
+            <div className='mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4'>
               <div className='rounded-lg bg-gray-100 p-2 text-center'>
                 <p>Ngày đặt:</p>
                 <p className='font-semibold text-orange-700'>
@@ -287,12 +310,10 @@ function OrderHistory() {
               </div>
             </div>
 
-            <div className='mb-6 grid grid-cols-3 gap-4'>
-              {/* Customer & Order */}
+            {/* Customer & Address */}
+            <div className='mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
               <div className='rounded-lg border p-4'>
-                <div className='mb-2 flex justify-between'>
-                  <h2 className='font-semibold'>THÔNG TIN ĐẶT HÀNG</h2>
-                </div>
+                <h2 className='font-semibold'>THÔNG TIN ĐẶT HÀNG</h2>
                 <p>
                   <span className='font-semibold'>Tên:</span>{' '}
                   {selectedOrder.user.fullname}
@@ -308,9 +329,7 @@ function OrderHistory() {
               </div>
 
               <div className='rounded-lg border p-4'>
-                <div className='mb-2 flex justify-between'>
-                  <h2 className='font-semibold'>ĐỊA CHỈ GIAO HÀNG</h2>
-                </div>
+                <h2 className='font-semibold'>ĐỊA CHỈ GIAO HÀNG</h2>
                 <p>{selectedOrder?.shippingAddress.detail}</p>
                 <p>
                   {selectedOrder?.shippingAddress.commune},{' '}
@@ -320,9 +339,7 @@ function OrderHistory() {
               </div>
 
               <div className='rounded-lg border p-4'>
-                <div className='mb-2 flex justify-between'>
-                  <h2 className='font-semibold'>THANH TOÁN</h2>
-                </div>
+                <h2 className='font-semibold'>THANH TOÁN</h2>
                 <p>
                   <span className='font-semibold'>Trạng thái:</span>{' '}
                   {selectedOrder?.paymentStatus
@@ -336,6 +353,7 @@ function OrderHistory() {
               </div>
             </div>
 
+            {/* Ordered Products */}
             <div className='mb-6'>
               <h2 className='mb-2 font-semibold'>SẢN PHẨM ĐÃ ĐẶT</h2>
               <div className='rounded-lg border p-4'>
@@ -344,20 +362,12 @@ function OrderHistory() {
                     <Link
                       to={`/products/detail/${item.product._id}`}
                       key={item._id}
-                      className='flex items-center space-x-4 py-2'
+                      className='flex flex-col items-start space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4 py-2'
                     >
                       <img
-                        src={
-                          String(item.product.productImagePath?.[0]).startsWith(
-                            'http'
-                          )
-                            ? item.product.productImagePath?.[0]
-                            : `http://localhost:5000/${String(
-                                item.product.productImagePath?.[0]
-                              ).replace(/\\/g, '/')}`
-                        }
+                        src={item.product.productImagePath?.[0]}
                         alt={item.product.productName}
-                        className='h-16 w-16 rounded-md object-cover'
+                        className='h-20 w-20 rounded-md object-cover'
                       />
                       <div>
                         <h3 className='text-gray-900'>
