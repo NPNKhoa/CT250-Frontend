@@ -32,6 +32,8 @@ const VoucherManager = () => {
     return <div className='p-6 bg-white rounded-lg shadow-md'>Loading...</div>;
   }
 
+  console.log(ownVouchers);
+
   // Hiển thị nếu không có voucher
   if (!loading && ownVouchers.length === 0) {
     return (
@@ -90,7 +92,7 @@ const VoucherManager = () => {
               </p>
 
               <Typography className='text-xs text-gray-400 mt-1'>
-                Đã dùng {1}%
+                Đã dùng {voucher.voucherId.usedPercent}%
               </Typography>
               <LinearProgress variant='determinate' value={1} />
             </div>

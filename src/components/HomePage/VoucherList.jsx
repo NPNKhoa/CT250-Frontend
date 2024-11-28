@@ -18,6 +18,8 @@ const VoucherList = () => {
     fetchPublishingVouchers();
   }, []);
 
+  console.log(publishingVouchers);
+
   return (
     <div className='p-4 md:p-8'>
       {publishingVouchers?.length !== 0 ? (
