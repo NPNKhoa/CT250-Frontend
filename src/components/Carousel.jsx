@@ -44,7 +44,8 @@ const Carousel = () => {
 
   return (
     <div className='relative w-full overflow-hidden'>
-      <div className='relative h-64 md:h-80 lg:h-96 xl:h-[500px]'>
+      {/* Slide Container */}
+      <div className='relative h-56 sm:h-72 md:h-80 lg:h-96 xl:h-[500px]'>
         {Array.isArray(banners) &&
           banners.map((slide, index) => (
             <div
@@ -57,13 +58,14 @@ const Carousel = () => {
                 <img
                   src={`http://localhost:5000/${slide?.bannerImgPath}`}
                   alt={`Slide ${index + 1}`}
-                  className='w-full object-cover'
+                  className='w-full h-full object-cover'
                 />
               </Link>
             </div>
           ))}
       </div>
 
+      {/* Dots Navigation */}
       <div className='absolute bottom-5 left-1/2 transform -translate-x-1/2 flex space-x-3 rtl:space-x-reverse'>
         {Array.isArray(banners) &&
           banners.map((_, index) => (
@@ -80,9 +82,10 @@ const Carousel = () => {
           ))}
       </div>
 
+      {/* Previous Button */}
       <button
         type='button'
-        className='absolute top-1/2 -left-4 md:-left-6 lg:-left-8 z-30 flex items-center justify-center h-10 w-10 bg-white rounded-full shadow-lg hover:bg-gray-200 focus:outline-none'
+        className='absolute top-1/2 -left-4 md:-left-6 lg:-left-8 z-30 flex items-center justify-center h-10 w-10 bg-white rounded-full shadow-lg hover:bg-gray-200 focus:outline-none transform -translate-y-1/2'
         onClick={() => changeSlide(-1)}
       >
         <svg
@@ -103,9 +106,10 @@ const Carousel = () => {
         <span className='sr-only'>Previous</span>
       </button>
 
+      {/* Next Button */}
       <button
         type='button'
-        className='absolute top-1/2 -right-4 md:-right-6 lg:-right-8 z-30 flex items-center justify-center h-10 w-10 bg-white rounded-full shadow-lg hover:bg-gray-200 focus:outline-none'
+        className='absolute top-1/2 -right-4 md:-right-6 lg:-right-8 z-30 flex items-center justify-center h-10 w-10 bg-white rounded-full shadow-lg hover:bg-gray-200 focus:outline-none transform -translate-y-1/2'
         onClick={() => changeSlide(1)}
       >
         <svg

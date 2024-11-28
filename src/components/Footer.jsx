@@ -85,7 +85,7 @@ const Footer = () => {
 
   return (
     <div className='bg-black/90'>
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-6 md:px-12 lg:px-28 py-8'>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-6 md:px-12 lg:px-28 p-10 lg:py-8'>
         {infoList.map((section, index) => (
           <div key={index}>
             <h2 className='text-white uppercase text-base font-bold py-2'>
@@ -115,7 +115,7 @@ const Footer = () => {
             )}
 
             {section.title === 'Hướng dẫn' && (
-              <img src={FooterImg} alt='Bộ Công Thương' className='mt-4 h-18' />
+              <img src={FooterImg} alt='Bộ Công Thương' className='mt-4 h-16' />
             )}
             {section.title === 'Thông tin liên hệ' && (
               <div className=''>
@@ -139,9 +139,7 @@ const Footer = () => {
         <p className='text-white text-sm'>
           © Copyright {new Date().getFullYear()} By KTB Sport
           <span className='hidden sm:inline'> - </span>
-          <span className='block sm:inline'>
-            GĐ/Sở hữu website: KTB Sport
-          </span>
+          <span className='block sm:inline'>GĐ/Sở hữu website: KTB Sport</span>
         </p>
       </div>
     </div>
