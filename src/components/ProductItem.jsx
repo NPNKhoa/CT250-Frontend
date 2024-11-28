@@ -7,7 +7,7 @@ const ProductItem = ({ imageUrl, name, price, productLink, discount }) => {
 
   return (
     <div className='bg-white rounded-lg shadow-md overflow-hidden'>
-      <div className='flex justify-center items-center w-full h-44 md:h-64 lg:h-64'>
+      <div className='flex justify-center items-center w-full h-40 md:h-64 lg:h-64'>
         {/* Điều chỉnh chiều cao theo kích thước màn hình */}
         <Link to={`/${productLink}`}>
           <img
@@ -17,7 +17,7 @@ const ProductItem = ({ imageUrl, name, price, productLink, discount }) => {
                 : `http://localhost:5000/${imageUrl.replace(/\\/g, '/')}`
             }
             alt={name}
-            className='w-full h-64 object-cover'
+            className='w-full h-40 lg:h-60 object-cover'
           />
         </Link>
       </div>

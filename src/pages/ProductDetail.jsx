@@ -170,7 +170,10 @@ const ProductDetail = () => {
       }
     );
     dispatch(setSelectedProduct([response.data._id]));
-    sessionStorage.setItem('selectedProductIds', JSON.stringify([response.data._id]));
+    sessionStorage.setItem(
+      'selectedProductIds',
+      JSON.stringify([response.data._id])
+    );
     toast.success('Thanh toán ngay');
     navigate('/order');
   };
@@ -313,12 +316,12 @@ const ProductDetail = () => {
                           >
                             <CheckIcon className='text-primary font-bold' />
                             <Link
-                              className='hover:text-primary'
+                              className='hover:text-primary lg:text-base text-sm'
                               to={`/products/detail/${gift._id}`}
                             >
                               {gift.productName}
                             </Link>
-                            <p className='italic text-red-600'>
+                            <p className='italic  lg:text-base text-xs text-red-600'>
                               (trị giá: {ToVietnamCurrencyFormat(gift.price)})
                             </p>
                           </li>
@@ -330,18 +333,18 @@ const ProductDetail = () => {
                   {/* Ưu đãi thêm */}
                   {benefitsData?.length > 0 && (
                     <>
-                      <h3 className='text-lg sm:text-xl font-bold mt-4'>
+                      <h3 className='text-sm sm:text-xl font-bold mt-4'>
                         Dịch vụ kèm theo:
                       </h3>
                       <ul className='list-disc space-y-2 mt-2'>
                         {benefitsData.map((benefit, index) => (
                           <li
                             key={index}
-                            className='list-none flex items-center gap-2'
+                            className='list-none flex lg:text-base text-sm items-center gap-2'
                           >
                             <CheckBoxIcon className='text-green-500' />
                             {benefit.serviceName}
-                            <p className='italic text-red-600'>
+                            <p className='italic lg:text-base text-xs text-red-600'>
                               (trị giá:{' '}
                               {ToVietnamCurrencyFormat(benefit.servicePrice)})
                             </p>
@@ -493,26 +496,28 @@ const ProductDetail = () => {
           <h2 className='text-2xl font-bold text-center hover:text-primary mb-4'>
             Sản phẩm tương tự
           </h2>
-          <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[30vw] mx-auto'></span>
-          <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 justify-items-center'>
+          <span className='mb-6 bg-primary h-2 rounded flex justify-center w-[50vw] md:w-[30vw] mx-auto'></span>
+          <div className='flex md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 overflow-x-auto md:overflow-visible scrollbar-hide'>
             {Array.isArray(similarProducts) &&
               similarProducts.map(
                 (product, index) => (
                   console.log(product),
                   (
-                    <ProductItem
-                      key={index}
-                      imageUrl={product?.productImagePath[0]}
-                      name={product?.productName}
-                      price={
-                        product?.price *
-                        ((100 -
-                          (product?.discountDetails?.discountPercent || 0)) /
-                          100)
-                      }
-                      productLink={`products/detail/${product._id}`}
-                      discount={product?.discountDetails?.discountPercent}
-                    />
+                    <div className='flex-shrink-0 w-[calc(80vw/2)] sm:w-[calc(90vw/2)] md:w-auto'>
+                      <ProductItem
+                        key={index}
+                        imageUrl={product?.productImagePath[0]}
+                        name={product?.productName}
+                        price={
+                          product?.price *
+                          ((100 -
+                            (product?.discountDetails?.discountPercent || 0)) /
+                            100)
+                        }
+                        productLink={`products/detail/${product._id}`}
+                        discount={product?.discountDetails?.discountPercent}
+                      />
+                    </div>
                   )
                 )
               )}

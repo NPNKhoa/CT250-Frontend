@@ -172,9 +172,9 @@ function RatingSection({ productId }) {
           })}
         </div>
       </div>
-      <div className='flex flex-col items-start p-4 md:p-6 bg-white rounded-lg shadow-md w-full mx-auto'>
-        <div className='flex justify-between items-center gap-4'>
-          <p className='text-md md:text-lg font-semibold mb-4'>
+      <div className='flex flex-col items-start p-2 md:p-6 bg-white rounded-lg shadow-md w-full mx-auto'>
+        <div className='flex flex-col md:flex-row justify-between items-center gap-2 mb-2'>
+          <p className='text-md md:text-lg font-semibold text-center md:text-left'>
             Bạn đánh giá sao về sản phẩm này?
           </p>
           <Rating
@@ -183,9 +183,10 @@ function RatingSection({ productId }) {
             onChange={handleRatingChange}
             precision={1}
             size='large'
-            className='mb-4'
+            className='w-full md:w-auto text-center'
           />
         </div>
+
         <textarea
           value={review}
           onChange={handleReviewChange}
@@ -193,11 +194,12 @@ function RatingSection({ productId }) {
           rows='4'
           className='w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary resize-none mb-4'
         />
-        <div className='flex justify-between items-center w-full'>
+        <div className='flex flex-col md:flex-row justify-between items-center w-full gap-4'>
           <Button
             component='label'
             variant='outlined'
             startIcon={<AddAPhotoIcon />}
+            className='w-full md:w-auto'
           >
             Thêm ảnh
             <input
@@ -209,11 +211,12 @@ function RatingSection({ productId }) {
           </Button>
           <button
             onClick={handleSubmit}
-            className='bg-primary hover:bg-hover-primary text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-150 ease-in-out'
+            className='w-full md:w-auto bg-primary hover:bg-hover-primary text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-150 ease-in-out'
           >
             Đánh giá ngay
           </button>
         </div>
+
         {reviewImg.length !== 0 && (
           <div className='flex justify-start w-full items-center gap-5 mt-3 flex-wrap'>
             {reviewImg.map((image, index) => (
@@ -221,7 +224,7 @@ function RatingSection({ productId }) {
                 key={`reviewImg-${index}`}
                 imageUrl={image}
                 onDelete={() => onDeleteReviewImg(image)}
-                className='w-1/4'
+                className='w-1/4 sm:w-1/3 md:w-1/4 lg:w-1/5'
               />
             ))}
           </div>
@@ -249,10 +252,12 @@ function RatingSection({ productId }) {
                   alt=''
                   className=' rounded-full w-10 h-10 border-primary border-2'
                 />
-                <h3 className='font-bold text-lg'>{comment.user?.fullname}</h3>
+                <h3 className='font-bold lg:text-lg text-sm'>
+                  {comment.user?.fullname}
+                </h3>
               </div>
 
-              <span className='text-sm text-gray-500'>
+              <span className='lg:text-sm text-xs text-gray-500'>
                 {new Date(comment.createdAt).toLocaleString('vi-VN', {
                   hour: 'numeric',
                   minute: 'numeric',
@@ -283,7 +288,7 @@ function RatingSection({ productId }) {
                   </span>
                 </p>
                 <p className='mt-1 font-semibold'>
-                  <span className='text-gray-700 font-base'>
+                  <span className='text-gray-700 lg:font-base lg:text-base text-xs'>
                     {comment.content}
                   </span>
                 </p>
