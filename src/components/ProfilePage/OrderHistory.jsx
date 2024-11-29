@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import orderService from '@services/order.service';
 import PaginationComponent from '@components/common/PaginationComponent';
@@ -38,6 +39,8 @@ function OrderHistory() {
     setOrderStatus(res.data);
   };
 
+  console.log(orderStatus);
+
   useEffect(() => {
     fetchOrderStatus();
   }, []);
@@ -58,7 +61,7 @@ function OrderHistory() {
       }
     };
     fetchOrders();
-  }, [page, selectedOrderStatus, isLatestOrder]);
+  }, [page, selectedOrderStatus, isLatestOrder, orderStatus]);
 
   const handleViewDetails = async order => {
     try {
@@ -72,8 +75,6 @@ function OrderHistory() {
   const handleCloseModal = () => {
     setSelectedOrder(null);
   };
-
-  console.log(selectedOrder);
 
   const totalPriceItems = selectedOrder?.orderDetail.reduce((total, item) => {
     return (
@@ -92,8 +93,38 @@ function OrderHistory() {
         return 'text-yellow-600';
       case 'Đã hủy':
         return 'text-red-600';
+      case 'Đang vận chuyển':
+        return 'text-blue-600';
       default:
         return 'text-gray-600';
+    }
+  };
+
+  const getStatusButton = statusId => {
+    switch (statusId) {
+      case '6710b30f130cc0804e87c9a7': // Trạng thái "Đã giao hàng"
+        return 'bg-green-500 text-white'; // Màu xanh lá
+      case '66e0bf5b97d3d40c4f0fb70a': // Trạng thái "Chờ xử lý"
+        return 'bg-yellow-400 text-white'; // Màu vàng
+      case '6710fb3cfdd96181597b2b6a': // Trạng thái "Đã hủy"
+        return 'bg-red-600 text-white'; // Màu đỏ
+      case '66e0bf2997d3d40c4f0fb706': // Trạng thái "Đang vận chuyển"
+        return 'bg-blue-600 text-white'; // Màu xanh dương
+      default:
+        return 'bg-gray-200 text-gray-600'; // Mặc định là màu xám
+    }
+  };
+
+  const handleCancelOrder = async orderId => {
+    try {
+      await orderService.updateOrderStatus({
+        id: orderId,
+        orderStatus: '6710fb3cfdd96181597b2b6a',
+      });
+      toast.success('Đơn hàng đã được hủy thành công!');
+    } catch (error) {
+      console.error('Đã có lỗi xảy ra khi hủy đơn hàng:', error);
+      toast.error('Đã có lỗi xảy ra khi hủy đơn hàng!');
     }
   };
 
@@ -128,8 +159,8 @@ function OrderHistory() {
                     onClick={() => handleChangeFilter(_id)}
                     className={`flex-shrink-0 px-4 py-2 rounded-lg ${
                       selectedOrderStatus === _id
-                        ? 'bg-primary text-white'
-                        : 'bg-gray-200'
+                        ? getStatusButton(_id)
+                        : 'bg-gray-200 text-gray-600'
                     }`}
                   >
                     {orderStatus}
@@ -254,12 +285,23 @@ function OrderHistory() {
               <h1 className='text-lg font-semibold md:text-2xl'>
                 Đơn hàng #{selectedOrder._id}
               </h1>
-              <button
-                onClick={handleCloseModal}
-                className='rounded-xl bg-gray-200 px-4 py-2 transition duration-300 ease-in-out hover:bg-gray-300'
-              >
-                X
-              </button>
+
+              <div className='flex gap-6'>
+                {selectedOrder.orderStatus?.orderStatus === 'Chờ xử lý' && (
+                  <button
+                    onClick={() => handleCancelOrder(selectedOrder._id)} // Truyền id của đơn hàng vào hàm
+                    className='px-6 py-3 bg-red-600 text-white rounded-xl font-semibold shadow-md hover:bg-red-700'
+                  >
+                    Hủy đơn hàng
+                  </button>
+                )}
+                <button
+                  onClick={handleCloseModal}
+                  className='px-4 py-3 bg-gray-200 text-gray-800 rounded-xl font-semibold shadow-md hover:bg-gray-300'
+                >
+                  X
+                </button>
+              </div>
             </div>
 
             {/* Order Summary */}
