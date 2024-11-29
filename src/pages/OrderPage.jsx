@@ -313,6 +313,12 @@ function OrderPage() {
     maxDiscountPrice = voucher.maxPriceDiscount * 1000;
   }
 
+  // Lọc voucher chưa hết hạn
+  const validVouchers = ownVouchers.filter(voucher => {
+    if (!voucher.voucherId?.expiredDate) return true; // Không có ngày hết hạn
+    return new Date(voucher.voucherId.expiredDate) > new Date(); // Chưa hết hạn
+  });
+
   return (
     <>
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
@@ -579,47 +585,39 @@ function OrderPage() {
                           : 'Bạn chưa có voucher nào'}
                       </div>
 
-                      {ownVouchers.length > 0 ? (
+                      {validVouchers.length > 0 ? (
                         <ul className='space-y-4 max-h-60 overflow-y-auto no-scrollbar'>
-                          {ownVouchers.map(voucher => {
-                            // Kiểm tra xem voucher đã hết hạn chưa
-                            const isExpired =
-                              new Date(voucher.expiredDate) < new Date();
-
-                            // Nếu voucher đã hết hạn thì không hiển thị nó
-                            if (isExpired) return null;
-
-                            return (
-                              <li
-                                key={voucher._id}
-                                onClick={() => handleSelectDiscount(voucher)}
-                                className='cursor-pointer transition-all duration-300 rounded-lg border p-2 flex items-center gap-4 mb-2 bg-gray-50 hover:bg-gray-100 shadow-md hover:shadow-lg w-full'
-                              >
-                                <div className='bg-primary p-3 rounded-full'>
-                                  <Gift className='text-white text-xl' />
-                                </div>
-                                <div className='flex flex-col'>
-                                  <p className='text-lg font-semibold text-gray-800'>
-                                    {voucher.voucherId.voucherName}{' '}
-                                  </p>
-                                  <p className='text-sm text-gray-500'>
-                                    Giảm {voucher.voucherId.discountPercent}%{' '}
-                                    <span className='italic'>
-                                      (Tối đa{' '}
-                                      {ToVietnamCurrencyFormat(
-                                        voucher.voucherId.maxPriceDiscount *
-                                          1000
-                                      )}
-                                      )
-                                    </span>
-                                  </p>
-                                </div>
-                              </li>
-                            );
-                          })}
+                          {validVouchers.map(voucher => (
+                            <li
+                              key={voucher._id}
+                              onClick={() => handleSelectDiscount(voucher)}
+                              className='cursor-pointer transition-all duration-300 rounded-lg border p-2 flex items-center gap-4 mb-2 bg-gray-50 hover:bg-gray-100 shadow-md hover:shadow-lg w-full'
+                            >
+                              <div className='bg-primary p-3 rounded-full'>
+                                <Gift className='text-white text-xl' />
+                              </div>
+                              <div className='flex flex-col'>
+                                <p className='text-lg font-semibold text-gray-800'>
+                                  {voucher.voucherId.voucherName ||
+                                    'Không rõ tên'}
+                                </p>
+                                <p className='text-sm text-gray-500'>
+                                  Giảm {voucher.voucherId.discountPercent || 0}%{' '}
+                                  <span className='italic'>
+                                    (Tối đa{' '}
+                                    {ToVietnamCurrencyFormat(
+                                      (voucher.voucherId.maxPriceDiscount ||
+                                        0) * 1000
+                                    )}
+                                    )
+                                  </span>
+                                </p>
+                              </div>
+                            </li>
+                          ))}
                         </ul>
                       ) : (
-                        <div className=' flex justify-center my-3 '>
+                        <div className='flex justify-center my-3'>
                           <button
                             className='p-2 border bg-primary text-white w-[50%] rounded-xl flex justify-center'
                             onClick={() => navigate('/')}
