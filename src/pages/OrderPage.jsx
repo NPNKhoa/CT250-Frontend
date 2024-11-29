@@ -119,7 +119,7 @@ function OrderPage() {
 
     fetchCartDetail();
   }, []);
-
+  console.log(productItems);
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
     dispatch(getUserAddressThunk(accessToken));
@@ -313,17 +313,6 @@ function OrderPage() {
     maxDiscountPrice = voucher.maxPriceDiscount * 1000;
   }
 
-  const giftsData = [
-    {
-      id: 1,
-      name: 'Túi xách thời trang',
-      price: 150000,
-      discountPrice: 0, // Giá giảm
-      image:
-        'https://cdn.shopvnb.com/uploads/gallery/tui-cau-long-victor-br2101-c-den-chinh-hang-8.webp', // Thay thế bằng URL hình ảnh thực tế
-    },
-  ];
-
   return (
     <>
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
@@ -466,7 +455,8 @@ function OrderPage() {
                 </h2>
                 <div className='mt-4'>
                   {productItems.map(item => (
-                    <div key={item.id} className='flex flex-col '>
+                    <div key={item._id} className='flex flex-col'>
+                      {/* Hiển thị sản phẩm chính */}
                       <div className='flex items-center space-x-4 py-2'>
                         <img
                           src={
@@ -478,9 +468,9 @@ function OrderPage() {
                                   item.product.productImagePath?.[0]
                                 ).replace(/\\/g, '/')}`
                           }
-                          alt={item.product.productName}
+                          alt={item.product.productName || 'Sản phẩm không tên'}
                           className='w-16 h-16 object-cover rounded-md'
-                        />{' '}
+                        />
                         <div>
                           <h3 className='text-gray-900'>
                             {item.product.productName}
@@ -504,35 +494,63 @@ function OrderPage() {
                           </p>
                         </div>
                       </div>
+
                       {/* Hiển thị quà tặng */}
-                      <div className='mt-2'>
-                        <h4 className='text-lg font-semibold text-gray-800'>
-                          Quà tặng kèm:
-                        </h4>
-                        <ul className='list-disc pl-2'>
-                          {giftsData.map(gift => (
-                            <li
-                              key={gift.id}
-                              className='flex items-center text-gray-600'
-                            >
+                      {item.product?.promotion?.productIds ? (
+                        <div className='mt-2'>
+                          <h4 className='text-lg font-semibold text-gray-800'>
+                            Quà tặng kèm:
+                          </h4>
+                          <ul className='list-disc pl-2'>
+                            <li className='flex items-center text-gray-600'>
                               <img
-                                src={gift.image} // Hình ảnh quà tặng
-                                alt={gift.name}
+                                src={
+                                  String(
+                                    item.product.promotion.productIds[0]
+                                      .productImagePath?.[0]
+                                  ).startsWith('http')
+                                    ? item.product.promotion.productIds[0]
+                                        .productImagePath?.[0]
+                                    : `http://localhost:5000/${String(
+                                        item.product.promotion.productIds[0]
+                                          .productImagePath?.[0]
+                                      ).replace(/\\/g, '/')}`
+                                }
+                                alt={
+                                  item.product.promotion.productIds[0]
+                                    .productName || 'Quà tặng không tên'
+                                }
                                 className='w-10 h-10 object-cover rounded-md mr-2'
                               />
                               <span>
-                                {gift.name} (trị giá:{' '}
-                                {ToVietnamCurrencyFormat(gift.price)})
+                                {item.product.promotion.productIds[0]
+                                  ?.productName || 'Không có tên'}{' '}
+                                (trị giá:{' '}
+                                {ToVietnamCurrencyFormat(
+                                  item.product.promotion.productIds[0].price ||
+                                    0
+                                )}
+                                )
                               </span>
-                              <span className='ml-2 text-red-500'>
-                                Giảm còn:{' '}
-                                {ToVietnamCurrencyFormat(gift.discountPrice)}{' '}
-                                {/* Hiển thị giá giảm */}
-                              </span>
+                              {item.product.promotion.discountedPrice && (
+                                <span className='ml-2 text-red-500'>
+                                  Giảm còn:{' '}
+                                  {ToVietnamCurrencyFormat(
+                                    item.product.promotion.discountedPrice
+                                  )}
+                                </span>
+                              )}
                             </li>
-                          ))}
-                        </ul>
-                      </div>
+                          </ul>
+                        </div>
+                      ) : (
+                        <div className='mt-2'>
+                          <h4 className='text-lg font-semibold text-gray-800'>
+                            Quà tặng kèm:
+                          </h4>
+                          <p className='text-gray-600'>Không có quà tặng kèm</p>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
