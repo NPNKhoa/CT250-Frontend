@@ -73,6 +73,8 @@ function OrderHistory() {
     setSelectedOrder(null);
   };
 
+  console.log(selectedOrder);
+
   const totalPriceItems = selectedOrder?.orderDetail.reduce((total, item) => {
     return (
       total +
@@ -97,8 +99,8 @@ function OrderHistory() {
 
   const maxPriceDiscount = selectedOrder?.voucher
     ? Math.min(
-        totalPriceItems * (selectedOrder.voucher.discountPercent / 100),
-        selectedOrder.voucher.maxPriceDiscount * 1000
+        totalPriceItems * (selectedOrder?.voucher?.discountPercent / 100),
+        selectedOrder?.voucher?.maxPriceDiscount * 1000
       )
     : 0;
 
@@ -376,25 +378,75 @@ function OrderHistory() {
                         <p className='text-gray-500'>
                           Số lượng: {item.quantity}
                         </p>
-                        <p className='text-sm text-gray-400 line-through sm:text-base'>
-                          {item?.product.discount && (
-                            <>
-                              {ToVietnamCurrencyFormat(
-                                item.itemPrice * item.quantity
-                              )}
-                            </>
-                          )}
-                        </p>
+                        {item?.product.discount && (
+                          <p className='text-sm text-gray-400 line-through sm:text-base'>
+                            {ToVietnamCurrencyFormat(
+                              item.itemPrice * item.quantity
+                            )}
+                          </p>
+                        )}
                         <p className='text-primary font-bold'>
                           {ToVietnamCurrencyFormat(
                             item.itemPrice *
                               item.quantity *
-                              (1 - item.product.discount.discountPercent / 100)
+                              (1 -
+                                (item.product.discount?.discountPercent || 0) /
+                                  100)
                           )}
                         </p>
+                        {/* Thêm phần quà tặng kèm */}
+                        {item.product.promotion?.productIds?.length > 0 ? (
+                          <div className='mt-2'>
+                            <h4 className='text-lg font-semibold text-gray-800'>
+                              Quà tặng kèm:
+                            </h4>
+                            <ul className='list-disc pl-2'>
+                              {item.product.promotion.productIds.map(
+                                (gift, index) => (
+                                  <li
+                                    key={index}
+                                    className='flex items-center text-gray-600'
+                                  >
+                                    <img
+                                      src={
+                                        String(
+                                          gift.productImagePath?.[0]
+                                        ).startsWith('http')
+                                          ? gift.productImagePath?.[0]
+                                          : `http://localhost:5000/${String(
+                                              gift.productImagePath?.[0]
+                                            ).replace(/\\/g, '/')}`
+                                      }
+                                      alt={
+                                        gift.productName || 'Quà tặng không tên'
+                                      }
+                                      className='w-10 h-10 object-cover rounded-md mr-2'
+                                    />
+                                    <span>
+                                      {gift.productName || 'Không có tên'} (trị
+                                      giá:{' '}
+                                      {ToVietnamCurrencyFormat(gift.price || 0)}
+                                      )
+                                    </span>
+                                  </li>
+                                )
+                              )}
+                            </ul>
+                          </div>
+                        ) : (
+                          <div className='mt-2'>
+                            <h4 className='text-lg font-semibold text-gray-800'>
+                              Quà tặng kèm:
+                            </h4>
+                            <p className='text-gray-600'>
+                              Không có quà tặng kèm
+                            </p>
+                          </div>
+                        )}
                       </div>
                     </Link>
                   ))}
+
                   <p className='text-right font-semibold'>
                     Tổng: {ToVietnamCurrencyFormat(totalPriceItems)}
                   </p>
