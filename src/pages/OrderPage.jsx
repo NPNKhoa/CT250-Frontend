@@ -538,9 +538,11 @@ function OrderPage() {
                 </div>
                 {/* khuyen mai */}
                 <div className='border-t flex items-center justify-between py-2'>
-                  <div className='font-bold text-xl'>Mã giảm giá</div>
+                  <div className='font-bold lg:text-xl text-sm'>
+                    Mã giảm giá
+                  </div>
                   <div
-                    className='text-base hover:text-white w-[200px] flex justify-center hover:bg-primary font-semibold cursor-pointer rounded-xl p-2 border-2'
+                    className='lg:text-base  text-sm hover:text-white w-[200px] flex justify-center hover:bg-primary font-semibold cursor-pointer rounded-xl p-2 border-2'
                     onClick={() => setModalOpen(true)}
                   >
                     {voucher ? voucher.voucherName : 'Chọn mã giảm giá'}
@@ -548,61 +550,55 @@ function OrderPage() {
                 </div>
                 {modalOpen && (
                   <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
-                    <div className='bg-white p-6 rounded-lg shadow-lg w-[28vw] flex flex-col'>
+                    <div className='bg-white p-6 rounded-lg shadow-lg w-[90%] sm:w-[60%] md:w-[50%] lg:w-[28vw] flex flex-col'>
                       <h2 className='text-2xl font-bold mb-1 text-primary border-b-2 border-gray-300 p-2 flex justify-center'>
                         Chọn mã giảm giá
                       </h2>
-
-                      {/* <div className='my-3 flex items-center gap-2 justify-between'>
-                        <input
-                          type='text'
-                          placeholder='Mã giảm giá'
-                          value={voucherInput}
-                          onKeyPress={handleKeyPress}
-                          onChange={e => setVoucherInput(e.target.value)} // Cập nhật state khi người dùng nhập
-                          className='border rounded-lg py-2 px-4 w-4/6 focus:outline-none focus:ring-2 focus:ring-primary'
-                        />
-                        <button
-                          onClick={handleApplyVoucher} // Gọi hàm khi nhấn nút
-                          className='bg-primary text-white py-3 px-4 w-2/6 text-sm rounded-lg hover:bg-opacity-80 transition-all duration-300'
-                        >
-                          ÁP DỤNG
-                        </button>
-                      </div> */}
 
                       <div className='italic text-gray text-sm mb-2 flex justify-center'>
                         {ownVouchers.length > 0
                           ? 'Chỉ có thể chọn 1 mã giảm giá'
                           : 'Bạn chưa có voucher nào'}
                       </div>
+
                       {ownVouchers.length > 0 ? (
                         <ul className='space-y-4 max-h-60 overflow-y-auto no-scrollbar'>
-                          {ownVouchers.map(voucher => (
-                            <li
-                              key={voucher._id} // Sử dụng _id của UserVoucher làm key
-                              onClick={() => handleSelectDiscount(voucher)}
-                              className='cursor-pointer transition-all duration-300 rounded-lg border p-2 flex items-center gap-4 mb-2 bg-gray-50 hover:bg-gray-100 shadow-md hover:shadow-lg w-full'
-                            >
-                              <div className='bg-primary p-3 rounded-full'>
-                                <Gift className='text-white text-xl' />
-                              </div>
-                              <div className='flex flex-col'>
-                                <p className='text-lg font-semibold text-gray-800'>
-                                  {voucher.voucherId.voucherName}{' '}
-                                </p>
-                                <p className='text-sm text-gray-500'>
-                                  Giảm {voucher.voucherId.discountPercent}%{' '}
-                                  <span className='italic'>
-                                    (Tối đa{' '}
-                                    {ToVietnamCurrencyFormat(
-                                      voucher.voucherId.maxPriceDiscount * 1000
-                                    )}
-                                    )
-                                  </span>
-                                </p>
-                              </div>
-                            </li>
-                          ))}
+                          {ownVouchers.map(voucher => {
+                            // Kiểm tra xem voucher đã hết hạn chưa
+                            const isExpired =
+                              new Date(voucher.expiredDate) < new Date();
+
+                            // Nếu voucher đã hết hạn thì không hiển thị nó
+                            if (isExpired) return null;
+
+                            return (
+                              <li
+                                key={voucher._id}
+                                onClick={() => handleSelectDiscount(voucher)}
+                                className='cursor-pointer transition-all duration-300 rounded-lg border p-2 flex items-center gap-4 mb-2 bg-gray-50 hover:bg-gray-100 shadow-md hover:shadow-lg w-full'
+                              >
+                                <div className='bg-primary p-3 rounded-full'>
+                                  <Gift className='text-white text-xl' />
+                                </div>
+                                <div className='flex flex-col'>
+                                  <p className='text-lg font-semibold text-gray-800'>
+                                    {voucher.voucherId.voucherName}{' '}
+                                  </p>
+                                  <p className='text-sm text-gray-500'>
+                                    Giảm {voucher.voucherId.discountPercent}%{' '}
+                                    <span className='italic'>
+                                      (Tối đa{' '}
+                                      {ToVietnamCurrencyFormat(
+                                        voucher.voucherId.maxPriceDiscount *
+                                          1000
+                                      )}
+                                      )
+                                    </span>
+                                  </p>
+                                </div>
+                              </li>
+                            );
+                          })}
                         </ul>
                       ) : (
                         <div className=' flex justify-center my-3 '>
@@ -663,13 +659,13 @@ function OrderPage() {
 
                 <div className='flex justify-between mt-6'>
                   <button
-                    className='w-1/2 mr-2 font-semibold bg-gray-300 text-gray-700 py-3 rounded-md text-lg hover:bg-gray-400'
+                    className='w-1/2 mr-2 font-semibold bg-gray-300 text-gray-700 py-3 rounded-md lg:text-lg text-sm hover:bg-gray-400'
                     onClick={() => navigate(-1)}
                   >
                     Trở về
                   </button>
                   <button
-                    className={`w-1/2 ml-2 font-semibold bg-primary text-white py-3 rounded-md text-lg flex justify-center items-center ${
+                    className={`w-1/2 ml-2 font-semibold bg-primary text-white py-3 rounded-md lg:text-lg text-sm flex justify-center items-center ${
                       isLoading
                         ? 'cursor-not-allowed'
                         : 'hover:bg-hover-primary'
@@ -690,12 +686,12 @@ function OrderPage() {
         </div>
         {isModalOpen && (
           <div className='fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center'>
-            <div className='bg-white rounded-lg p-6 w-1/2 max-h-1/2'>
-              <div className='flex justify-between mb-3 item-center '>
-                <h3 className='text-xl font-semibold '>Chọn địa chỉ</h3>
+            <div className='bg-white rounded-lg p-6 w-11/12 sm:w-1/2 md:w-1/3 lg:w-1/4 max-h-[80vh] sm:max-h-[70vh] overflow-y-auto'>
+              <div className='flex justify-between mb-3 items-center'>
+                <h3 className='text-xl font-semibold'>Chọn địa chỉ</h3>
 
                 <button
-                  className='bg-primary p-2 rounded-lg text-bold text-white'
+                  className='bg-primary p-2 rounded-lg font-bold text-white'
                   onClick={() => handleClickOpen()}
                 >
                   Thêm địa chỉ
@@ -707,7 +703,8 @@ function OrderPage() {
                   addressData={editAddress}
                 />
               </div>
-              <ul className='space-y-2  max-h-[70vh] overflow-y-auto no-scrollbar'>
+
+              <ul className='space-y-2 max-h-[70vh] overflow-y-auto no-scrollbar'>
                 {addresses.map((address, index) => (
                   <li
                     key={index}
@@ -720,6 +717,7 @@ function OrderPage() {
                   </li>
                 ))}
               </ul>
+
               <button
                 onClick={() => setIsModalOpen(false)}
                 className='mt-4 w-full p-3 bg-primary hover:bg-hover-primary text-white rounded focus:outline-none focus:ring-2 focus:ring-red-500'

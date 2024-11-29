@@ -27,18 +27,24 @@ const VoucherManager = () => {
     fetchUserVouchers();
   }, []);
 
+  // Lọc voucher chưa hết hạn
+  const validVouchers = ownVouchers.filter(voucher => {
+    if (!voucher.voucherId?.expiredDate) return true; // Không có ngày hết hạn
+    return new Date(voucher.voucherId.expiredDate) > new Date(); // Chưa hết hạn
+  });
+
   // Hiển thị loading
   if (loading) {
     return <div className='p-6 bg-white rounded-lg shadow-md'>Loading...</div>;
   }
 
   // Hiển thị nếu không có voucher
-  if (!loading && ownVouchers.length === 0) {
+  if (!loading && validVouchers.length === 0) {
     return (
       <div className='p-6 bg-white rounded-lg shadow-md'>
         <h1 className='text-2xl font-bold mb-4'>Kho Vouchers của bạn</h1>
         <p className='text-gray-500'>Bạn chưa có voucher nào.</p>
-        <div className=' flex justify-center my-3 '>
+        <div className='flex justify-center my-3'>
           <button
             className='p-2 border bg-primary text-white w-[20%] rounded-xl'
             onClick={() => navigate('/')}
@@ -49,24 +55,24 @@ const VoucherManager = () => {
       </div>
     );
   }
-  //   const usedPercent = Math.ceil(voucher.collectedCount / voucher.maxUsage);
+
   return (
-    <div className=''>
+    <div className='p-4'>
       <h1 className='text-2xl font-bold mb-4'>Kho Vouchers của bạn</h1>
 
       {/* Danh sách voucher */}
-      <ul className='  grid grid-cols-2 gap-5'>
-        {ownVouchers.map(voucher => (
+      <ul className='grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3'>
+        {validVouchers.map(voucher => (
           <div
             key={voucher._id}
-            className='cursor-pointer transition-all duration-300 rounded-lg border p-5 flex items-center gap-4 bg-gray-50 hover:bg-gray-100 shadow-md hover:shadow-lg w-full'
+            className='cursor-pointer transition-all duration-300 rounded-lg border p-3 flex items-center gap-3 bg-gray-50 hover:bg-gray-100 shadow-md hover:shadow-lg'
           >
             <div className='bg-primary p-3 rounded-full'>
               <Gift className='text-white text-xl' />
             </div>
             <div className='flex flex-col w-full'>
               <div className='flex justify-between items-center'>
-                <p className='text-lg font-semibold text-gray-800'>
+                <p className='lg:text-lg text-sm font-semibold text-gray-800'>
                   {voucher.voucherId?.voucherName || 'Tên voucher không có'}
                 </p>
                 <p className='text-sm text-gray-400'>
@@ -90,9 +96,22 @@ const VoucherManager = () => {
               </p>
 
               <Typography className='text-xs text-gray-400 mt-1'>
-                Đã dùng {1}%
+                Đã dùng{' '}
+                {Math.ceil(
+                  (voucher.voucherId?.collectedCount /
+                    voucher.voucherId?.maxUsage) *
+                    100
+                )}
+                %
               </Typography>
-              <LinearProgress variant='determinate' value={1} />
+              <LinearProgress
+                variant='determinate'
+                value={Math.ceil(
+                  (voucher.voucherId?.collectedCount /
+                    voucher.voucherId?.maxUsage) *
+                    100
+                )}
+              />
             </div>
           </div>
         ))}

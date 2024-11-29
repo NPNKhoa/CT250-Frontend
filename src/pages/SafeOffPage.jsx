@@ -171,7 +171,7 @@ const SafeOffPage = () => {
                   </div>
 
                   {/* Grid để chứa các product items */}
-                  <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1'>
+                  <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2'>
                     {products.map((product, index) => (
                       <ProductItem
                         key={index}
@@ -200,7 +200,7 @@ const SafeOffPage = () => {
                   </div>
 
                   {/* Pagination */}
-                  <div className='col-span-4 mt-4 flex justify-center'>
+                  <div className='col-span-2 mt-4 flex justify-center'>
                     <PaginationComponent
                       path={`${location.pathname}`}
                       totalPages={totalPage}

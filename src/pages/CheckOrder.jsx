@@ -99,59 +99,93 @@ const CheckOrder = () => {
         {selectedOrder && (
           <div className='mt-6'>
             <h2 className='text-xl font-semibold mb-4'>Thông tin đơn hàng</h2>
-            <table className='min-w-full divide-y divide-gray-200'>
-              <thead>
-                <tr>
-                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                    Mã đơn hàng
-                  </th>
-                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                    Ngày đặt
-                  </th>
-                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                    Tiền hàng
-                  </th>
-                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                    Trạng thái
-                  </th>
-                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'></th>
-                </tr>
-              </thead>
-              <tbody className='bg-white divide-y divide-gray-200'>
-                <tr>
-                  <td className='px-6 py-4 whitespace-nowrap'>
-                    #{selectedOrder._id}
-                  </td>
-                  <td className='px-6 py-4 whitespace-nowrap'>
-                    {new Date(selectedOrder.orderDate).toLocaleDateString(
-                      'vi-VN'
-                    )}
-                  </td>
-                  <td className='px-6 py-4 whitespace-nowrap'>
-                    {ToVietnamCurrencyFormat(selectedOrder.totalPrice)}
-                  </td>
-                  <td className='px-6 py-4 whitespace-nowrap'>
-                    {selectedOrder.orderStatus.orderStatus}
-                  </td>
-                  <td className='px-6 py-4 whitespace-nowrap'>
-                    <button
-                      onClick={() => handleViewDetails(selectedOrder)}
-                      className='bg-primary text-white py-1 px-2 rounded hover:bg-primary-hover transition-colors'
-                    >
-                      Xem chi tiết
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+
+            {/* Wrapper div for responsiveness */}
+            <div className='block md:hidden'>
+              {/* Hiển thị thông tin dọc trên điện thoại */}
+              <div className='space-y-4'>
+                <div>
+                  <strong>Mã đơn hàng:</strong> #{selectedOrder._id}
+                </div>
+                <div>
+                  <strong>Ngày đặt:</strong>{' '}
+                  {new Date(selectedOrder.orderDate).toLocaleDateString(
+                    'vi-VN'
+                  )}
+                </div>
+                <div>
+                  <strong>Tiền hàng:</strong>{' '}
+                  {ToVietnamCurrencyFormat(selectedOrder.totalPrice)}
+                </div>
+                <div>
+                  <strong>Trạng thái:</strong>{' '}
+                  {selectedOrder.orderStatus.orderStatus}
+                </div>
+                <div>
+                  <button
+                    onClick={() => handleViewDetails(selectedOrder)}
+                    className='bg-primary text-white py-1 px-2 rounded hover:bg-primary-hover transition-colors'
+                  >
+                    Xem chi tiết
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Hiển thị thông tin bảng trên laptop */}
+            <div className='hidden md:block'>
+              <table className='min-w-full divide-y divide-gray-200'>
+                <thead>
+                  <tr>
+                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                      Mã đơn hàng
+                    </th>
+                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                      Ngày đặt
+                    </th>
+                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                      Tiền hàng
+                    </th>
+                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                      Trạng thái
+                    </th>
+                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'></th>
+                  </tr>
+                </thead>
+                <tbody className='bg-white divide-y divide-gray-200'>
+                  <tr>
+                    <td className='px-6 py-4 whitespace-nowrap'>{`#${selectedOrder._id}`}</td>
+                    <td className='px-6 py-4 whitespace-nowrap'>
+                      {new Date(selectedOrder.orderDate).toLocaleDateString(
+                        'vi-VN'
+                      )}
+                    </td>
+                    <td className='px-6 py-4 whitespace-nowrap'>
+                      {ToVietnamCurrencyFormat(selectedOrder.totalPrice)}
+                    </td>
+                    <td className='px-6 py-4 whitespace-nowrap'>
+                      {selectedOrder.orderStatus.orderStatus}
+                    </td>
+                    <td className='px-6 py-4 whitespace-nowrap'>
+                      <button
+                        onClick={() => handleViewDetails(selectedOrder)}
+                        className='bg-primary text-white py-1 px-2 rounded hover:bg-primary-hover transition-colors'
+                      >
+                        Xem chi tiết
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
         {isModalOpen && orderDetail && (
           <div className='fixed inset-0 z-50 flex items-center justify-center bg-gray-600 bg-opacity-50'>
-            <div className='container mx-auto h-[90%] w-[80%] overflow-y-auto rounded-xl bg-white p-4'>
+            <div className='container mx-auto h-[90%] w-full sm:w-[80%] overflow-y-auto rounded-xl bg-white p-4'>
               {/* Header */}
               <div className='mb-4 flex items-center justify-between'>
-                <h1 className='text-2xl font-semibold'>
+                <h1 className='text-xl lg:text-2xl font-semibold'>
                   Đơn hàng #{selectedOrder._id}
                 </h1>
                 <div className='flex space-x-2'>
@@ -164,7 +198,8 @@ const CheckOrder = () => {
                 </div>
               </div>
 
-              <div className='mb-6 grid grid-cols-4 gap-4'>
+              {/* Thông tin đơn hàng */}
+              <div className='mb-6 grid grid-cols-1 sm:grid-cols-4 gap-4'>
                 <div className='rounded-lg bg-gray-100 p-2 text-center'>
                   <p>Ngày đặt:</p>
                   <p className='font-semibold text-orange-700'>
@@ -213,12 +248,10 @@ const CheckOrder = () => {
                 </div>
               </div>
 
-              <div className='mb-6 grid grid-cols-3 gap-4'>
-                {/* Customer & Order */}
+              {/* Customer, Address, Payment */}
+              <div className='mb-6 grid grid-cols-1 sm:grid-cols-3 gap-4'>
                 <div className='rounded-lg border p-4'>
-                  <div className='mb-2 flex justify-between'>
-                    <h2 className='font-semibold'>THÔNG TIN ĐẶT HÀNG</h2>
-                  </div>
+                  <h2 className='font-semibold'>THÔNG TIN ĐẶT HÀNG</h2>
                   <p>
                     <span className='font-semibold'>Tên:</span>{' '}
                     {selectedOrder.user.fullname}
@@ -234,9 +267,7 @@ const CheckOrder = () => {
                 </div>
 
                 <div className='rounded-lg border p-4'>
-                  <div className='mb-2 flex justify-between'>
-                    <h2 className='font-semibold'>ĐỊA CHỈ GIAO HÀNG</h2>
-                  </div>
+                  <h2 className='font-semibold'>ĐỊA CHỈ GIAO HÀNG</h2>
                   <p>{selectedOrder?.shippingAddress.detail}</p>
                   <p>
                     {selectedOrder?.shippingAddress.commune},{' '}
@@ -246,9 +277,7 @@ const CheckOrder = () => {
                 </div>
 
                 <div className='rounded-lg border p-4'>
-                  <div className='mb-2 flex justify-between'>
-                    <h2 className='font-semibold'>THANH TOÁN</h2>
-                  </div>
+                  <h2 className='font-semibold'>THANH TOÁN</h2>
                   <p>
                     <span className='font-semibold'>Trạng thái:</span>{' '}
                     {selectedOrder?.paymentStatus
@@ -262,6 +291,7 @@ const CheckOrder = () => {
                 </div>
               </div>
 
+              {/* Product List */}
               <div className='mb-6'>
                 <h2 className='mb-2 font-semibold'>SẢN PHẨM ĐÃ ĐẶT</h2>
                 <div className='rounded-lg border p-4'>

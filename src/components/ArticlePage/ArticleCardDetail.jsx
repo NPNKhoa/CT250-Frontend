@@ -21,7 +21,7 @@ const ArticleCardDetail = () => {
 
   const breadcrumbs = [
     { label: 'Trang chủ', href: '/' },
-    { label: 'Bài viết', href: '/acticle' },
+    { label: 'Bài viết', href: '/article' },
     { label: `${article.title}` },
   ];
 
@@ -32,13 +32,17 @@ const ArticleCardDetail = () => {
         <div className=' bg-white shadow-lg rounded-lg p-8'>
           <div className='flex gap-12'>
             {/* Sidebar cho bài viết liên quan */}
-            <aside className='w-1/4'>
+            <aside className='md:w-1/4 md:block hidden'>
               <h2 className='text-xl font-bold text-gray-800 mb-6 border-b-2 border-gray-300 pb-2'>
                 Các bài viết khác
               </h2>
               <div className='space-y-5'>
                 {relatedArticles.map(article => (
-                  <Link to={`/articledetail/${article._id}`} key={article.id} className='flex items-center gap-4'>
+                  <Link
+                    to={`/articledetail/${article._id}`}
+                    key={article.id}
+                    className='flex items-center gap-4'
+                  >
                     {article.thumbnail ? (
                       <img
                         src={

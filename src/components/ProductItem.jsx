@@ -7,7 +7,7 @@ const ProductItem = ({ imageUrl, name, price, productLink, discount }) => {
 
   return (
     <div className='bg-white rounded-lg shadow-md overflow-hidden'>
-      <div className='flex justify-center items-center w-full h-44 md:h-64 lg:h-64'>
+      <div className='flex justify-center items-center w-full h-40 md:h-64 lg:h-64'>
         {/* Điều chỉnh chiều cao theo kích thước màn hình */}
         <Link to={`/${productLink}`}>
           <img
@@ -17,12 +17,12 @@ const ProductItem = ({ imageUrl, name, price, productLink, discount }) => {
                 : `http://localhost:5000/${imageUrl.replace(/\\/g, '/')}`
             }
             alt={name}
-            className='w-full h-64 object-cover'
+            className='w-full h-40 lg:h-60 object-cover'
           />
         </Link>
       </div>
 
-      <div className='p-4 mt-5  flex flex-col justify-between h-28 md:h-32'>
+      <div className='p-4 mt-5 flex flex-col justify-between h-28 md:h-32'>
         {/* Điều chỉnh padding và chiều cao theo kích thước màn hình */}
         <Link to={`/${productLink}`}>
           <h3 className='text-xs md:text-base text-gray-800 sm:line-clamp-2 line-clamp-3'>
