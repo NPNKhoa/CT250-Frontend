@@ -183,6 +183,18 @@ class OrderService {
       throw new Error(error.message || 'Error fetching order');
     }
   }
+
+  async updateOrderStatus(order) {
+    try {
+      const response = await this.api.put(`/update-status/${order.id}`, {
+        orderStatus: order.orderStatus,
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Lỗi khi cập nhật trạng thái đơn hàng:', error);
+      throw error;
+    }
+  }
 }
 
 export default new OrderService();
