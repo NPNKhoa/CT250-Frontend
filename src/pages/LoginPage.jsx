@@ -153,7 +153,7 @@ const LoginPage = () => {
               </button>
             </LoginSocialGoogle>
           </div>
-          <div className='mb-4 flex justify-center'>
+          {/* <div className='mb-4 flex justify-center'>
             <LoginSocialFacebook
               appId={appId}
               onResolve={response => {
@@ -177,7 +177,7 @@ const LoginPage = () => {
                 </div>
               </button>
             </LoginSocialFacebook>
-          </div>
+          </div> */}
           <p className='text-center mt-4'>
             <span className='cursor-pointer hover:text-primary'>
               Quên mật khẩu?
